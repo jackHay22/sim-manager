@@ -4,7 +4,7 @@
 ## Setup
 - Use `vagrant` to run in a vm
   - Run: `vagrant up && vagrant ssh`
-  - In the vm: `cd /vagrant/simulation_manager && export SUMO_HOME=/home/vagrant/sumo && make libs && make -j4`
+  - In the vm: `cd /vagrant && export SUMO_HOME=/home/vagrant/sumo && make setup && make build -j8`
 
 ## Use
 
