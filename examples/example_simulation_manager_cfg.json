@@ -1,0 +1,7 @@
+{
+  "network_path" : "examples/example.net.xml",
+  "routes_path" : "examples/example.rou.xml",
+  "servers_path" : "examples/example.servers.xml",
+  "simulation_steps" : 1000,
+  "step_length" : 0.1
+}
