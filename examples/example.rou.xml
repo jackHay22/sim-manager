@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2021-09-06 14:15:41 by Eclipse SUMO duarouter Version v1_10_0+0494-3badba79c1
+<!-- generated on 2021-09-06 14:25:05 by Eclipse SUMO duarouter Version v1_10_0+0494-3badba79c1
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/duarouterConfiguration.xsd">
 
     <input>
         <net-file value="examples/example.net.xml"/>
-        <route-files value="examples/example.trip.xml"/>
+        <route-files value="trips.trips.xml"/>
     </input>
 
     <output>
