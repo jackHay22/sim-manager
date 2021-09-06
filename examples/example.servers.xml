@@ -1,9 +1,10 @@
 <additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
 
-  <parkingArea id="parkingArea_-64_0_0" lane="-64_0" startPos="71.72" endPos="81.72" roadsideCapacity="1" width="4.00" length="4.00"/>
-  <vehicle id="vehicle_0" depart="0.00">
+  <parkingArea id="tower0_pa" lane="-64_0" startPos="71.72" endPos="81.72" roadsideCapacity="1" width="4.00" length="4.00"/>
+  <vehicle id="tower0" depart="0.00" departPos="stop">
       <route edges="-64" color="cyan"/>
-      <stop parkingArea="parkingArea_-64_0_0" parking="true"/>
+      <stop parkingArea="tower0_pa" parking="true"/>
+      <param key="has.btreiver.device" value="true"/>
   </vehicle>
 
 </additional>
