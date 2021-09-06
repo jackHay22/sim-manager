@@ -1,6 +1,10 @@
 # Sumo Simulation Manager
 - Automates the creation and management of Sumo simulations for vehicle communications optimization.
 
+## Roadside towers
+- Roadside towers are represented by parked cars:
+![Screenshot](docs/images/example_server.png)
+
 ## Setup
 - Use `vagrant` to run in a vm
   - Run: `vagrant up && vagrant ssh`
@@ -16,7 +20,7 @@
 make simulate-example
 ```
 
-- Open example simulation in sumo-gui
+- Open example simulation in sumo-gui (can't run in vagrant)
 ```bash
 make gui-example
 ```
@@ -33,5 +37,5 @@ python $SUMO_HOME/tools/randomTrips.py \
       -n examples/example.net.xml \
       -o examples/example.trip.xml \
       -r examples/example.rou.xml \
-      -e 500 -p 0.01
+      -e 3600 -p 1.0 #defaults
 ```

@@ -1,4 +1,9 @@
 <additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
-    <poly id="server_0" color="red" fill="0" layer="0.00" shape="1534.643111,2530.852386 1548.040563,2512.212453 1558.525526,2528.522394 1533.478115,2530.269888"/>
-    <poly id="server_1" color="red" fill="0" layer="0.00" shape="1534.643111,2530.852386 1548.040563,2512.212453 1558.525526,2528.522394 1533.478115,2530.269888"/>
+
+  <parkingArea id="parkingArea_-64_0_0" lane="-64_0" startPos="71.72" endPos="81.72" roadsideCapacity="1" width="4.00" length="4.00"/>
+  <vehicle id="vehicle_0" depart="0.00">
+      <route edges="-64" color="cyan"/>
+      <stop parkingArea="parkingArea_-64_0_0" parking="true"/>
+  </vehicle>
+
 </additional>
