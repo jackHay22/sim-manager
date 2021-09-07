@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 
   //default configuration location
   std::string cfg_path = "simulation_cfg.json";
-  std::string output_path = "";
+  std::string output_path = ""; //TODO default
 
   //get command line options
   while ((c = getopt(argc, argv, "c:o:")) != -1) {
@@ -36,8 +36,8 @@ int main(int argc, char **argv) {
     //run the sumo simulation on this configuration
     simulation_manager::run_simulation(cfg, output_path);
 
-  } catch (...) {
-    std::cerr << "failed to run simulation" << std::endl;
+  } catch (const std::exception& e) {
+    std::cerr << "failed to run simulation: " << e.what() << std::endl;
     return EXIT_FAILURE;
   }
 
