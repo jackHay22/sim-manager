@@ -16,4 +16,4 @@ RUN make -j$(nproc)
 WORKDIR /
 COPY simulation_manager/ simulation_manager/
 COPY Makefile Makefile
-RUN make build
+RUN make build -j$(nproc)

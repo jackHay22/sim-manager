@@ -1,0 +1,11 @@
+{
+  "default_network_path" : "data/grid/grid.net.xml",
+  "default_routes_path" : "data/grid/grid.rou.xml",
+  "default_towers_path" : "data/grid/grid.towers.xml",
+  "simulations" : [
+    {
+      "simulation_steps" : 1000,
+      "step_length" : 0.1
+    }
+  ]
+}
