@@ -44,15 +44,22 @@ class Edge:
             self._lanes.append(Lane(lane))
 
 class Tower:
-    def __init__(self, towerId, edgeId, laneId):
+    def __init__(self, tower_id, edge_id, lane_id):
         """Tower constructor takes id to assign, id of edge
             to attach to, id of lane within edge"""
         self._id = towerId
-        self._edgeId = edgeId
-        self._laneId = laneId
+        self._edgeId = edge_id
+        self._laneId = lane_id
 
     def generate_xml(self):
         #generate an xml representation for this tower
+        #For example:
+        # <parkingArea id="<tower_id>_PA" lane="<lane_id>" endPos="10" roadsideCapacity="1"/>
+        # <vehicle id="<tower_id>" depart="0.00" departPos="stop">
+        #     <route edges="<edge_id>" color="cyan"/>
+        #     <stop parkingArea="<tower_id>_PA" parking="true"/>
+        #     <param key="has.btreiver.device" value="true"/>
+        # </vehicle>
         pass
 
 def place_towers_grid(edges, tower_count, tower_pos):

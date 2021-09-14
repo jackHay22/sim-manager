@@ -31,6 +31,9 @@ generate () {
   rm $ROUTES_ALT_PATH || true
   rm trips.trips.xml || true
 
+  #enable bluetooth on all cars in route file
+  python bt_enable.py --routes $ROUTES_PATH
+
   #Run the tower placer on this network
   python tower_placer.py \
         --net $NETWORK_PATH \

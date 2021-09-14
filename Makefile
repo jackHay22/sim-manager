@@ -7,5 +7,10 @@ build:
 	# Builds simulation_manager/simulation_manager.o
 simulate-example: build
 	LD_LIBRARY_PATH=$(SUMO_HOME)/bin ./simulation_manager/simulation_manager.o -c examples/example_simulation_manager_cfg.json
+simulate-example-cmdline:
+	./simulation/simulation.sh \
+			examples \
+			output_data \
+			example
 gui-example:
 	./gui.sh examples example
