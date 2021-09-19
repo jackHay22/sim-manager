@@ -1,16 +1,13 @@
-.PHONY: setup build gui-example data-example towers-example
+.PHONY: simulate-example gui-example edit-example
 
-setup:
-	$(MAKE) -C simulation_manager libs
-build:
-	$(MAKE) -C simulation_manager
-	# Builds simulation_manager/simulation_manager.o
-simulate-example: build
-	LD_LIBRARY_PATH=$(SUMO_HOME)/bin ./simulation_manager/simulation_manager.o -c examples/example_simulation_manager_cfg.json
-simulate-example-cmdline:
+simulate-example:
 	./simulation/simulation.sh \
 			examples \
 			output_data \
 			example
 gui-example:
 	./gui.sh examples example
+edit-example:
+	$(SUMO_HOME)/bin/netedit \
+		-s examples/example.net.xml \
+		-a examples/example.towers.xml

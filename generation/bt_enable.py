@@ -31,7 +31,7 @@ def main(routes_path, send=True, recv=False):
             if send:
                 v.addChild("param", {"key": "has.btsender.device", "value": "true"})
             if recv:
-                v.addChild("param", {"key": "has.btreiver.device", "value": "true"})
+                v.addChild("param", {"key": "has.btreceiver.device", "value": "true"})
             vehicles += 1
         routes.append(r)
 

@@ -13,4 +13,3 @@ $SUMO_HOME/bin/sumo \
       --bt-output $2/$3.bt_output.xml \
       --step-length 0.1 \
       --device.btreceiver.range 1000.0
-      #--device.btreceiver.probability 0.25

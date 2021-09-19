@@ -1,10 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
 
-  <parkingArea id="parkingArea_F5F4_0_1" lane="F5F4_0" endPos="10" roadsideCapacity="1"/>
-  <vehicle id="tower0" depart="0.00" departPos="stop">
+    <parkingArea id="parkingArea_A1A0_0_81" lane="A1A0_0" endPos="35.86" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_A1A0_0_81" depart="0.00" departPos="stop">
+      <route edges="A1A0" color="cyan"/>
+      <stop parkingArea="parkingArea_A1A0_0_81" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_A2A1_0_71" lane="A2A1_0" endPos="29.57" roadsideCapacity="1"/>
+    <vehicle id="tower0_parkingArea_A2A1_0_71" depart="0.00" departPos="stop">
+      <route edges="A2A1" color="cyan"/>
+      <stop parkingArea="parkingArea_A2A1_0_71" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_A3A2_0_61" lane="A3A2_0" endPos="28.26" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_A3A2_0_61" depart="0.00" departPos="stop">
+      <route edges="A3A2" color="cyan"/>
+      <stop parkingArea="parkingArea_A3A2_0_61" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_A4A3_0_19" lane="A4A3_0" endPos="26.76" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_A4A3_0_19" depart="0.00" departPos="stop">
+      <route edges="A4A3" color="cyan"/>
+      <stop parkingArea="parkingArea_A4A3_0_19" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_A5A4_0_20" lane="A5A4_0" endPos="26.19" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_A5A4_0_20" depart="0.00" departPos="stop">
+      <route edges="A5A4" color="cyan"/>
+      <stop parkingArea="parkingArea_A5A4_0_20" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_A6A5_0_21" lane="A6A5_0" endPos="22.96" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_A6A5_0_21" depart="0.00" departPos="stop">
+      <route edges="A6A5" color="cyan"/>
+      <stop parkingArea="parkingArea_A6A5_0_21" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_A7A6_0_31" lane="A7A6_0" endPos="25.10" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_A7A6_0_31" depart="0.00" departPos="stop">
+      <route edges="A7A6" color="cyan"/>
+      <stop parkingArea="parkingArea_A7A6_0_31" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_A7A8_0_41" lane="A7A8_0" endPos="81.31" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_A7A8_0_41" depart="0.00" departPos="stop">
+      <route edges="A7A8" color="cyan"/>
+      <stop parkingArea="parkingArea_A7A8_0_41" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_A9A8_0_51" lane="A9A8_0" endPos="29.59" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_A9A8_0_51" depart="0.00" departPos="stop">
+      <route edges="A9A8" color="cyan"/>
+      <stop parkingArea="parkingArea_A9A8_0_51" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_B1B0_0_82" lane="B1B0_0" endPos="35.86" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_B1B0_0_82" depart="0.00" departPos="stop">
+      <route edges="B1B0" color="cyan"/>
+      <stop parkingArea="parkingArea_B1B0_0_82" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_B2B1_0_72" lane="B2B1_0" endPos="34.55" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_B2B1_0_72" depart="0.00" departPos="stop">
+      <route edges="B2B1" color="cyan"/>
+      <stop parkingArea="parkingArea_B2B1_0_72" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_B3B2_0_62" lane="B3B2_0" endPos="30.75" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_B3B2_0_62" depart="0.00" departPos="stop">
+      <route edges="B3B2" color="cyan"/>
+      <stop parkingArea="parkingArea_B3B2_0_62" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_B4B3_0_18" lane="B4B3_0" endPos="27.18" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_B4B3_0_18" depart="0.00" departPos="stop">
+      <route edges="B4B3" color="cyan"/>
+      <stop parkingArea="parkingArea_B4B3_0_18" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_B5B4_0_8" lane="B5B4_0" endPos="23.47" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_B5B4_0_8" depart="0.00" departPos="stop">
+      <route edges="B5B4" color="cyan"/>
+      <stop parkingArea="parkingArea_B5B4_0_8" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_B6B5_0_22" lane="B6B5_0" endPos="25.46" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_B6B5_0_22" depart="0.00" departPos="stop">
+      <route edges="B6B5" color="cyan"/>
+      <stop parkingArea="parkingArea_B6B5_0_22" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_B7B6_0_32" lane="B7B6_0" endPos="29.25" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_B7B6_0_32" depart="0.00" departPos="stop">
+      <route edges="B7B6" color="cyan"/>
+      <stop parkingArea="parkingArea_B7B6_0_32" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_B8B7_0_42" lane="B8B7_0" endPos="20.86" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_B8B7_0_42" depart="0.00" departPos="stop">
+      <route edges="B8B7" color="cyan"/>
+      <stop parkingArea="parkingArea_B8B7_0_42" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_B9B8_0_52" lane="B9B8_0" endPos="28.08" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_B9B8_0_52" depart="0.00" departPos="stop">
+      <route edges="B9B8" color="cyan"/>
+      <stop parkingArea="parkingArea_B9B8_0_52" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_C1C0_0_83" lane="C1C0_0" endPos="36.69" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_C1C0_0_83" depart="0.00" departPos="stop">
+      <route edges="C1C0" color="cyan"/>
+      <stop parkingArea="parkingArea_C1C0_0_83" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_C2C1_0_73" lane="C2C1_0" endPos="35.38" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_C2C1_0_73" depart="0.00" departPos="stop">
+      <route edges="C2C1" color="cyan"/>
+      <stop parkingArea="parkingArea_C2C1_0_73" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_C3C2_0_63" lane="C3C2_0" endPos="31.58" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_C3C2_0_63" depart="0.00" departPos="stop">
+      <route edges="C3C2" color="cyan"/>
+      <stop parkingArea="parkingArea_C3C2_0_63" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_C4C3_0_17" lane="C4C3_0" endPos="27.16" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_C4C3_0_17" depart="0.00" departPos="stop">
+      <route edges="C4C3" color="cyan"/>
+      <stop parkingArea="parkingArea_C4C3_0_17" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_C5C4_0_7" lane="C5C4_0" endPos="19.72" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_C5C4_0_7" depart="0.00" departPos="stop">
+      <route edges="C5C4" color="cyan"/>
+      <stop parkingArea="parkingArea_C5C4_0_7" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_C6C5_0_23" lane="C6C5_0" endPos="22.96" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_C6C5_0_23" depart="0.00" departPos="stop">
+      <route edges="C6C5" color="cyan"/>
+      <stop parkingArea="parkingArea_C6C5_0_23" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_C7C6_0_33" lane="C7C6_0" endPos="25.93" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_C7C6_0_33" depart="0.00" departPos="stop">
+      <route edges="C7C6" color="cyan"/>
+      <stop parkingArea="parkingArea_C7C6_0_33" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_C8C7_0_43" lane="C8C7_0" endPos="23.60" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_C8C7_0_43" depart="0.00" departPos="stop">
+      <route edges="C8C7" color="cyan"/>
+      <stop parkingArea="parkingArea_C8C7_0_43" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_C9C8_0_53" lane="C9C8_0" endPos="28.91" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_C9C8_0_53" depart="0.00" departPos="stop">
+      <route edges="C9C8" color="cyan"/>
+      <stop parkingArea="parkingArea_C9C8_0_53" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_D1D0_0_84" lane="D1D0_0" endPos="39.18" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_D1D0_0_84" depart="0.00" departPos="stop">
+      <route edges="D1D0" color="cyan"/>
+      <stop parkingArea="parkingArea_D1D0_0_84" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_D2D1_0_74" lane="D2D1_0" endPos="35.38" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_D2D1_0_74" depart="0.00" departPos="stop">
+      <route edges="D2D1" color="cyan"/>
+      <stop parkingArea="parkingArea_D2D1_0_74" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_D3D2_0_64" lane="D3D2_0" endPos="37.39" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_D3D2_0_64" depart="0.00" departPos="stop">
+      <route edges="D3D2" color="cyan"/>
+      <stop parkingArea="parkingArea_D3D2_0_64" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_D4D3_0_16" lane="D4D3_0" endPos="25.29" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_D4D3_0_16" depart="0.00" departPos="stop">
+      <route edges="D4D3" color="cyan"/>
+      <stop parkingArea="parkingArea_D4D3_0_16" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_D5D4_0_6" lane="D5D4_0" endPos="22.06" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_D5D4_0_6" depart="0.00" departPos="stop">
+      <route edges="D5D4" color="cyan"/>
+      <stop parkingArea="parkingArea_D5D4_0_6" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_D6D5_0_24" lane="D6D5_0" endPos="26.70" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_D6D5_0_24" depart="0.00" departPos="stop">
+      <route edges="D6D5" color="cyan"/>
+      <stop parkingArea="parkingArea_D6D5_0_24" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_D7D6_0_34" lane="D7D6_0" endPos="25.10" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_D7D6_0_34" depart="0.00" departPos="stop">
+      <route edges="D7D6" color="cyan"/>
+      <stop parkingArea="parkingArea_D7D6_0_34" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_D8D7_0_44" lane="D8D7_0" endPos="22.92" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_D8D7_0_44" depart="0.00" departPos="stop">
+      <route edges="D8D7" color="cyan"/>
+      <stop parkingArea="parkingArea_D8D7_0_44" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_D9D8_0_54" lane="D9D8_0" endPos="31.28" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_D9D8_0_54" depart="0.00" departPos="stop">
+      <route edges="D9D8" color="cyan"/>
+      <stop parkingArea="parkingArea_D9D8_0_54" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_E1E0_0_85" lane="E1E0_0" endPos="37.52" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_E1E0_0_85" depart="0.00" departPos="stop">
+      <route edges="E1E0" color="cyan"/>
+      <stop parkingArea="parkingArea_E1E0_0_85" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_E2E1_0_75" lane="E2E1_0" endPos="39.53" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_E2E1_0_75" depart="0.00" departPos="stop">
+      <route edges="E2E1" color="cyan"/>
+      <stop parkingArea="parkingArea_E2E1_0_75" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_E3E2_0_65" lane="E3E2_0" endPos="37.39" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_E3E2_0_65" depart="0.00" departPos="stop">
+      <route edges="E3E2" color="cyan"/>
+      <stop parkingArea="parkingArea_E3E2_0_65" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_E4E3_0_15" lane="E4E3_0" endPos="21.55" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_E4E3_0_15" depart="0.00" departPos="stop">
+      <route edges="E4E3" color="cyan"/>
+      <stop parkingArea="parkingArea_E4E3_0_15" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_E5E4_0_5" lane="E5E4_0" endPos="20.19" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_E5E4_0_5" depart="0.00" departPos="stop">
+      <route edges="E5E4" color="cyan"/>
+      <stop parkingArea="parkingArea_E5E4_0_5" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_E6E5_0_25" lane="E6E5_0" endPos="27.95" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_E6E5_0_25" depart="0.00" departPos="stop">
+      <route edges="E6E5" color="cyan"/>
+      <stop parkingArea="parkingArea_E6E5_0_25" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_E7E6_0_35" lane="E7E6_0" endPos="27.59" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_E7E6_0_35" depart="0.00" departPos="stop">
+      <route edges="E7E6" color="cyan"/>
+      <stop parkingArea="parkingArea_E7E6_0_35" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_E8E7_0_45" lane="E8E7_0" endPos="22.23" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_E8E7_0_45" depart="0.00" departPos="stop">
+      <route edges="E8E7" color="cyan"/>
+      <stop parkingArea="parkingArea_E8E7_0_45" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_E9E8_0_55" lane="E9E8_0" endPos="35.40" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_E9E8_0_55" depart="0.00" departPos="stop">
+      <route edges="E9E8" color="cyan"/>
+      <stop parkingArea="parkingArea_E9E8_0_55" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_F1F0_0_86" lane="F1F0_0" endPos="34.20" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_F1F0_0_86" depart="0.00" departPos="stop">
+      <route edges="F1F0" color="cyan"/>
+      <stop parkingArea="parkingArea_F1F0_0_86" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_F2F1_0_76" lane="F2F1_0" endPos="33.72" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_F2F1_0_76" depart="0.00" departPos="stop">
+      <route edges="F2F1" color="cyan"/>
+      <stop parkingArea="parkingArea_F2F1_0_76" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_F3F2_0_66" lane="F3F2_0" endPos="40.71" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_F3F2_0_66" depart="0.00" departPos="stop">
+      <route edges="F3F2" color="cyan"/>
+      <stop parkingArea="parkingArea_F3F2_0_66" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_F4F3_0_14" lane="F4F3_0" endPos="24.67" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_F4F3_0_14" depart="0.00" departPos="stop">
+      <route edges="F4F3" color="cyan"/>
+      <stop parkingArea="parkingArea_F4F3_0_14" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_F5F4_0_1" lane="F5F4_0" endPos="10.00" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_F5F4_0_1" depart="0.00" departPos="stop">
       <route edges="F5F4" color="cyan"/>
       <stop parkingArea="parkingArea_F5F4_0_1" parking="true"/>
-      <param key="has.btreiver.device" value="true"/>
-  </vehicle>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_F5G5_0_1" lane="F5G5_0" endPos="59.88" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_F5G5_0_1" depart="0.00" departPos="stop">
+      <route edges="F5G5" color="cyan"/>
+      <stop parkingArea="parkingArea_F5G5_0_1" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_F6F5_0_26" lane="F6F5_0" endPos="31.69" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_F6F5_0_26" depart="0.00" departPos="stop">
+      <route edges="F6F5" color="cyan"/>
+      <stop parkingArea="parkingArea_F6F5_0_26" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_F7F6_0_36" lane="F7F6_0" endPos="28.42" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_F7F6_0_36" depart="0.00" departPos="stop">
+      <route edges="F7F6" color="cyan"/>
+      <stop parkingArea="parkingArea_F7F6_0_36" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_F8F7_0_46" lane="F8F7_0" endPos="22.92" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_F8F7_0_46" depart="0.00" departPos="stop">
+      <route edges="F8F7" color="cyan"/>
+      <stop parkingArea="parkingArea_F8F7_0_46" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_F9F8_0_56" lane="F9F8_0" endPos="32.65" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_F9F8_0_56" depart="0.00" departPos="stop">
+      <route edges="F9F8" color="cyan"/>
+      <stop parkingArea="parkingArea_F9F8_0_56" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_G1G0_0_87" lane="G1G0_0" endPos="39.18" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_G1G0_0_87" depart="0.00" departPos="stop">
+      <route edges="G1G0" color="cyan"/>
+      <stop parkingArea="parkingArea_G1G0_0_87" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_G2G1_0_77" lane="G2G1_0" endPos="37.04" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_G2G1_0_77" depart="0.00" departPos="stop">
+      <route edges="G2G1" color="cyan"/>
+      <stop parkingArea="parkingArea_G2G1_0_77" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_G3G2_0_67" lane="G3G2_0" endPos="39.05" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_G3G2_0_67" depart="0.00" departPos="stop">
+      <route edges="G3G2" color="cyan"/>
+      <stop parkingArea="parkingArea_G3G2_0_67" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_G4G3_0_13" lane="G4G3_0" endPos="22.80" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_G4G3_0_13" depart="0.00" departPos="stop">
+      <route edges="G4G3" color="cyan"/>
+      <stop parkingArea="parkingArea_G4G3_0_13" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_G5G4_0_2" lane="G5G4_0" endPos="17.34" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_G5G4_0_2" depart="0.00" departPos="stop">
+      <route edges="G5G4" color="cyan"/>
+      <stop parkingArea="parkingArea_G5G4_0_2" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_G6G5_0_27" lane="G6G5_0" endPos="29.20" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_G6G5_0_27" depart="0.00" departPos="stop">
+      <route edges="G6G5" color="cyan"/>
+      <stop parkingArea="parkingArea_G6G5_0_27" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_G7G6_0_37" lane="G7G6_0" endPos="28.42" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_G7G6_0_37" depart="0.00" departPos="stop">
+      <route edges="G7G6" color="cyan"/>
+      <stop parkingArea="parkingArea_G7G6_0_37" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_G8G7_0_47" lane="G8G7_0" endPos="26.35" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_G8G7_0_47" depart="0.00" departPos="stop">
+      <route edges="G8G7" color="cyan"/>
+      <stop parkingArea="parkingArea_G8G7_0_47" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_G9G8_0_57" lane="G9G8_0" endPos="40.20" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_G9G8_0_57" depart="0.00" departPos="stop">
+      <route edges="G9G8" color="cyan"/>
+      <stop parkingArea="parkingArea_G9G8_0_57" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_H1H0_0_88" lane="H1H0_0" endPos="38.35" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_H1H0_0_88" depart="0.00" departPos="stop">
+      <route edges="H1H0" color="cyan"/>
+      <stop parkingArea="parkingArea_H1H0_0_88" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_H2H1_0_78" lane="H2H1_0" endPos="37.04" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_H2H1_0_78" depart="0.00" departPos="stop">
+      <route edges="H2H1" color="cyan"/>
+      <stop parkingArea="parkingArea_H2H1_0_78" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_H3H2_0_68" lane="H3H2_0" endPos="39.88" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_H3H2_0_68" depart="0.00" departPos="stop">
+      <route edges="H3H2" color="cyan"/>
+      <stop parkingArea="parkingArea_H3H2_0_68" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_H4H3_0_12" lane="H4H3_0" endPos="20.92" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_H4H3_0_12" depart="0.00" departPos="stop">
+      <route edges="H4H3" color="cyan"/>
+      <stop parkingArea="parkingArea_H4H3_0_12" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_H5H4_0_3" lane="H5H4_0" endPos="20.26" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_H5H4_0_3" depart="0.00" departPos="stop">
+      <route edges="H5H4" color="cyan"/>
+      <stop parkingArea="parkingArea_H5H4_0_3" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_H6H5_0_28" lane="H6H5_0" endPos="29.82" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_H6H5_0_28" depart="0.00" departPos="stop">
+      <route edges="H6H5" color="cyan"/>
+      <stop parkingArea="parkingArea_H6H5_0_28" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_H7H6_0_38" lane="H7H6_0" endPos="28.42" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_H7H6_0_38" depart="0.00" departPos="stop">
+      <route edges="H7H6" color="cyan"/>
+      <stop parkingArea="parkingArea_H7H6_0_38" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_H7H8_0_48" lane="H7H8_0" endPos="78.57" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_H7H8_0_48" depart="0.00" departPos="stop">
+      <route edges="H7H8" color="cyan"/>
+      <stop parkingArea="parkingArea_H7H8_0_48" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_H9H8_0_58" lane="H9H8_0" endPos="34.02" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_H9H8_0_58" depart="0.00" departPos="stop">
+      <route edges="H9H8" color="cyan"/>
+      <stop parkingArea="parkingArea_H9H8_0_58" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_I1I0_0_89" lane="I1I0_0" endPos="40.01" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_I1I0_0_89" depart="0.00" departPos="stop">
+      <route edges="I1I0" color="cyan"/>
+      <stop parkingArea="parkingArea_I1I0_0_89" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_I1I2_0_79" lane="I1I2_0" endPos="71.05" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_I1I2_0_79" depart="0.00" departPos="stop">
+      <route edges="I1I2" color="cyan"/>
+      <stop parkingArea="parkingArea_I1I2_0_79" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_I3I2_0_69" lane="I3I2_0" endPos="40.71" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_I3I2_0_69" depart="0.00" departPos="stop">
+      <route edges="I3I2" color="cyan"/>
+      <stop parkingArea="parkingArea_I3I2_0_69" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_I4I3_0_11" lane="I4I3_0" endPos="19.68" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_I4I3_0_11" depart="0.00" departPos="stop">
+      <route edges="I4I3" color="cyan"/>
+      <stop parkingArea="parkingArea_I4I3_0_11" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_I5I4_0_4" lane="I5I4_0" endPos="22.64" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_I5I4_0_4" depart="0.00" departPos="stop">
+      <route edges="I5I4" color="cyan"/>
+      <stop parkingArea="parkingArea_I5I4_0_4" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_I6I5_0_29" lane="I6I5_0" endPos="34.19" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_I6I5_0_29" depart="0.00" departPos="stop">
+      <route edges="I6I5" color="cyan"/>
+      <stop parkingArea="parkingArea_I6I5_0_29" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_I7I6_0_39" lane="I7I6_0" endPos="28.42" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_I7I6_0_39" depart="0.00" departPos="stop">
+      <route edges="I7I6" color="cyan"/>
+      <stop parkingArea="parkingArea_I7I6_0_39" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_I8I7_0_49" lane="I8I7_0" endPos="28.41" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_I8I7_0_49" depart="0.00" departPos="stop">
+      <route edges="I8I7" color="cyan"/>
+      <stop parkingArea="parkingArea_I8I7_0_49" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_I9I8_0_59" lane="I9I8_0" endPos="31.28" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_I9I8_0_59" depart="0.00" departPos="stop">
+      <route edges="I9I8" color="cyan"/>
+      <stop parkingArea="parkingArea_I9I8_0_59" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_J0J1_0_90" lane="J0J1_0" endPos="62.95" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_J0J1_0_90" depart="0.00" departPos="stop">
+      <route edges="J0J1" color="cyan"/>
+      <stop parkingArea="parkingArea_J0J1_0_90" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_J2J1_0_80" lane="J2J1_0" endPos="33.72" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_J2J1_0_80" depart="0.00" departPos="stop">
+      <route edges="J2J1" color="cyan"/>
+      <stop parkingArea="parkingArea_J2J1_0_80" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_J2J3_0_70" lane="J2J3_0" endPos="67.38" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_J2J3_0_70" depart="0.00" departPos="stop">
+      <route edges="J2J3" color="cyan"/>
+      <stop parkingArea="parkingArea_J2J3_0_70" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_J4J3_0_10" lane="J4J3_0" endPos="21.55" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_J4J3_0_10" depart="0.00" departPos="stop">
+      <route edges="J4J3" color="cyan"/>
+      <stop parkingArea="parkingArea_J4J3_0_10" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_J5J4_0_9" lane="J5J4_0" endPos="23.07" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_J5J4_0_9" depart="0.00" departPos="stop">
+      <route edges="J5J4" color="cyan"/>
+      <stop parkingArea="parkingArea_J5J4_0_9" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_J6J5_0_30" lane="J6J5_0" endPos="32.94" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_J6J5_0_30" depart="0.00" departPos="stop">
+      <route edges="J6J5" color="cyan"/>
+      <stop parkingArea="parkingArea_J6J5_0_30" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_J7J6_0_40" lane="J7J6_0" endPos="30.91" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_J7J6_0_40" depart="0.00" departPos="stop">
+      <route edges="J7J6" color="cyan"/>
+      <stop parkingArea="parkingArea_J7J6_0_40" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_J8J7_0_50" lane="J8J7_0" endPos="26.35" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_J8J7_0_50" depart="0.00" departPos="stop">
+      <route edges="J8J7" color="cyan"/>
+      <stop parkingArea="parkingArea_J8J7_0_50" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
+
+    <parkingArea id="parkingArea_J9J8_0_60" lane="J9J8_0" endPos="33.22" roadsideCapacity="1"/>
+    <vehicle id="tower_parkingArea_J9J8_0_60" depart="0.00" departPos="stop">
+      <route edges="J9J8" color="cyan"/>
+      <stop parkingArea="parkingArea_J9J8_0_60" parking="true"/>
+      <param key="has.btreceiver.device" value="true"/>
+    </vehicle>
 
 </additional>

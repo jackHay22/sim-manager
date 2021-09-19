@@ -9,4 +9,5 @@ $SUMO_HOME/bin/sumo-gui \
       -n $1/$2.net.xml \
       -r $1/$2.rou.xml \
       -a $1/$2.towers.xml \
-      --bt-output output_data/bt.xml
+      --bt-output output_data/gui_bt.xml \
+      --device.btreceiver.range 1000.0

@@ -1,4 +1,9 @@
 <routes >
+  <vehicle id="test" depart="0.00" departPos="stop">
+      <route edges="-64" color="cyan"/>
+      <stop parkingArea="test_pa" parking="true"/>
+      <param key="has.btreiver.device" value="true"/>
+  </vehicle>
     <vehicle depart="0.00" id="0">
         <route edges="17 64 -121"/>
         <param key="has.btsender.device" value="true"/>
