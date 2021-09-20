@@ -12,4 +12,5 @@ $SUMO_HOME/bin/sumo \
       -a $1/$3.towers.xml \
       --bt-output $2/$3.bt_output.xml \
       --step-length 0.1 \
-      --device.btreceiver.range 1000.0
+      --device.btreceiver.range 1000.0 \
+      --device.btreceiver.all-recognitions

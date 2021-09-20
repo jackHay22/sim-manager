@@ -1,4 +1,7 @@
-.PHONY: simulate-example gui-example edit-example
+.PHONY: simulate-example gui-example edit-example setup
+
+setup:
+	$(MAKE) -C pipeline libs
 
 simulate-example:
 	./simulation/simulation.sh \

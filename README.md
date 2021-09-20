@@ -8,13 +8,11 @@
 ## Setup
 - Use `vagrant` to run in a vm
   - Run: `vagrant up && vagrant ssh`
-  - In the vm: `cd /vagrant && export SUMO_HOME=/home/vagrant/sumo && make setup && make build -j8`
+  - In the vm: `cd /vagrant && export SUMO_HOME=/home/vagrant/sumo && make setup`
 
 ## Use
 
 ### Simulation Manager
-[Simulation Manager](simulation_manager/README.md)
-
 - Run example simulation
 ```bash
 make simulate-example
