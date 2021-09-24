@@ -1,6 +1,9 @@
 # Sumo Simulation Manager
 - Automates the creation and management of Sumo simulations for vehicle communications optimization.
 
+## Analysis transformer
+- Requires [RapidXML](https://sourceforge.net/projects/rapidxml/)
+
 ## Roadside towers
 - Roadside towers are represented by parked cars:
 ![Screenshot](docs/images/example_server.png)

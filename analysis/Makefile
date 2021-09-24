@@ -1,17 +1,13 @@
-TARGET = simulation_manager.o
-SOURCES := $(wildcard src/*.cc)
+TARGET = analysis_transformer.o
+SOURCES := $(wildcard src/*.cc) $(wildcard src/*/*.cc)
 BUILD_DIR = build
 LIB_DIR = libs
 OBJECTS = $(SOURCES:.cc=.o)
 BUILDOBJECTS := $(patsubst %,$(BUILD_DIR)/%,$(SOURCES:.cc=.o))
-CFLAGS := -std=c++11 -O2 -Wall -Wextra -Werror -pedantic -Ilibs
+CFLAGS := -std=c++17 -g -O2 -Wall -Wextra -Werror -pedantic -I$(LIB_DIR)
 
 .PHONY: all clean libs
 all: $(TARGET)
-
-libs:
-	wget https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
-	mkdir -p $(LIB_DIR) && mv json.hpp $(LIB_DIR)
 
 %.o: %.cc
 	mkdir -p $(BUILD_DIR)/$(dir $@)
