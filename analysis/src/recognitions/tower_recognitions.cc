@@ -3,8 +3,20 @@
  */
 
 #include "tower_recognitions.h"
+#include <cmath>
 
 namespace recognitions {
+
+  /**
+   * Calculate the distance between two points
+   * @param  x0,y0 first point
+   * @param  x1,y1 second point
+   * @return cartesian distance
+   */
+  inline double distance(double x0, double y0,
+                         double x1, double y1) {
+    return sqrt(pow(x1 - x0, 2) + pow(y1 - y0, 2));
+  }
 
   /**
    * Constructor
@@ -34,7 +46,8 @@ namespace recognitions {
    * @param timestep the timestep
    * @param position the position of a recognized vehicle
    */
-  void tower_recognitions_t::add_recognition(double timestep, std::unique_ptr<vehicle_position_t> position) {
+  void tower_recognitions_t::add_recognition(std::string&& timestep,
+                                             std::unique_ptr<vehicle_position_t> position) {
     vehicles[timestep].push_back(std::move(position));
   }
 }

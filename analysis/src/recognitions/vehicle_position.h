@@ -8,11 +8,15 @@
 #include <string>
 
 namespace recognitions {
+
+  struct tower_recognitions_t;
+
   /*
    * Defines the position of a vehicle at some timestep
    */
   struct vehicle_position_t {
   private:
+    friend struct tower_recognitions_t;
     //the id of the vehicle
     std::string vehicle_id;
     //the position

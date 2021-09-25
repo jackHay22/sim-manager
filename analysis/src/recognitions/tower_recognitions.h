@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <memory>
 #include <vector>
+#include <tuple>
 
 namespace recognitions {
   /*
@@ -22,8 +23,8 @@ namespace recognitions {
     //the tower position
     double x;
     double y;
-    //vehicles this tower has seen for each given timestep
-    std::unordered_map<double,std::vector<std::unique_ptr<vehicle_position_t>>> vehicles;
+    //vehicles this tower has seen for each given timestep (timestep remains a string)
+    std::unordered_map<std::string,std::vector<std::unique_ptr<vehicle_position_t>>> vehicles;
 
   public:
     /**
@@ -48,7 +49,8 @@ namespace recognitions {
      * @param timestep the timestep
      * @param position the position of a recognized vehicle
      */
-    void add_recognition(double timestep, std::unique_ptr<vehicle_position_t> position);
+    void add_recognition(std::string&& timestep, std::unique_ptr<vehicle_position_t> position);
+
   };
 }
 

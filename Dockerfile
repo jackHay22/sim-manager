@@ -14,6 +14,7 @@ RUN cmake ../..
 RUN make -j$(nproc)
 
 WORKDIR /
-COPY simulation_manager/ simulation_manager/
+COPY simulation/ simulation/
+COPY analysis/ analysis/
 COPY Makefile Makefile
-RUN make build -j$(nproc)
+RUN make analysis -B -j$(nproc)

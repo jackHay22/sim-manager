@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include "recognitions/vehicle_position.h"
 #include "recognitions/tower_recognitions.h"
-#include "output/transform.h"
+#include "output/render_output.h"
 #include <iostream>
 #include <functional>
 #include <exception>
@@ -184,7 +184,7 @@ void add_recognition_points(recognitions::tower_recognitions_t& tower,
   for (rapidxml::xml_node<> *rp_node = seen_node->first_node(RECOGNITION_POINT_NODE);
        rp_node;
        rp_node = rp_node->next_sibling()) {
-    double ts = 0.0;
+    std::string ts = "0.0";
     double v_x = 0.0;
     double v_y = 0.0;
     double v_s = 0.0;
@@ -196,7 +196,7 @@ void add_recognition_points(recognitions::tower_recognitions_t& tower,
          rp_attr = rp_attr->next_attribute()) {
 
       if (strcmp(rp_attr->name(), T_ATTR) == 0) {
-        ts = atof(rp_attr->value());
+        ts = std::string(rp_attr->value());
         not_found--;
 
       } else if (strcmp(rp_attr->name(), SEEN_POS_ATTR) == 0) {
@@ -220,7 +220,7 @@ void add_recognition_points(recognitions::tower_recognitions_t& tower,
 
     //add the recognition point
     tower.add_recognition(
-      ts,
+      std::move(ts),
       std::make_unique<recognitions::vehicle_position_t>(vehicle_id, v_x, v_y, v_s)
     );
   }

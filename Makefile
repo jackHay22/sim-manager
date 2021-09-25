@@ -1,8 +1,8 @@
 .PHONY: simulate-example gui-example edit-example setup
 
-setup:
-	$(MAKE) -C pipeline libs
-
+analysis:
+	$(MAKE) -C analysis clean
+	$(MAKE) -C analysis
 simulate-example:
 	./simulation/simulation.sh \
 			examples \

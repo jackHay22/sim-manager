@@ -16,9 +16,11 @@ int main(int argc, char **argv) {
   //the location to write the output to
   std::string output_path;
 
-  while ((c = getopt(argc, argv, "b:")) != -1) {
+  while ((c = getopt(argc, argv, "b:o:")) != -1) {
     if (c == 'b') {
       bt_output_path = std::string(optarg);
+    } else if (c == 'o') {
+      output_path = std::string(optarg);
     }
   }
 

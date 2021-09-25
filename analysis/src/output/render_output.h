@@ -2,8 +2,8 @@
  * Jack Hay, Sept 2021
  */
 
-#ifndef _TRANSFORM_H
-#define _TRANSFORM_H
+#ifndef _RENDER_OUTPUT_H
+#define _RENDER_OUTPUT_H
 
 #include <string>
 #include <unordered_map>
@@ -22,4 +22,4 @@ namespace output {
                      std::unordered_map<std::string, std::unique_ptr<recognitions::tower_recognitions_t>>& tower_recognitions);
 }
 
-#endif /*_TRANSFORM_H*/
+#endif /*_RENDER_OUTPUT_H*/
