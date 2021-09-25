@@ -11,6 +11,5 @@ $SUMO_HOME/bin/sumo \
       -r $1/$3.rou.xml \
       -a $1/$3.towers.xml \
       --bt-output $2/$3.bt_output.xml \
-      --fcd-output $2/$3.fcd.output.xml \
       --device.btreceiver.range 1000.0 \
       --device.btreceiver.all-recognitions
