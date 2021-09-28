@@ -72,8 +72,8 @@ class Lane:
         pairs = s_lane.shape.split(' ')
         for p in pairs:
             comps = p.split(',')
-            self._pts.append((float(comps[0]),
-                              float(comps[1])))
+            self._pts.append(Vec2(float(comps[0]),
+                                  float(comps[1])))
 
 class Edge:
     def __init__(self, s_edge):

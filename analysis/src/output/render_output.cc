@@ -4,8 +4,11 @@
 
 #include "render_output.h"
 #include "csv_writer.h"
+#include <json.hpp>
 
 namespace output {
+
+  typedef nlohmann::json json_t;
 
   /**
    * Transform and write output to a file
@@ -15,6 +18,8 @@ namespace output {
    */
   int render_output(const std::string& out_path,
                      std::unordered_map<std::string, std::unique_ptr<recognitions::tower_recognitions_t>>& tower_recognitions) {
+
+    //TODO vehicle segments visited matrix
 
     //create a csv writer
     csv_writer_t writer(out_path);
