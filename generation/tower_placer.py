@@ -2,6 +2,7 @@ import logging
 import sys
 import os
 import argparse
+import math
 
 #Verify that the SUMO_HOME environment var is set to we can load the python lib
 if 'SUMO_HOME' in os.environ:
@@ -20,6 +21,47 @@ stream.setLevel(logging.DEBUG)
 log.addHandler(stream)
 
 TOWER_POSITION_OPTIONS = ["center", "junction"]
+
+class Vec2:
+    def __init__(x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return Vec2(self.x + other.x,
+                    self.y + other.y)
+
+    def __sub__(self, other):
+        return Vec2(self.x - other.x,
+                    self.y - other.y)
+
+    def __mul__(self, s):
+        return Vec2(self.x * s, self.y * s)
+
+    def dist(self, other):
+        return math.sqrt((other.x - self.x) ** 2 +
+                         (other.y - self.y) ** 2)
+
+    def dot(self, other):
+        return self.x * other.x + self.y * other.y
+
+
+def distance(pt, line):
+    """Get the distance between a point and a line segment
+    @param pt   Vec2
+    @param line (Vec2, Vec2)"""
+    l0 = line[0]
+    l1 = line[1]
+    #get segment distance squared
+    dist_sqrd = ((l1.x - l0.x) ** 2 + (l1.y - l0.y) ** 2)
+
+    if dist_sqrd == 0:
+        #line seqment has no length
+        return pt.dist(l0)
+
+    #calculate projection
+    proj = l0 + (l1 - l0) * max(0, min(1, (pt - l0).dot(l1 - l0) / dist_sqrd))
+    return pt.dist(proj)
 
 class Lane:
     def __init__(self, s_lane):
