@@ -14,5 +14,7 @@ $SUMO_HOME/bin/sumo \
       --device.btreceiver.range 1000.0 \
       --device.btreceiver.all-recognitions
 
+OUT_DIR=${2}/${3}/
 # Run the output transformer
-./analysis/analysis_transformer.o -b $2/$3.bt_output.xml -o $2/$3.output.csv
+mkdir -p $OUT_DIR
+./analysis/analysis_transformer.o -b $2/$3.bt_output.xml -o $OUT_DIR

@@ -39,14 +39,14 @@ namespace recognitions {
    */
   double tower_recognitions_t::distance(const std::string& timestep, const std::string& vehicle_id) const {
     //look for the vehicle in the map
-    std::unordered_map<std::string,std::unordered_map<std::string,std::unique_ptr<vehicle_position_t>>>::const_iterator it
+    std::unordered_map<std::string,std::unordered_map<std::string,double>>::const_iterator it
       = vehicles.find(timestep);
 
     if (it != vehicles.end()) {
       //find the vehicle for this timestep
-      std::unordered_map<std::string,std::unique_ptr<vehicle_position_t>>::const_iterator it2 = it->second.find(vehicle_id);
+      std::unordered_map<std::string,double>::const_iterator it2 = it->second.find(vehicle_id);
       if (it2 != it->second.end()) {
-        return it2->second.dist;
+        return it2->second;
       }
     }
     return -1;

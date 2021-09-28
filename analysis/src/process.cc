@@ -10,7 +10,6 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
-#include "recognitions/vehicle_position.h"
 #include "recognitions/tower_recognitions.h"
 #include "output/render_output.h"
 #include <iostream>
@@ -258,7 +257,7 @@ int process_output_data(const std::string& bt_output_path,
   //map of all towers found
   std::set<std::string> towers;
   std::set<std::string> vehicles;
-  std""set<std::string> timesteps;
+  std::set<std::string> timesteps;
 
   {
     //load the bt xml file, add recognitions to map
@@ -288,7 +287,7 @@ int process_output_data(const std::string& bt_output_path,
             towers.insert(tower_id);
 
             //create a tower
-            recognitions::tower_recognitions_t& tower = add_tower(tower_id, tower_recognitions);
+            recognitions::tower_recognitions_t& tower = add_tower(std::move(tower_id), tower_recognitions);
 
             //add vehicle recognitions
             for (rapidxml::xml_node<> *seen_node = tower_node->first_node(SEEN_NODE);

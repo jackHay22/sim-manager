@@ -46,8 +46,6 @@ int main(int argc, char **argv) {
       bt_output_path = std::string(optarg);
     } else if (c == 'o') {
       output_path = std::string(optarg);
-    } else if (c == 't') {
-      tower_locations = std::string(optarg);
     }
   }
 
