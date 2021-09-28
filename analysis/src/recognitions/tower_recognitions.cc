@@ -3,20 +3,9 @@
  */
 
 #include "tower_recognitions.h"
-#include <cmath>
+
 
 namespace recognitions {
-
-  /**
-   * Calculate the distance between two points
-   * @param  x0,y0 first point
-   * @param  x1,y1 second point
-   * @return cartesian distance
-   */
-  inline double distance(double x0, double y0,
-                         double x1, double y1) {
-    return sqrt(pow(x1 - x0, 2) + pow(y1 - y0, 2));
-  }
 
   /**
    * Constructor
@@ -42,12 +31,35 @@ namespace recognitions {
   }
 
   /**
-   * Add a vehicle recognition for a given timestep
-   * @param timestep the timestep
-   * @param position the position of a recognized vehicle
+   * Get the distance from a vehicle to the tower
+   * (-1 if out of range)
+   * @param  timestep   the timestep to check for
+   * @param  vehicle_id the id of the vehicle
+   * @return            the distance
    */
-  void tower_recognitions_t::add_recognition(std::string&& timestep,
-                                             std::unique_ptr<vehicle_position_t> position) {
-    vehicles[timestep].push_back(std::move(position));
+  double tower_recognitions_t::distance(const std::string& timestep, const std::string& vehicle_id) const {
+    //look for the vehicle in the map
+    std::unordered_map<std::string,std::unordered_map<std::string,std::unique_ptr<vehicle_position_t>>>::const_iterator it
+      = vehicles.find(timestep);
+
+    if (it != vehicles.end()) {
+      //find the vehicle for this timestep
+      std::unordered_map<std::string,std::unique_ptr<vehicle_position_t>>::const_iterator it2 = it->second.find(vehicle_id);
+      if (it2 != it->second.end()) {
+        return it2->second.dist;
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Add a vehicle recognition for this twoer
+   * @param timestep   the current timestep
+   * @param vehicle_id the id of the vehicle
+   * @param dist       the distance from the tower to the vehicle
+   */
+  void tower_recognitions_t::add_recognition(std::string&& timestep, std::string&& vehicle_id, double dist) {
+    //add to lookup
+    vehicles[timestep][vehicle_id] = dist;
   }
 }

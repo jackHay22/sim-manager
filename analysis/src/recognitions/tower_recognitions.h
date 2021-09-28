@@ -6,7 +6,6 @@
 #define _TOWER_RECOGNITIONS_H
 
 #include <string>
-#include "vehicle_position.h"
 #include <unordered_map>
 #include <memory>
 #include <vector>
@@ -24,7 +23,7 @@ namespace recognitions {
     double x;
     double y;
     //vehicles this tower has seen for each given timestep (timestep remains a string)
-    std::unordered_map<std::string,std::vector<std::unique_ptr<vehicle_position_t>>> vehicles;
+    std::unordered_map<std::string,std::unordered_map<std::string,double>> vehicles;
 
   public:
     /**
@@ -45,11 +44,21 @@ namespace recognitions {
     void set_position(double x, double y);
 
     /**
-     * Add a vehicle recognition for a given timestep
-     * @param timestep the timestep
-     * @param position the position of a recognized vehicle
+     * Get the distance from a vehicle to the tower
+     * (-1 if out of range)
+     * @param  timestep   the timestep to check for
+     * @param  vehicle_id the id of the vehicle
+     * @return            the distance
      */
-    void add_recognition(std::string&& timestep, std::unique_ptr<vehicle_position_t> position);
+    double distance(const std::string& timestep, const std::string& vehicle_id) const;
+
+    /**
+     * Add a vehicle recognition for this twoer
+     * @param timestep   the current timestep
+     * @param vehicle_id the id of the vehicle
+     * @param dist       the distance from the tower to the vehicle
+     */
+    void add_recognition(std::string&& timestep, std::string&& vehicle_id, double dist);
 
   };
 }

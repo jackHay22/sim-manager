@@ -18,6 +18,8 @@
 #include <exception>
 #include <cstring>
 #include <stdint.h>
+#include <set>
+#include <cmath>
 
 #define BT_OUTPUT_NODE          "bt-output"
 #define BT_NODE                 "bt"
@@ -122,6 +124,17 @@ bool parse_position(const std::string& pos, double& x, double& y) {
 }
 
 /**
+ * Calculate the distance between two points
+ * @param  x0,y0 first point
+ * @param  x1,y1 second point
+ * @return cartesian distance
+ */
+inline double distance(double x0, double y0,
+                       double x1, double y1) {
+  return sqrt(pow(x1 - x0, 2) + pow(y1 - y0, 2));
+}
+
+/**
  * Add a tower recognition collector if not already set for this id
  * @param  tower_id           the id of the tower
  * @param  tower_recognitions all tower recognitions
@@ -146,11 +159,16 @@ recognitions::tower_recognitions_t& add_tower(std::string&& tower_id,
  * Add all of the recognition points for a vehicle
  * @param tower     the tower
  * @param seen_node the list of recognition points
+ * @param vehicles  set of unique vehicle ids
  */
 void add_recognition_points(recognitions::tower_recognitions_t& tower,
-                            rapidxml::xml_node<> *seen_node) {
+                            rapidxml::xml_node<> *seen_node,
+                            std::set<std::string>& vehicles,
+                            std::set<std::string>& timesteps) {
   //extract the attributes
   std::string vehicle_id = "-";
+  double tower_x = 0.0;
+  double tower_y = 0.0;
 
   int not_found = 2;
 
@@ -161,16 +179,14 @@ void add_recognition_points(recognitions::tower_recognitions_t& tower,
     if (strcmp(sn_attr->name(), ID_ATTR) == 0) {
       vehicle_id = std::string(sn_attr->value());
       not_found--;
+
     } else if (strcmp(sn_attr->name(), OBSERVER_POS_END_ATTR) == 0) {
       std::string tower_pos = std::string(sn_attr->value());
-      double tower_x = 0.0;
-      double tower_y = 0.0;
       //parse the tower position
       if (!parse_position(tower_pos, tower_x, tower_y)) {
         std::cerr << "ERR unable to parse tower position " << tower_pos << std::endl;
         return;
       }
-      tower.set_position(tower_x,tower_y);
       not_found--;
     }
   }
@@ -180,6 +196,9 @@ void add_recognition_points(recognitions::tower_recognitions_t& tower,
     return;
   }
 
+  //track this vehicle by id
+  vehicles.insert(vehicle_id);
+
   //add recognition points
   for (rapidxml::xml_node<> *rp_node = seen_node->first_node(RECOGNITION_POINT_NODE);
        rp_node;
@@ -187,9 +206,8 @@ void add_recognition_points(recognitions::tower_recognitions_t& tower,
     std::string ts = "0.0";
     double v_x = 0.0;
     double v_y = 0.0;
-    double v_s = 0.0;
 
-    not_found = 3;
+    not_found = 2;
     //look through attributes
     for (rapidxml::xml_attribute<> *rp_attr = rp_node->first_attribute();
          rp_attr;
@@ -207,9 +225,6 @@ void add_recognition_points(recognitions::tower_recognitions_t& tower,
         }
 
         not_found--;
-      } else if (strcmp(rp_attr->name(), SEEN_SPEED_ATTR) == 0) {
-        v_s = atof(rp_attr->value());
-        not_found--;
       }
     }
 
@@ -218,10 +233,14 @@ void add_recognition_points(recognitions::tower_recognitions_t& tower,
       return;
     }
 
+    //record the timestep
+    timesteps.insert(ts);
+
     //add the recognition point
     tower.add_recognition(
       std::move(ts),
-      std::make_unique<recognitions::vehicle_position_t>(vehicle_id, v_x, v_y, v_s)
+      std::move(vehicle_id),
+      distance(tower_x, tower_y, v_x, v_y)
     );
   }
 }
@@ -229,16 +248,21 @@ void add_recognition_points(recognitions::tower_recognitions_t& tower,
 /**
  * Read the output files and generate an aggregated report
  * @param  bt_output_path       the path to the bluetooth output file
- * @param  output_path          the path to write the output data to
+ * @param  output_path          the path to a folder to write output files to
  * @return                      success or failure
  */
 int process_output_data(const std::string& bt_output_path,
                         const std::string& output_path) {
   //construct a mapping from tower id to all recognition points
   std::unordered_map<std::string, std::unique_ptr<recognitions::tower_recognitions_t>> tower_recognitions;
+  //map of all towers found
+  std::set<std::string> towers;
+  std::set<std::string> vehicles;
+  std""set<std::string> timesteps;
+
   {
     //load the bt xml file, add recognitions to map
-    if (!load_from_path(bt_output_path, [&tower_recognitions] (const rapidxml::xml_document<>& doc) {
+    if (!load_from_path(bt_output_path, [&tower_recognitions, &towers, &vehicles, &timesteps] (const rapidxml::xml_document<>& doc) {
 
       //verify the name of the root node
       if (strcmp(doc.first_node()->name(), BT_OUTPUT_NODE) != 0) {
@@ -259,9 +283,12 @@ int process_output_data(const std::string& bt_output_path,
              tower_attr = tower_attr->next_attribute()) {
           //check the attribute name
           if (strcmp(tower_attr->name(), ID_ATTR) == 0) {
+            std::string tower_id = std::string(tower_attr->value());
+
+            towers.insert(tower_id);
+
             //create a tower
-            recognitions::tower_recognitions_t& tower = add_tower(std::string(tower_attr->value()),
-                                                                  tower_recognitions);
+            recognitions::tower_recognitions_t& tower = add_tower(tower_id, tower_recognitions);
 
             //add vehicle recognitions
             for (rapidxml::xml_node<> *seen_node = tower_node->first_node(SEEN_NODE);
@@ -269,7 +296,7 @@ int process_output_data(const std::string& bt_output_path,
                  seen_node = seen_node->next_sibling()) {
 
               //add recognition points for this tower
-              add_recognition_points(tower, seen_node);
+              add_recognition_points(tower, seen_node, vehicles, timesteps);
             }
           }
         }
@@ -281,5 +308,5 @@ int process_output_data(const std::string& bt_output_path,
   }
 
   //reshape output and write to file
-  return output::render_output(output_path, tower_recognitions);
+  return output::render_output(output_path, tower_recognitions, towers, vehicles, timesteps);
 }
