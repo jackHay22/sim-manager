@@ -86,7 +86,12 @@ bool parse_position(const std::string& pos, double& x, double& y) {
   char *buff = (char*) malloc(sizeof(char) * (filesize + 1));
 
   FILE *xml_file = fopen(path.c_str(), "rb");
-  fread(buff, filesize, 1, xml_file);
+  if (fread(buff, filesize, 1, xml_file) == 0) {
+    std::cout << "ERR: failed to read from " << path << std::endl;
+    free(buff);
+    fclose(xml_file);
+    return false;
+  }
   fclose(xml_file);
 
   buff[filesize] = 0;
@@ -156,9 +161,9 @@ recognitions::tower_recognitions_t& add_tower(std::string&& tower_id,
 
 /**
  * Add all of the recognition points for a vehicle
- * @param tower     the tower
- * @param seen_node the list of recognition points
- * @param vehicles  set of unique vehicle ids
+ * @param tower             the tower
+ * @param seen_node         the list of recognition points
+ * @param vehicles          set of unique vehicle ids
  */
 void add_recognition_points(recognitions::tower_recognitions_t& tower,
                             rapidxml::xml_node<> *seen_node,
@@ -197,6 +202,9 @@ void add_recognition_points(recognitions::tower_recognitions_t& tower,
 
   //track this vehicle by id
   vehicles.insert(vehicle_id);
+
+  //track the tower position
+  tower.set_position(tower_x, tower_y);
 
   //add recognition points
   for (rapidxml::xml_node<> *rp_node = seen_node->first_node(RECOGNITION_POINT_NODE);
@@ -247,65 +255,72 @@ void add_recognition_points(recognitions::tower_recognitions_t& tower,
 /**
  * Read the output files and generate an aggregated report
  * @param  bt_output_path       the path to the bluetooth output file
+ * @param  fcd_output_path      the path to the sumo fcd output file
  * @param  output_path          the path to a folder to write output files to
  * @return                      success or failure
  */
 int process_output_data(const std::string& bt_output_path,
+                        const std::string& /*fcd_output_path*/,
                         const std::string& output_path) {
   //construct a mapping from tower id to all recognition points
   std::unordered_map<std::string, std::unique_ptr<recognitions::tower_recognitions_t>> tower_recognitions;
-  //map of all towers found
+  //sets of tower, vehicle ids, timesteps
   std::set<std::string> towers;
   std::set<std::string> vehicles;
   std::set<std::string> timesteps;
 
-  {
-    //load the bt xml file, add recognitions to map
-    if (!load_from_path(bt_output_path, [&tower_recognitions, &towers, &vehicles, &timesteps] (const rapidxml::xml_document<>& doc) {
+  //load the bt xml file, add recognitions to map
+  if (!load_from_path(bt_output_path, [&tower_recognitions, &towers, &vehicles, &timesteps] (const rapidxml::xml_document<>& doc) {
 
-      //verify the name of the root node
-      if (strcmp(doc.first_node()->name(), BT_OUTPUT_NODE) != 0) {
-        std::cerr << "ERR doc root node not: " << BT_OUTPUT_NODE << std::endl;
-        throw std::exception();
-      }
+    //verify the name of the root node
+    if (strcmp(doc.first_node()->name(), BT_OUTPUT_NODE) != 0) {
+      std::cerr << "ERR doc root node not: " << BT_OUTPUT_NODE << std::endl;
+      throw std::exception();
+    }
 
-      rapidxml::xml_node<> *bt_node = doc.first_node(BT_OUTPUT_NODE);
+    rapidxml::xml_node<> *bt_node = doc.first_node(BT_OUTPUT_NODE);
 
-      //get each tower
-      for (rapidxml::xml_node<> *tower_node = bt_node->first_node(BT_NODE);
-           tower_node;
-           tower_node = tower_node->next_sibling()) {
+    //get each tower
+    for (rapidxml::xml_node<> *tower_node = bt_node->first_node(BT_NODE);
+         tower_node;
+         tower_node = tower_node->next_sibling()) {
 
-        //get the timestep
-        for (rapidxml::xml_attribute<> *tower_attr = tower_node->first_attribute();
-             tower_attr;
-             tower_attr = tower_attr->next_attribute()) {
-          //check the attribute name
-          if (strcmp(tower_attr->name(), ID_ATTR) == 0) {
-            std::string tower_id = std::string(tower_attr->value());
+      //get the timestep
+      for (rapidxml::xml_attribute<> *tower_attr = tower_node->first_attribute();
+           tower_attr;
+           tower_attr = tower_attr->next_attribute()) {
+        //check the attribute name
+        if (strcmp(tower_attr->name(), ID_ATTR) == 0) {
+          std::string tower_id = std::string(tower_attr->value());
 
-            towers.insert(tower_id);
+          towers.insert(tower_id);
 
-            //create a tower
-            recognitions::tower_recognitions_t& tower = add_tower(std::move(tower_id), tower_recognitions);
+          //create a tower
+          recognitions::tower_recognitions_t& tower = add_tower(std::move(tower_id), tower_recognitions);
 
-            //add vehicle recognitions
-            for (rapidxml::xml_node<> *seen_node = tower_node->first_node(SEEN_NODE);
-                 seen_node;
-                 seen_node = seen_node->next_sibling()) {
+          //add vehicle recognitions
+          for (rapidxml::xml_node<> *seen_node = tower_node->first_node(SEEN_NODE);
+               seen_node;
+               seen_node = seen_node->next_sibling()) {
 
-              //add recognition points for this tower
-              add_recognition_points(tower, seen_node, vehicles, timesteps);
-            }
+            //add recognition points for this tower
+            add_recognition_points(tower, seen_node, vehicles, timesteps);
           }
         }
       }
-
-    })) {
-      return EXIT_FAILURE;
     }
+
+  })) {
+    return EXIT_FAILURE;
   }
 
-  //reshape output and write to file
-  return output::render_output(output_path, tower_recognitions, towers, vehicles, timesteps);
+  //write the tower output
+  int tower_output_stat = output::write_tower_output(output_path, tower_recognitions, vehicles, timesteps);
+  if (tower_output_stat != EXIT_SUCCESS) {
+    std::cerr << "ERR: failed to write tower output, skipping remaining output artifacts" << std::endl;
+    return tower_output_stat;
+  }
+
+  return EXIT_SUCCESS;
+  //TODO remaining
 }

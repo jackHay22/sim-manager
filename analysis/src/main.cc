@@ -38,14 +38,18 @@ int main(int argc, char **argv) {
   int c;
   //the path to the bluetooth output file
   std::string bt_output_path;
+  //the path to the fcd output file
+  std::string fcd_output_path;
   //the location to write the output to
   std::string output_path;
 
-  while ((c = getopt(argc, argv, "b:o:t:")) != -1) {
+  while ((c = getopt(argc, argv, "b:o:f:")) != -1) {
     if (c == 'b') {
       bt_output_path = std::string(optarg);
     } else if (c == 'o') {
       output_path = std::string(optarg);
+    } else if (c == 'f') {
+      fcd_output_path = std::string(optarg);
     }
   }
 
@@ -55,11 +59,16 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
+  if (!is_file(fcd_output_path)) {
+    std::cerr << "ERR: fcd output file does not exist: " << fcd_output_path << std::endl;
+    return EXIT_FAILURE;
+  }
+
   if (!is_dir(output_path)) {
     std::cerr << "ERR: output directory does not exist: " << output_path << std::endl;
     return EXIT_FAILURE;
   }
 
   //process the data and write to output file
-  return process_output_data(bt_output_path, output_path);
+  return process_output_data(bt_output_path, fcd_output_path, output_path);
 }

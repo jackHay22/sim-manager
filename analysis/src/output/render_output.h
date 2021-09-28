@@ -14,19 +14,18 @@
 namespace output {
 
   /**
-   * Transform and write output to files
-   * @param out_path           the path to write files to (should be a folder)
-   * @param tower_recognitions all recognitions from the simulation
-   * @param towers             the ids of all towers
-   * @param vehicles           the ids of all vehicles
-   * @param timesteps          all of the timestep values in the simulation
-   * @return success or failure
+   * Write the tower output format
+   * @see docs/output.md
+   * @param out_dir_path       path to the output directory
+   * @param tower_recognitions tower recognitions map
+   * @param vehicles           a set of unique vehicle ids
+   * @param timesteps          all timesteps in the simulation
+   * @return the status
    */
-  int render_output(const std::string& out_path,
-                    const std::unordered_map<std::string, std::unique_ptr<recognitions::tower_recognitions_t>>& tower_recognitions,
-                    const std::set<std::string>& towers,
-                    const std::set<std::string>& vehicles,
-                    const std::set<std::string>& timesteps);
+  int write_tower_output(const std::string& out_dir_path,
+                          const std::unordered_map<std::string, std::unique_ptr<recognitions::tower_recognitions_t>>& tower_recognitions,
+                          const std::set<std::string>& vehicles,
+                          const std::set<std::string>& timesteps);
 }
 
 #endif /*_RENDER_OUTPUT_H*/
