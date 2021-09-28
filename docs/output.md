@@ -60,7 +60,7 @@
   - `ts` : the timestep
   - `s` : all segments in the map
     - -1 : The vehicle has not visited this segment
-    - non-negative : how long ago in timsteps this vehicle passed this segment
+    - non-negative : how long ago in timesteps this vehicle passed this segment
 
 ## Segment Output
 - Format: `json`
