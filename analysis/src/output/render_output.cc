@@ -73,8 +73,19 @@ namespace output {
         positions[TS_KEY] = std::stod(ts);
         positions[V_KEY] = json_t::array();
 
+        int vidx = 0;
         for (const std::string& vehicle_id : vehicles) {
-          positions[V_KEY].push_back(it->second->distance(ts, vehicle_id));
+          //get the distance
+          double dist = it->second->distance(ts, vehicle_id);
+          //add if in range
+          if (dist > -1) {
+            json_t pair = json_t::array();
+            pair.push_back(vidx);
+            pair.push_back(dist);
+            positions[V_KEY].push_back(pair);
+          }
+
+          vidx++;
         }
 
         elem[VEHICLES_KEY].push_back(positions);

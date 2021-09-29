@@ -10,16 +10,16 @@
     {
       "tower_id" : "tower_parkingArea_A1A0_0_81",
       "vehicles" : [
-        {"ts" : 0.0, "v" : [-1, -1, -1, 6, -1, -1, 8, ...]},
-        {"ts" : 1.0, "v" : [-1, 20, -1, 9, -1, -1, 7, ...]}
+        {"ts" : 0.0, "v" : [[1, 20], [2, 3], [23, 12], ...]},
+        {"ts" : 1.0, "v" : [[1, 19], [2, 5], [23, 11], ...]}
         ...
       ]
     },
     {
       "tower_id" : "tower0_parkingArea_A2A1_0_71",
       "vehicles" : [
-        {"ts" : 0.0, "v" : [-1, -1, -1, -1, -1, -1, 100, ...]},
-        {"ts" : 1.0, "v" : [-1, -1, -1, -1, -1, -1, 99, ...]}
+        {"ts" : 0.0, "v" : [[1, 0], [2, 100], [7, 10], ...]},
+        {"ts" : 1.0, "v" : [[1, 0], [47, 100], [7, 11], ...]}
         ...
       ]
     },
@@ -34,8 +34,8 @@
   - `vehicles` : a list of connections:
     - `ts` : the current timestep
     - `v` : a list of all vehicles.
-      - -1 : The vehicle is not connected to the tower
-      - non-negative: the distance from the vehicle to the tower
+      - first element: index in vehicle id list
+      - second element: distance from tower
 
 ## Vehicle Output
 - Format: `json`
@@ -56,7 +56,7 @@
       "vehicle_id" : "1",
       "segments" : [
         {"ts" : 0.0, "s" : [-1, -1, -1, ...]},
-        {"ts" : 1.0, "s" : [0, -1, -1, ...]},
+        {"ts" : 1.0, "s" : [0, -1, -1, ...]}, TODO we may need to make this more sparse
         ...
       ]
     },
