@@ -33,7 +33,7 @@
   - `tower_id` : unique identifier for the tower
   - `vehicles` : a list of connections:
     - `ts` : the current timestep
-    - `v` : a list of all vehicles.
+    - `v` : a list of vehicles in range.
       - first element: index in vehicle id list
       - second element: distance from tower
 
