@@ -11,7 +11,7 @@
 #include <vector>
 #include <tuple>
 
-namespace recognitions {
+namespace types {
   /*
    * Defines all of the bluetooth recognitions for a given tower
    */

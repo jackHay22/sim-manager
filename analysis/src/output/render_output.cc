@@ -45,7 +45,7 @@ namespace output {
    * @return the status
    */
   int write_tower_output(const std::string& out_dir_path,
-                          const std::unordered_map<std::string, std::unique_ptr<recognitions::tower_recognitions_t>>& tower_recognitions,
+                          const std::unordered_map<std::string, std::unique_ptr<types::tower_recognitions_t>>& tower_recognitions,
                           const std::set<std::string>& vehicles,
                           const std::set<std::string>& timesteps) {
 
@@ -58,7 +58,7 @@ namespace output {
       out_obj[VEHICLES_KEY].push_back(vehicle_id);
     }
 
-    std::unordered_map<std::string, std::unique_ptr<recognitions::tower_recognitions_t>>::const_iterator it
+    std::unordered_map<std::string, std::unique_ptr<types::tower_recognitions_t>>::const_iterator it
       = tower_recognitions.begin();
 
     //read through all tower recognitions

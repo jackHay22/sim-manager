@@ -10,7 +10,7 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
-#include "recognitions/tower_recognitions.h"
+#include "types/tower_recognitions.h"
 #include "output/render_output.h"
 #include <iostream>
 #include <functional>
@@ -144,9 +144,9 @@ inline double distance(double x0, double y0,
  * @param  tower_recognitions all tower recognitions
  * @return                    the tower recognition collector
  */
-recognitions::tower_recognitions_t& add_tower(std::string&& tower_id,
-                                              std::unordered_map<std::string, std::unique_ptr<recognitions::tower_recognitions_t>>& tower_recognitions) {
-  std::unordered_map<std::string, std::unique_ptr<recognitions::tower_recognitions_t>>::iterator it = tower_recognitions.find(tower_id);
+types::tower_recognitions_t& add_tower(std::string&& tower_id,
+                                       std::unordered_map<std::string, std::unique_ptr<types::tower_recognitions_t>>& tower_recognitions) {
+  std::unordered_map<std::string, std::unique_ptr<types::tower_recognitions_t>>::iterator it = tower_recognitions.find(tower_id);
   if (it != tower_recognitions.end()) {
     return *it->second;
   }
@@ -154,7 +154,7 @@ recognitions::tower_recognitions_t& add_tower(std::string&& tower_id,
   //add new
   tower_recognitions.insert(std::make_pair(
     tower_id,
-    std::make_unique<recognitions::tower_recognitions_t>(tower_id)
+    std::make_unique<types::tower_recognitions_t>(tower_id)
   ));
   return add_tower(std::move(tower_id), tower_recognitions);
 }
@@ -165,7 +165,7 @@ recognitions::tower_recognitions_t& add_tower(std::string&& tower_id,
  * @param seen_node         the list of recognition points
  * @param vehicles          set of unique vehicle ids
  */
-void add_recognition_points(recognitions::tower_recognitions_t& tower,
+void add_recognition_points(types::tower_recognitions_t& tower,
                             rapidxml::xml_node<> *seen_node,
                             std::set<std::string>& vehicles,
                             std::set<std::string>& timesteps) {
@@ -263,7 +263,7 @@ int process_output_data(const std::string& bt_output_path,
                         const std::string& /*fcd_output_path*/,
                         const std::string& output_path) {
   //construct a mapping from tower id to all recognition points
-  std::unordered_map<std::string, std::unique_ptr<recognitions::tower_recognitions_t>> tower_recognitions;
+  std::unordered_map<std::string, std::unique_ptr<types::tower_recognitions_t>> tower_recognitions;
   //sets of tower, vehicle ids, timesteps
   std::set<std::string> towers;
   std::set<std::string> vehicles;
@@ -296,7 +296,7 @@ int process_output_data(const std::string& bt_output_path,
           towers.insert(tower_id);
 
           //create a tower
-          recognitions::tower_recognitions_t& tower = add_tower(std::move(tower_id), tower_recognitions);
+          types::tower_recognitions_t& tower = add_tower(std::move(tower_id), tower_recognitions);
 
           //add vehicle recognitions
           for (rapidxml::xml_node<> *seen_node = tower_node->first_node(SEEN_NODE);

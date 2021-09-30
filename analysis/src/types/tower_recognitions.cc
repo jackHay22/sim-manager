@@ -4,8 +4,7 @@
 
 #include "tower_recognitions.h"
 
-
-namespace recognitions {
+namespace types {
 
   /**
    * Constructor
