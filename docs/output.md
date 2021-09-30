@@ -34,7 +34,7 @@
   - `vehicles` : a list of connections:
     - `ts` : the current timestep
     - `v` : a list of vehicles in range.
-      - first element: index in vehicle id list
+      - first element: 0-index in vehicle id list
       - second element: distance from tower
 
 ## Vehicle Output
@@ -47,16 +47,16 @@
     {
       "vehicle_id" : "0",
       "segments" : [
-        {"ts" : 0.0, "s" : [-1, -1, -1, ...]},
-        {"ts" : 1.0, "s" : [-1, 0, -1, ...]},
+        {"ts" : 0.0, "s" : [[0, 0], [1, 100], [2, 10], ...]},
+        {"ts" : 1.0, "s" : [[0, 1], [1, 101], [2, 11], ...]},
         ...
       ]
     },
     {
       "vehicle_id" : "1",
       "segments" : [
-        {"ts" : 0.0, "s" : [-1, -1, -1, ...]},
-        {"ts" : 1.0, "s" : [0, -1, -1, ...]}, TODO we may need to make this more sparse
+        {"ts" : 0.0, "s" : [[6, 0], [9, 22], [13, 14], ...]},
+        {"ts" : 1.0, "s" : [[6, 1], [9, 23], [13, 15], ...]},
         ...
       ]
     },
@@ -69,9 +69,9 @@
   - `vehicle_id` : the unique identifier for the vehicle
   - `segments` : a list of segments the vehicle has passed by timestep:
     - `ts` : the timestep
-    - `s` : all segments in the map
-      - -1 : The vehicle has not visited this segment
-      - non-negative : how long ago in timesteps this vehicle passed this segment
+    - `s` : visited segments in the map (if segment is not in list it has not been visited by the vehicle)
+      - first element: 0-index into `segments` list
+      - second element: how long ago in timesteps this vehicle passed this segment
 
 ## Segment Output
 - Format: `json`
