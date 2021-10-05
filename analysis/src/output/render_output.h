@@ -45,8 +45,7 @@ namespace output {
                                   const std::unordered_map<std::string,std::unique_ptr<types::tower_recognitions_t>>& tower_recognitions,
                                   const std::unordered_map<std::string,std::unique_ptr<types::road_edge_t>>& edge_shapes,
                                   const std::set<std::string>& edges,
-                                  const std::set<std::string>& towers,
-                                  double radius);
+                                  const std::set<std::string>& towers);
 }
 
 #endif /*_RENDER_OUTPUT_H*/

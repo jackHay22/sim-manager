@@ -38,22 +38,18 @@ int main(int argc, char **argv) {
   int c;
   //the path to the bluetooth output file
   std::string bt_output_path;
-  //the path to the fcd output file
-  std::string fcd_output_path;
+  //the path to the network file
+  std::string net_input_path;
   //the location to write the output to
   std::string output_path;
-  //the coverage radius
-  double radius = -1;
 
-  while ((c = getopt(argc, argv, "b:o:f:r:")) != -1) {
+  while ((c = getopt(argc, argv, "b:o:n:")) != -1) {
     if (c == 'b') {
       bt_output_path = std::string(optarg);
     } else if (c == 'o') {
       output_path = std::string(optarg);
-    } else if (c == 'f') {
-      fcd_output_path = std::string(optarg);
-    } else if (c == 'r') {
-      radius = atof(optarg);
+    } else if (c == 'n') {
+      net_input_path = std::string(optarg);
     }
   }
 
@@ -63,8 +59,8 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  if (!is_file(fcd_output_path)) {
-    std::cerr << "ERR: fcd output file does not exist: " << fcd_output_path << std::endl;
+  if (!is_file(net_input_path)) {
+    std::cerr << "ERR: network input file does not exist: " << net_input_path << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -73,11 +69,6 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  if (radius < 0) {
-    std::cerr << "ERR: coverage radius not specified: " << radius << std::endl;
-    return EXIT_FAILURE;
-  }
-
   //process the data and write to output file
-  return process_output_data(bt_output_path, fcd_output_path, output_path, radius);
+  return process_output_data(bt_output_path, net_input_path, output_path);
 }

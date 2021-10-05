@@ -19,9 +19,13 @@
 #include <stdint.h>
 #include <set>
 #include <cmath>
+#include <utility>
 
 #define BT_OUTPUT_NODE          "bt-output"
 #define BT_NODE                 "bt"
+#define NET_NODE                "net"
+#define EDGE_NODE               "edge"
+#define LANE_NODE               "lane"
 #define SEEN_NODE               "seen"
 #define RECOGNITION_POINT_NODE  "recognitionPoint"
 #define ID_ATTR                 "id"
@@ -29,8 +33,12 @@
 #define T_ATTR                  "t"
 #define SEEN_POS_ATTR           "seenPos"
 #define SEEN_SPEED_ATTR         "seenSpeed"
+#define FUNCTION_ATTR           "function"
+#define INTERNAL_VAL            "internal"
+#define SHAPE_ATTR              "shape"
 
 #define COMMA ','
+#define SPACE ' '
 
 /**
  * Get the size of the file
@@ -53,7 +61,7 @@ uint64_t get_size(const std::string& path) {
  * @param  y   parsed position y
  * @return     whether the pair was parsed successfully
  */
-bool parse_position(const std::string& pos, double& x, double& y) {
+[[nodiscard]] bool parse_position(const std::string& pos, double& x, double& y) {
   std::stringstream sstream(pos);
   bool got_x = false;
   std::string substr;
@@ -72,6 +80,43 @@ bool parse_position(const std::string& pos, double& x, double& y) {
     return false;
   }
   return true;
+}
+
+/**
+ * Parse a list of space separated, comma separated pairs of doubles
+ * @param  shape    the string encoding
+ * @param  vertices the parsed pairs
+ * @return          whether the pairs were parsed successfully
+ */
+[[nodiscard]] bool parse_shape(const std::string& shape, std::vector<std::pair<double,double>>& vertices) {
+  std::stringstream sstream(shape);
+  std::string pair;
+  while (std::getline(sstream, pair, SPACE)) {
+    //split the pair
+    std::pair<double,double> p;
+    int dim = 0;
+    std::string v;
+
+    std::stringstream pair_sstream(pair);
+    while (std::getline(pair_sstream, v, COMMA)) {
+      //parse as double
+      if (dim == 0) {
+        p.first = atof(v.c_str());
+      } else {
+        p.second = atof(v.c_str());
+      }
+      dim++;
+    }
+
+    if (dim == 2) {
+      vertices.push_back(p);
+    } else {
+      return false;
+    }
+  }
+
+  //shape assumes greater than a single vertex
+  return vertices.size() > 1;
 }
 
 /**
@@ -253,17 +298,90 @@ void add_recognition_points(types::tower_recognitions_t& tower,
 }
 
 /**
+ * Add an edge to the lookup
+ * @param edge_node   the xml node in the net file
+ * @param edges       all edge ids in the network
+ * @param edge_shapes the shapes of all edges
+ */
+void add_edge(rapidxml::xml_node<> *edge_node,
+              std::set<std::string>& edges,
+              std::unordered_map<std::string, std::unique_ptr<types::road_edge_t>>& edge_shapes) {
+
+  //get the edge attributes
+  for (rapidxml::xml_attribute<> *edge_attr = edge_node->first_attribute();
+       edge_attr;
+       edge_attr = edge_attr->next_attribute()) {
+    //check the attribute name
+    if ((strcmp(edge_attr->name(),  FUNCTION_ATTR) == 0) &&
+        (strcmp(edge_attr->value(), INTERNAL_VAL) == 0)) {
+      //ignore edges with internal function
+      return;
+    }
+  }
+
+  //get lanes
+  for (rapidxml::xml_node<> *lane_node = edge_node->first_node(LANE_NODE);
+       lane_node;
+       lane_node = lane_node->next_sibling()) {
+
+    std::string lane_id;
+    std::vector<std::pair<double, double>> vertices;
+    int not_found = 2;
+
+    //look at attributes for lane
+    for (rapidxml::xml_attribute<> *lane_attr = lane_node->first_attribute();
+         lane_attr;
+         lane_attr = lane_attr->next_attribute()) {
+
+      if (strcmp(lane_attr->name(), ID_ATTR) == 0) {
+        lane_id = std::string(lane_attr->value());
+        not_found--;
+
+      } else if (strcmp(lane_attr->name(), SHAPE_ATTR) == 0) {
+        std::string shape = std::string(lane_attr->value());
+        not_found--;
+
+        //parse vertex pairs
+        if (!parse_shape(shape, vertices)) {
+          std::cerr << "ERR: failed to parse shape: " << shape << std::endl;
+          return;
+        }
+      }
+    }
+
+    if (not_found > 0) {
+      std::cerr << "ERR: lane missing id or shape" << std::endl;
+      return;
+    }
+
+    //add to lookups
+    edges.insert(lane_id);
+
+    std::unique_ptr<types::road_edge_t> edge = std::make_unique<types::road_edge_t>();
+
+    //add the parsed vertices
+    for (size_t i=0; i<vertices.size(); i++) {
+      edge->add_vertex(
+        vertices.at(i).first,
+        vertices.at(i).second
+      );
+    }
+
+    //add to lookup
+    edge_shapes.insert(std::make_pair(lane_id, std::move(edge)));
+  }
+}
+
+/**
  * Read the output files and generate an aggregated report
  * @param  bt_output_path       the path to the bluetooth output file
- * @param  fcd_output_path      the path to the sumo fcd output file
+ * @param  net_input_path       the path to the sumo network input file (input to simulation)
  * @param  output_path          the path to a folder to write output files to
- * @param  radius               the coverage radius
  * @return                      success or failure
  */
 int process_output_data(const std::string& bt_output_path,
-                        const std::string& /*fcd_output_path*/,
-                        const std::string& output_path,
-                        double radius) {
+                        const std::string& net_input_path,
+                        const std::string& output_path) {
   //construct a mapping from tower id to all recognition points
   std::unordered_map<std::string, std::unique_ptr<types::tower_recognitions_t>> tower_recognitions;
   //sets of tower, vehicle ids, timesteps
@@ -280,10 +398,8 @@ int process_output_data(const std::string& bt_output_path,
       throw std::exception();
     }
 
-    rapidxml::xml_node<> *bt_node = doc.first_node(BT_OUTPUT_NODE);
-
     //get each tower
-    for (rapidxml::xml_node<> *tower_node = bt_node->first_node(BT_NODE);
+    for (rapidxml::xml_node<> *tower_node = doc.first_node(BT_OUTPUT_NODE)->first_node(BT_NODE);
          tower_node;
          tower_node = tower_node->next_sibling()) {
 
@@ -333,15 +449,33 @@ int process_output_data(const std::string& bt_output_path,
   //record the shapes of edges in the network
   std::unordered_map<std::string, std::unique_ptr<types::road_edge_t>> edge_shapes;
 
-  //TODO only add non internal edges
+  //load the network xml file
+  if (!load_from_path(net_input_path, [&edges, &edge_shapes] (const rapidxml::xml_document<>& doc) {
+    //verify the name of the root node
+    if (strcmp(doc.first_node()->name(), NET_NODE) != 0) {
+      std::cerr << "ERR doc root node not: " << NET_NODE << std::endl;
+      throw std::exception();
+    }
+
+    //get each edge
+    for (rapidxml::xml_node<> *edge_node = doc.first_node(NET_NODE)->first_node(EDGE_NODE);
+         edge_node;
+         edge_node = edge_node->next_sibling()) {
+      //add the edge
+      add_edge(edge_node, edges, edge_shapes);
+    }
+
+  })) {
+    return EXIT_FAILURE;
+  }
+
 
   //write the tower coverage output
   int tower_coverage_output_stat = output::write_tower_coverage_output(output_path,
                                                                        tower_recognitions,
                                                                        edge_shapes,
                                                                        edges,
-                                                                       towers,
-                                                                       radius);
+                                                                       towers);
   if (tower_coverage_output_stat != EXIT_SUCCESS) {
     std::cerr << "ERR: failed to write tower overage output, skipping remaining output artifacts" << std::endl;
     return tower_coverage_output_stat;

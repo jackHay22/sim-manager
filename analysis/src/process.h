@@ -10,14 +10,12 @@
 /**
  * Read the output files and generate an aggregated report
  * @param  bt_output_path       the path to the bluetooth output file
- * @param  fcd_output_path      the path to the sumo fcd output file
+ * @param  net_input_path       the path to the sumo network input file (input to simulation)
  * @param  output_path          the path to a folder to write output files to
- * @param  radius               the coverage radius
  * @return                      success or failure
  */
 int process_output_data(const std::string& bt_output_path,
-                        const std::string& fcd_output_path,
-                        const std::string& output_path,
-                        double radius);
+                        const std::string& net_input_path,
+                        const std::string& output_path);
 
 #endif /*_PROCESS_H*/

@@ -123,15 +123,13 @@ namespace output {
    * @param  edge_shapes         all of the edges (mapped by id)
    * @param  edges               the ids of all edges in the network
    * @param  towers              the ids of all towers in the network
-   * @param  radius              the coverage radius
    * @return the status
    */
   int write_tower_coverage_output(const std::string& out_dir_path,
                                   const std::unordered_map<std::string,std::unique_ptr<types::tower_recognitions_t>>& tower_recognitions,
                                   const std::unordered_map<std::string,std::unique_ptr<types::road_edge_t>>& edge_shapes,
                                   const std::set<std::string>& edges,
-                                  const std::set<std::string>& towers,
-                                  double radius) {
+                                  const std::set<std::string>& towers) {
     json_t out_obj = json_t::object();
     out_obj[SEGMENTS_KEY] = json_t::array();
     out_obj[TOWERS_KEY] = json_t::array();
@@ -145,8 +143,6 @@ namespace output {
       tower[TOWER_ID_KEY] = tower_id;
       tower[SEGMENTS_KEY] = json_t::array();
 
-      int idx = 0;
-
       std::unordered_map<std::string,std::unique_ptr<types::tower_recognitions_t>>::const_iterator tower_it
         = tower_recognitions.find(tower_id);
 
@@ -158,13 +154,11 @@ namespace output {
 
           if (edge_it != edge_shapes.end()) {
 
-            //check coverage
-            if (tower_it->second->edge_distance(*edge_it->second, radius)) {
-              tower[SEGMENTS_KEY].push_back(idx);
-            }
+            //add the distance
+            tower[SEGMENTS_KEY].push_back(
+              tower_it->second->edge_distance(*edge_it->second)
+            );
           }
-
-          idx++;
         }
 
         out_obj[TOWERS_KEY].push_back(tower);
