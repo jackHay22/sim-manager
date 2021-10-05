@@ -4,6 +4,7 @@
 
 #include "road_edge.h"
 #include <cmath>
+#include <limits>
 
 namespace types {
   /**
@@ -22,20 +23,21 @@ namespace types {
   }
 
   /**
-   * Check if some other point is within a radius of all roadway points
+   * Get the distance from the edge to some point
    * @param  x      position x
    * @param  y      position y
-   * @param  radius the radius to check against
-   * @return        whether this point is closer than radius to all vertices
+   * @return        the distance to this edge
    */
-  bool road_edge_t::in_range(double x, double y, double radius) const {
+  double road_edge_t::distance(double x, double y) const {
+    double min = std::numeric_limits<double>::max();
+
     for (size_t i=0; i<this->vertices.size(); i++) {
       double d = sqrt(pow(this->vertices.at(i).first - x, 2) +
                       pow(this->vertices.at(i).second - y, 2));
-      if (d > radius) {
-        return false;
+      if (d < min) {
+        min = d;
       }
     }
-    return true;
+    return min;
   }
 }

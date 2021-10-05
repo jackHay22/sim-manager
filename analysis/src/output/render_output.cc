@@ -159,7 +159,7 @@ namespace output {
           if (edge_it != edge_shapes.end()) {
 
             //check coverage
-            if (tower_it->second->covers_edge(*edge_it->second, radius)) {
+            if (tower_it->second->edge_distance(*edge_it->second, radius)) {
               tower[SEGMENTS_KEY].push_back(idx);
             }
           }

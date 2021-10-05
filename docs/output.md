@@ -95,4 +95,4 @@
 - `segments` : the unique identifiers for segments in `segments` arrays
 - `towers` : towers:
   - `tower_id` : The unique identifier for this tower
-  - `segments` : The zero-indices of segments (relative to the `segments`) that the tower is in range of
+  - `segments` : The distance to each segment from the tower (from the closest point in the segment). Index in list corresponds to segment identifier in `segments` at the same position

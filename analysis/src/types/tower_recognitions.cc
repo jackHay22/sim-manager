@@ -63,12 +63,11 @@ namespace types {
   }
 
   /**
-   * Check if this tower covers a given edge by some radius
+   * Get the distance from this tower to an edge
    * @param  edge   the edge
-   * @param  radius the radius of the coverage range
-   * @return        whether the tower covers the edge
+   * @return the distance from the tower to the edge
    */
-  bool tower_recognitions_t::covers_edge(const road_edge_t& edge, double radius) const {
-    return edge.in_range(this->x, this->y, radius);
+  double tower_recognitions_t::edge_distance(const road_edge_t& edge) const {
+    return edge.distance(this->x, this->y);
   }
 }
