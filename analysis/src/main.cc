@@ -42,14 +42,18 @@ int main(int argc, char **argv) {
   std::string fcd_output_path;
   //the location to write the output to
   std::string output_path;
+  //the coverage radius
+  double radius = -1;
 
-  while ((c = getopt(argc, argv, "b:o:f:")) != -1) {
+  while ((c = getopt(argc, argv, "b:o:f:r:")) != -1) {
     if (c == 'b') {
       bt_output_path = std::string(optarg);
     } else if (c == 'o') {
       output_path = std::string(optarg);
     } else if (c == 'f') {
       fcd_output_path = std::string(optarg);
+    } else if (c == 'r') {
+      radius = atof(optarg);
     }
   }
 
@@ -69,6 +73,11 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
+  if (radius < 0) {
+    std::cerr << "ERR: coverage radius not specified: " << radius << std::endl;
+    return EXIT_FAILURE;
+  }
+
   //process the data and write to output file
-  return process_output_data(bt_output_path, fcd_output_path, output_path);
+  return process_output_data(bt_output_path, fcd_output_path, output_path, radius);
 }

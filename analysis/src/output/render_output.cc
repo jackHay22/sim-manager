@@ -16,6 +16,7 @@ namespace output {
   #define TOWER_ID_KEY "tower_id"
   #define VEHICLES_KEY "vehicles"
   #define TOWERS_KEY   "towers"
+  #define SEGMENTS_KEY "segments"
   #define TS_KEY       "ts"
   #define V_KEY        "v"
 
@@ -109,6 +110,81 @@ namespace output {
 
     } catch (const std::exception& e) {
       std::cerr << "ERR: failed to write tower output to file: " << e.what() << std::endl;
+      return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+  }
+
+  /**
+   * Determine which segments in the network each tower covers
+   * @param  out_dir_path        the directory to write output to
+   * @param  tower_recognitions  recognitions for towers in the network
+   * @param  edge_shapes         all of the edges (mapped by id)
+   * @param  edges               the ids of all edges in the network
+   * @param  towers              the ids of all towers in the network
+   * @param  radius              the coverage radius
+   * @return the status
+   */
+  int write_tower_coverage_output(const std::string& out_dir_path,
+                                  const std::unordered_map<std::string,std::unique_ptr<types::tower_recognitions_t>>& tower_recognitions,
+                                  const std::unordered_map<std::string,std::unique_ptr<types::road_edge_t>>& edge_shapes,
+                                  const std::set<std::string>& edges,
+                                  const std::set<std::string>& towers,
+                                  double radius) {
+    json_t out_obj = json_t::object();
+    out_obj[SEGMENTS_KEY] = json_t::array();
+    out_obj[TOWERS_KEY] = json_t::array();
+
+    for (const std::string& edge_id : edges) {
+      out_obj[SEGMENTS_KEY].push_back(edge_id);
+    }
+
+    for (const std::string& tower_id : towers) {
+      json_t tower = json_t::object();
+      tower[TOWER_ID_KEY] = tower_id;
+      tower[SEGMENTS_KEY] = json_t::array();
+
+      int idx = 0;
+
+      std::unordered_map<std::string,std::unique_ptr<types::tower_recognitions_t>>::const_iterator tower_it
+        = tower_recognitions.find(tower_id);
+
+      if (tower_it != tower_recognitions.end()) {
+
+        for (const std::string& edge_id : edges) {
+          std::unordered_map<std::string,std::unique_ptr<types::road_edge_t>>::const_iterator edge_it
+            = edge_shapes.find(edge_id);
+
+          if (edge_it != edge_shapes.end()) {
+
+            //check coverage
+            if (tower_it->second->covers_edge(*edge_it->second, radius)) {
+              tower[SEGMENTS_KEY].push_back(idx);
+            }
+          }
+
+          idx++;
+        }
+
+        out_obj[TOWERS_KEY].push_back(tower);
+      } else {
+        std::cerr << "WARN: missing recognitions for tower " << tower_id << std::endl;
+      }
+    }
+
+    //write to the file
+    try {
+      std::string full_path = join(out_dir_path, "tower_coverage_output.json");
+
+      std::ofstream out_file(full_path);
+      out_file << out_obj << std::endl;
+      out_file.close();
+
+      std::cerr << "INFO: wrote tower coverage output to: " << full_path << std::endl;
+
+    } catch (const std::exception& e) {
+      std::cerr << "ERR: failed to write tower coverage output to file: " << e.what() << std::endl;
       return EXIT_FAILURE;
     }
 

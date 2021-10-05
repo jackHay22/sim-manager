@@ -11,7 +11,6 @@
 #include "../types/road_edge.h"
 #include <memory>
 #include <set>
-#include <utility>
 
 namespace output {
 
@@ -25,7 +24,7 @@ namespace output {
    * @return the status
    */
   int write_tower_output(const std::string& out_dir_path,
-                          const std::unordered_map<std::string, std::unique_ptr<types::tower_recognitions_t>>& tower_recognitions,
+                          const std::unordered_map<std::string,std::unique_ptr<types::tower_recognitions_t>>& tower_recognitions,
                           const std::set<std::string>& vehicles,
                           const std::set<std::string>& timesteps);
 
@@ -33,15 +32,21 @@ namespace output {
   //                          );
 
   /**
-   * Determine the tower coverage over segments within the road network
-   * @param  out_dir_path    directory to write output files to
-   * @param  tower_positions the positions of towers in the network
-   * @param  road_edges      the edges of all roads in the network
-   * @return                 the status
+   * Determine which segments in the network each tower covers
+   * @param  out_dir_path        the directory to write output to
+   * @param  tower_recognitions  recognitions for towers in the network
+   * @param  edge_shapes         all of the edges (mapped by id)
+   * @param  edges               the ids of all edges in the network
+   * @param  towers              the ids of all towers in the network
+   * @param  radius              the coverage radius
+   * @return the status
    */
   int write_tower_coverage_output(const std::string& out_dir_path,
-                                  const std::unordered_map<std::string,std::pair<double,double>>& tower_positions,
-                                  const std::unordered_map<std::string,std::unique_ptr<types::road_edge_t>>& road_edges);
+                                  const std::unordered_map<std::string,std::unique_ptr<types::tower_recognitions_t>>& tower_recognitions,
+                                  const std::unordered_map<std::string,std::unique_ptr<types::road_edge_t>>& edge_shapes,
+                                  const std::set<std::string>& edges,
+                                  const std::set<std::string>& towers,
+                                  double radius);
 }
 
 #endif /*_RENDER_OUTPUT_H*/

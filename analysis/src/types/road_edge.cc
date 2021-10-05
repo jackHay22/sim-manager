@@ -23,14 +23,15 @@ namespace types {
 
   /**
    * Check if some other point is within a radius of all roadway points
-   * @param  pos    the position to check
+   * @param  x      position x
+   * @param  y      position y
    * @param  radius the radius to check against
    * @return        whether this point is closer than radius to all vertices
    */
-  bool in_range(const std::pair<double,double>& pos, double radius) const {
+  bool road_edge_t::in_range(double x, double y, double radius) const {
     for (size_t i=0; i<this->vertices.size(); i++) {
-      double d = sqrt(pow(this->vertices.at(i).first - pos.first, 2) +
-                      pow(this->vertices.at(i).second - pos.second, 2));
+      double d = sqrt(pow(this->vertices.at(i).first - x, 2) +
+                      pow(this->vertices.at(i).second - y, 2));
       if (d > radius) {
         return false;
       }

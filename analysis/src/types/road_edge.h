@@ -38,11 +38,12 @@ namespace types {
 
     /**
      * Check if some other point is within a radius of all roadway points
-     * @param  pos    the position to check
+     * @param  x      position x
+     * @param  y      position y
      * @param  radius the radius to check against
      * @return        whether this point is closer than radius to all vertices
      */
-    bool in_range(const std::pair<double,double>& pos, double radius) const;
+    bool in_range(double x, double y, double radius) const;
   };
 }
 

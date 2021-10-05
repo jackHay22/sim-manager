@@ -61,4 +61,14 @@ namespace types {
     //add to lookup
     vehicles[timestep][vehicle_id] = dist;
   }
+
+  /**
+   * Check if this tower covers a given edge by some radius
+   * @param  edge   the edge
+   * @param  radius the radius of the coverage range
+   * @return        whether the tower covers the edge
+   */
+  bool tower_recognitions_t::covers_edge(const road_edge_t& edge, double radius) const {
+    return edge.in_range(this->x, this->y, radius);
+  }
 }

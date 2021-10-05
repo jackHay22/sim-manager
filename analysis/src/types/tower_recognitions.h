@@ -10,6 +10,7 @@
 #include <memory>
 #include <vector>
 #include <tuple>
+#include "road_edge.h"
 
 namespace types {
   /*
@@ -60,6 +61,13 @@ namespace types {
      */
     void add_recognition(std::string&& timestep, std::string&& vehicle_id, double dist);
 
+    /**
+     * Check if this tower covers a given edge by some radius
+     * @param  edge   the edge
+     * @param  radius the radius of the coverage range
+     * @return        whether the tower covers the edge
+     */
+    bool covers_edge(const road_edge_t& edge, double radius) const;
   };
 }
 

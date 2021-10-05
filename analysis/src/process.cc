@@ -257,11 +257,13 @@ void add_recognition_points(types::tower_recognitions_t& tower,
  * @param  bt_output_path       the path to the bluetooth output file
  * @param  fcd_output_path      the path to the sumo fcd output file
  * @param  output_path          the path to a folder to write output files to
+ * @param  radius               the coverage radius
  * @return                      success or failure
  */
 int process_output_data(const std::string& bt_output_path,
                         const std::string& /*fcd_output_path*/,
-                        const std::string& output_path) {
+                        const std::string& output_path,
+                        double radius) {
   //construct a mapping from tower id to all recognition points
   std::unordered_map<std::string, std::unique_ptr<types::tower_recognitions_t>> tower_recognitions;
   //sets of tower, vehicle ids, timesteps
@@ -315,10 +317,34 @@ int process_output_data(const std::string& bt_output_path,
   }
 
   //write the tower output
-  int tower_output_stat = output::write_tower_output(output_path, tower_recognitions, vehicles, timesteps);
+  int tower_output_stat = output::write_tower_output(output_path,
+                                                     tower_recognitions,
+                                                     vehicles,
+                                                     timesteps);
   if (tower_output_stat != EXIT_SUCCESS) {
     std::cerr << "ERR: failed to write tower output, skipping remaining output artifacts" << std::endl;
     return tower_output_stat;
+  }
+
+  //TODO delete any unused data before reading new file
+
+  //load network edges
+  std::set<std::string> edges;
+  //record the shapes of edges in the network
+  std::unordered_map<std::string, std::unique_ptr<types::road_edge_t>> edge_shapes;
+
+  //TODO only add non internal edges
+
+  //write the tower coverage output
+  int tower_coverage_output_stat = output::write_tower_coverage_output(output_path,
+                                                                       tower_recognitions,
+                                                                       edge_shapes,
+                                                                       edges,
+                                                                       towers,
+                                                                       radius);
+  if (tower_coverage_output_stat != EXIT_SUCCESS) {
+    std::cerr << "ERR: failed to write tower overage output, skipping remaining output artifacts" << std::endl;
+    return tower_coverage_output_stat;
   }
 
   return EXIT_SUCCESS;
