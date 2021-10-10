@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include "../types/tower_recognitions.h"
 #include "../types/road_edge.h"
+#include "../types/vehicle_lane_hist.h"
 #include <memory>
 #include <set>
 
@@ -28,8 +29,18 @@ namespace output {
                           const std::set<std::string>& vehicles,
                           const std::set<std::string>& timesteps);
 
-  // int write_vehicle_output(const std::string& out_dir_path,
-  //                          );
+  /**
+   * Write the vehicle segment history to an output file
+   * @param  out_dir_path      the path to write output to
+   * @param  vehicle_lane_hist the history of
+   * @param  edges             all edges in the simulation
+   * @param  timesteps         all timesteps in the simulation
+   * @return the status
+   */
+  int write_vehicle_output(const std::string& out_dir_path,
+                           const std::unordered_map<std::string,std::unique_ptr<types::vehicle_lane_hist_t>>& vehicle_lane_hist,
+                           const std::set<std::string>& edges,
+                           const std::set<std::string>& timesteps);
 
   /**
    * Determine which segments in the network each tower covers

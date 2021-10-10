@@ -27,10 +27,14 @@
 #define EDGE_NODE               "edge"
 #define LANE_NODE               "lane"
 #define SEEN_NODE               "seen"
+#define NETSTATE_NODE           "netstate"
+#define VEHICLE_NODE            "vehicle"
+#define TIMESTEP_NODE           "timestep"
 #define RECOGNITION_POINT_NODE  "recognitionPoint"
 #define ID_ATTR                 "id"
 #define OBSERVER_POS_END_ATTR   "observerPosEnd"
 #define T_ATTR                  "t"
+#define TIME_ATTR               "time"
 #define SEEN_POS_ATTR           "seenPos"
 #define SEEN_SPEED_ATTR         "seenSpeed"
 #define FUNCTION_ATTR           "function"
@@ -373,14 +377,86 @@ void add_edge(rapidxml::xml_node<> *edge_node,
 }
 
 /**
+ * Add vehicles and their positions to the history lookup for a given timestep
+ * @param  edge_node         the edge node
+ * @param  timestep          the current simulation timestep
+ * @param  vehicle_lane_hist the history lookup
+ */
+void add_vehicle_hist(rapidxml::xml_node<> *edge_node,
+                      double timestep,
+                      std::unordered_map<std::string,std::unique_ptr<types::vehicle_lane_hist_t>>& vehicle_lane_hist) {
+  //get each lane
+  for (rapidxml::xml_node<> *lane_node = edge_node->first_node(LANE_NODE);
+       lane_node;
+       lane_node = lane_node->next_sibling()) {
+    //parse the lane id
+    std::string lane_id;
+    bool lane_id_found = false;
+
+    for (rapidxml::xml_attribute<> *lane_attr = lane_node->first_attribute();
+         lane_attr;
+         lane_attr = lane_attr->next_attribute()) {
+      //check the attribute name
+      if (strcmp(lane_attr->name(), ID_ATTR) == 0) {
+        lane_id = std::string(lane_attr->value());
+        lane_id_found = true;
+      }
+    }
+
+    if (!lane_id_found) {
+      std::cerr << "ERR lane id not found" << std::endl;
+      throw std::exception();
+    }
+
+    //get vehicles in the lane
+    for (rapidxml::xml_node<> *vehicle_node = lane_node->first_node(VEHICLE_NODE);
+         vehicle_node;
+         vehicle_node = vehicle_node->next_sibling()) {
+      //parse the id
+      std::string vehicle_id;
+      bool vehicle_id_found = false;
+
+      for (rapidxml::xml_attribute<> *vehicle_attr = vehicle_node->first_attribute();
+           vehicle_attr;
+           vehicle_attr = vehicle_attr->next_attribute()) {
+        //check the attribute name
+        if (strcmp(vehicle_attr->name(), ID_ATTR) == 0) {
+          vehicle_id = std::string(vehicle_attr->value());
+          vehicle_id_found = true;
+        }
+      }
+
+      if (!vehicle_id_found) {
+        std::cerr << "ERR vehicle id not found" << std::endl;
+        throw std::exception();
+      }
+
+      //add the mapping
+      std::unordered_map<std::string,std::unique_ptr<types::vehicle_lane_hist_t>>::iterator it = vehicle_lane_hist.find(vehicle_id);
+      if (it != vehicle_lane_hist.end()) {
+        it->second->at_segment(lane_id, timestep);
+      } else {
+        //add new
+        vehicle_lane_hist.insert(std::make_pair(
+          vehicle_id,
+          std::make_unique<types::vehicle_lane_hist_t>(lane_id, timestep) //constructor w/ initial values
+        ));
+      }
+    }
+  }
+}
+
+/**
  * Read the output files and generate an aggregated report
  * @param  bt_output_path       the path to the bluetooth output file
  * @param  net_input_path       the path to the sumo network input file (input to simulation)
+ * @param  raw_output_path      the raw simulation output to follow vehicle progress
  * @param  output_path          the path to a folder to write output files to
  * @return                      success or failure
  */
 int process_output_data(const std::string& bt_output_path,
                         const std::string& net_input_path,
+                        const std::string& raw_output_path,
                         const std::string& output_path) {
   //construct a mapping from tower id to all recognition points
   std::unordered_map<std::string, std::unique_ptr<types::tower_recognitions_t>> tower_recognitions;
@@ -442,7 +518,8 @@ int process_output_data(const std::string& bt_output_path,
     return tower_output_stat;
   }
 
-  //TODO delete any unused data before reading new file
+  //clear unused storage
+  vehicles.clear();
 
   //load network edges
   std::set<std::string> edges;
@@ -477,6 +554,67 @@ int process_output_data(const std::string& bt_output_path,
                                                                        edges,
                                                                        towers);
   if (tower_coverage_output_stat != EXIT_SUCCESS) {
+    std::cerr << "ERR: failed to write tower overage output, skipping remaining output artifacts" << std::endl;
+    return tower_coverage_output_stat;
+  }
+
+  //clear unused storage
+  edge_shapes.clear();
+  towers.clear();
+
+  //record the lanes seen by a given vehicle
+  std::unordered_map<std::string,std::unique_ptr<types::vehicle_lane_hist_t>> vehicle_lane_hist;
+
+  //load the raw output
+  if (!load_from_path(raw_output_path, [&vehicle_lane_hist] (const rapidxml::xml_document<>& doc) {
+    //verify the name of the root node
+    if (strcmp(doc.first_node()->name(), NETSTATE_NODE) != 0) {
+      std::cerr << "ERR doc root node not: " << NETSTATE_NODE << std::endl;
+      throw std::exception();
+    }
+
+    //get each timestep
+    for (rapidxml::xml_node<> *ts_node = doc.first_node(NETSTATE_NODE)->first_node(TIMESTEP_NODE);
+         ts_node;
+         ts_node = ts_node->next_sibling()) {
+      double ts = 0.0;
+      bool ts_found = false;
+
+      //parse the timestep value
+      for (rapidxml::xml_attribute<> *ts_attr = ts_node->first_attribute();
+           ts_attr;
+           ts_attr = ts_attr->next_attribute()) {
+        //check the attribute name
+        if (strcmp(ts_attr->name(), TIME_ATTR) == 0) {
+          ts = atof(ts_attr->value());
+          ts_found = true;
+        }
+      }
+
+      if (!ts_found) {
+        std::cerr << "ERR no timestep attribute" << std::endl;
+        throw std::exception();
+      }
+
+      //get each edge
+      for (rapidxml::xml_node<> *edge_node = ts_node->first_node(EDGE_NODE);
+           edge_node;
+           edge_node = edge_node->next_sibling()) {
+        add_vehicle_hist(edge_node, ts, vehicle_lane_hist);
+      }
+    }
+
+  })) {
+    return EXIT_FAILURE;
+  }
+
+
+  //write the vehicle history output
+  int vehicle_hist_output_stat = output::write_vehicle_output(output_path,
+                                                              vehicle_lane_hist,
+                                                              edges,
+                                                              timesteps);
+  if (vehicle_hist_output_stat != EXIT_SUCCESS) {
     std::cerr << "ERR: failed to write tower overage output, skipping remaining output artifacts" << std::endl;
     return tower_coverage_output_stat;
   }

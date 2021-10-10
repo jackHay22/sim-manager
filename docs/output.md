@@ -1,6 +1,6 @@
 # Output formats
 
-## Tower Output
+## Tower Output (tower communications)
 - Format: `json`
 
 ```json
@@ -37,7 +37,7 @@
       - first element: 0-index in vehicle id list
       - second element: distance from tower
 
-## Vehicle Output
+## Vehicle Output (vehicle route history)
 - Format: `json`
 
 ```json
@@ -64,8 +64,8 @@
   ]
 }
 ```
-- `segments` : the uniquer identifiers for each segment in the vehicle `segments` arrays
-- `vehicles` : positions of vehicles relative to segments by timestep:
+- `segments` : the uniquer identifiers for each segment in the vehicle `segments` arrays (same as segments in tower coverage output)
+- `vehicles` : positions of vehicles relative to segments by timestep (ex: vehicle 1 was at segment s0 10 timesteps ago, segment s1 15 timesteps ago, and segment s43 35 timesteps ago):
   - `vehicle_id` : the unique identifier for the vehicle
   - `segments` : a list of segments the vehicle has passed by timestep:
     - `ts` : the timestep
@@ -73,7 +73,7 @@
       - first element: 0-index into `segments` list
       - second element: how long ago in timesteps this vehicle passed this segment
 
-## Segment Output
+## Segment Output (tower coverage)
 - Format: `json`
 
 ```json

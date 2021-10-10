@@ -13,12 +13,18 @@ namespace output {
 
   typedef nlohmann::json json_t;
 
-  #define TOWER_ID_KEY "tower_id"
-  #define VEHICLES_KEY "vehicles"
-  #define TOWERS_KEY   "towers"
-  #define SEGMENTS_KEY "segments"
-  #define TS_KEY       "ts"
-  #define V_KEY        "v"
+  #define TOWER_ID_KEY   "tower_id"
+  #define VEHICLE_ID_KEY "vehicle_id"
+  #define VEHICLES_KEY   "vehicles"
+  #define TOWERS_KEY     "towers"
+  #define SEGMENTS_KEY   "segments"
+  #define TS_KEY         "ts"
+  #define V_KEY          "v"
+  #define S_KEY          "s"
+
+  #define TOWER_OUTPUT_FILENAME   "tower_output.json"
+  #define VEHICLE_HIST_FILENAME   "vehicle_history_output.json"
+  #define TOWER_COVERAGE_FILENAME "tower_coverage_output.json"
 
   /**
    * Join a filename to a path that may or may not have a trailing slash
@@ -100,7 +106,7 @@ namespace output {
 
     //write to the file
     try {
-      std::string full_path = join(out_dir_path, "tower_output.json");
+      std::string full_path = join(out_dir_path, TOWER_OUTPUT_FILENAME);
 
       std::ofstream out_file(full_path);
       out_file << out_obj << std::endl;
@@ -110,6 +116,84 @@ namespace output {
 
     } catch (const std::exception& e) {
       std::cerr << "ERR: failed to write tower output to file: " << e.what() << std::endl;
+      return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+  }
+
+  /**
+   * Write the vehicle segment history to an output file
+   * @param  out_dir_path      the path to write output to
+   * @param  vehicle_lane_hist the history of
+   * @param  edges             all edges in the simulation
+   * @param  timesteps         all timesteps in the simulation
+   * @return the status
+   */
+  int write_vehicle_output(const std::string& out_dir_path,
+                           const std::unordered_map<std::string,std::unique_ptr<types::vehicle_lane_hist_t>>& vehicle_lane_hist,
+                           const std::set<std::string>& edges,
+                           const std::set<std::string>& timesteps) {
+    json_t out_obj = json_t::object();
+    out_obj[SEGMENTS_KEY] = json_t::array();
+    out_obj[VEHICLES_KEY] = json_t::array();
+
+    for (const std::string& edge_id : edges) {
+      out_obj[SEGMENTS_KEY].push_back(edge_id);
+    }
+
+    std::vector<double> ts;
+    //convert timesteps to numeric values
+    for (const std::string& ts_s : timesteps) {
+      ts.push_back(atof(ts_s.c_str()));
+    }
+
+    std::unordered_map<std::string, std::unique_ptr<types::vehicle_lane_hist_t>>::const_iterator it
+      = vehicle_lane_hist.begin();
+
+    //read through all vehicles
+    while (it != vehicle_lane_hist.end()) {
+      json_t vehicle = json_t::object();
+      vehicle[VEHICLE_ID_KEY] = it->first;
+      vehicle[SEGMENTS_KEY] = json_t::array();
+
+      for (size_t i=0; i<ts.size(); i++) {
+        json_t current_ts = json_t::object();
+        current_ts[TS_KEY] = ts.at(i);
+        current_ts[S_KEY] = json_t::array();
+
+        //check all segments
+        size_t j=0;
+        for (const std::string& edge_id : edges) {
+          double ts_since_seen = it->second->timesteps_since_seen(edge_id, ts.at(i));
+          if (ts_since_seen >= 0) {
+            json_t pair = json_t::array();
+            pair.push_back(j);
+            pair.push_back(ts_since_seen);
+            current_ts[S_KEY].push_back(pair);
+          }
+          j++;
+        }
+
+        vehicle[SEGMENTS_KEY].push_back(current_ts);
+      }
+
+      out_obj[VEHICLES_KEY].push_back(vehicle);
+      it++;
+    }
+
+    //write to the file
+    try {
+      std::string full_path = join(out_dir_path, VEHICLE_HIST_FILENAME);
+
+      std::ofstream out_file(full_path);
+      out_file << out_obj << std::endl;
+      out_file.close();
+
+      std::cerr << "INFO: wrote vehicle history output to: " << full_path << std::endl;
+
+    } catch (const std::exception& e) {
+      std::cerr << "ERR: failed to write vehicle history output to file: " << e.what() << std::endl;
       return EXIT_FAILURE;
     }
 
@@ -169,7 +253,7 @@ namespace output {
 
     //write to the file
     try {
-      std::string full_path = join(out_dir_path, "tower_coverage_output.json");
+      std::string full_path = join(out_dir_path, TOWER_COVERAGE_FILENAME);
 
       std::ofstream out_file(full_path);
       out_file << out_obj << std::endl;
