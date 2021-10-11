@@ -18,6 +18,21 @@
 
 ## Use
 
+### Simulation pipeline
+
+## Docker
+- To run the simulation and post processing pipeline in docker:
+```bash
+./run_docker.sh
+```
+
+## Host
+- To run the simulation and post processing pipeline:
+```bash
+./simulate_analyze.sh data/grid output_data grid
+```
+- In this case `data/grid` is the input file location, `output_data` is the folder to write output to, and `grid` is the input file prefix
+
 ### Simulation Manager
 - Run example simulation
 ```bash
