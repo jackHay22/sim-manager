@@ -1,4 +1,4 @@
-.PHONY: simulate-example gui-example edit-example setup
+.PHONY: simulate-example gui-example edit-example
 
 analysis:
 	$(MAKE) -C analysis clean

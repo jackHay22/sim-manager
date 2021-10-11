@@ -2,7 +2,7 @@
 - Automates the creation and management of Sumo simulations for vehicle communications optimization.
 
 ## Analysis transformer
-- Requires
+- Requires (both can be installed as header only libraries in `analysis/libs/`)
   - [RapidXML](https://sourceforge.net/projects/rapidxml/)
   - [nlohmann json](https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp)
 
@@ -14,7 +14,7 @@
 ## Setup
 - Use `vagrant` to run in a vm
   - Run: `vagrant up && vagrant ssh`
-  - In the vm: `cd /vagrant && export SUMO_HOME=/home/vagrant/sumo && make setup`
+  - In the vm: `cd /vagrant && export SUMO_HOME=/home/vagrant/sumo`
 
 ## Use
 
