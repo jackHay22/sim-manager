@@ -41,6 +41,9 @@
 #define INTERNAL_VAL            "internal"
 #define SHAPE_ATTR              "shape"
 
+//tower vehicle prefix
+#define TOWER_PREFIX "tower"
+
 #define COMMA ','
 #define SPACE ' '
 
@@ -431,16 +434,19 @@ void add_vehicle_hist(rapidxml::xml_node<> *edge_node,
         throw std::exception();
       }
 
-      //add the mapping
-      std::unordered_map<std::string,std::unique_ptr<types::vehicle_lane_hist_t>>::iterator it = vehicle_lane_hist.find(vehicle_id);
-      if (it != vehicle_lane_hist.end()) {
-        it->second->at_segment(lane_id, timestep);
-      } else {
-        //add new
-        vehicle_lane_hist.insert(std::make_pair(
-          vehicle_id,
-          std::make_unique<types::vehicle_lane_hist_t>(lane_id, timestep) //constructor w/ initial values
-        ));
+      //check that this is not a tower
+      if (s.rfind(TOWER_PREFIX, 0) == string::npos) {
+        //add the mapping
+        std::unordered_map<std::string,std::unique_ptr<types::vehicle_lane_hist_t>>::iterator it = vehicle_lane_hist.find(vehicle_id);
+        if (it != vehicle_lane_hist.end()) {
+          it->second->at_segment(lane_id, timestep);
+        } else {
+          //add new
+          vehicle_lane_hist.insert(std::make_pair(
+            vehicle_id,
+            std::make_unique<types::vehicle_lane_hist_t>(lane_id, timestep) //constructor w/ initial values
+          ));
+        }
       }
     }
   }
