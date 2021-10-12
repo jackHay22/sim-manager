@@ -32,7 +32,7 @@
 - `towers` : connections for each tower:
   - `tower_id` : unique identifier for the tower
   - `vehicles` : a list of connections:
-    - `ts` : the current timestep
+    - `ts` : the current timestep (Note: these may not be sorted)
     - `v` : a list of vehicles in range.
       - first element: 0-index in vehicle id list
       - second element: distance from tower
@@ -68,7 +68,7 @@
 - `vehicles` : positions of vehicles relative to segments by timestep (ex: vehicle 1 was at segment s0 10 timesteps ago, segment s1 15 timesteps ago, and segment s43 35 timesteps ago):
   - `vehicle_id` : the unique identifier for the vehicle
   - `segments` : a list of segments the vehicle has passed by timestep (if the vehicle has no history for a given timestep, it is omitted):
-    - `ts` : the timestep
+    - `ts` : the timestep (Note: these may not be sorted)
     - `s` : visited segments in the map (if segment is not in list it has not been visited by the vehicle)
       - first element: 0-index into `segments` list
       - second element: how long ago in timesteps this vehicle passed this segment

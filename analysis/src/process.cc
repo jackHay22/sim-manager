@@ -520,11 +520,11 @@ int process_output_data(const std::string& bt_output_path,
                                                      vehicles,
                                                      timesteps);
   if (tower_output_stat != EXIT_SUCCESS) {
-    std::cerr << "ERR: failed to write tower output, skipping remaining output artifacts" << std::endl;
+    std::cerr << "ERR: failed to write tower output" << std::endl;
     return tower_output_stat;
   }
 
-  //clear unused storage
+  //clear storage that won't be used later
   vehicles.clear();
 
   //load network edges
@@ -552,7 +552,6 @@ int process_output_data(const std::string& bt_output_path,
     return EXIT_FAILURE;
   }
 
-
   //write the tower coverage output
   int tower_coverage_output_stat = output::write_tower_coverage_output(output_path,
                                                                        tower_recognitions,
@@ -560,7 +559,7 @@ int process_output_data(const std::string& bt_output_path,
                                                                        edges,
                                                                        towers);
   if (tower_coverage_output_stat != EXIT_SUCCESS) {
-    std::cerr << "ERR: failed to write tower overage output, skipping remaining output artifacts" << std::endl;
+    std::cerr << "ERR: failed to write tower overage output" << std::endl;
     return tower_coverage_output_stat;
   }
 
@@ -614,7 +613,6 @@ int process_output_data(const std::string& bt_output_path,
     return EXIT_FAILURE;
   }
 
-
   //write the vehicle history output
   int vehicle_hist_output_stat = output::write_vehicle_output(output_path,
                                                               vehicle_lane_hist,
@@ -622,7 +620,7 @@ int process_output_data(const std::string& bt_output_path,
                                                               timesteps);
   if (vehicle_hist_output_stat != EXIT_SUCCESS) {
     std::cerr << "ERR: failed to write tower overage output, skipping remaining output artifacts" << std::endl;
-    return tower_coverage_output_stat;
+    return vehicle_hist_output_stat;
   }
 
   return EXIT_SUCCESS;
