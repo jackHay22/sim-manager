@@ -162,6 +162,8 @@ namespace output {
         current_ts[TS_KEY] = ts.at(i);
         current_ts[S_KEY] = json_t::array();
 
+        size_t hist_added = 0;
+
         //check all segments
         size_t j=0;
         for (const std::string& edge_id : edges) {
@@ -171,11 +173,14 @@ namespace output {
             pair.push_back(j);
             pair.push_back(ts_since_seen);
             current_ts[S_KEY].push_back(pair);
+            hist_added++;
           }
           j++;
         }
 
-        vehicle[SEGMENTS_KEY].push_back(current_ts);
+        if (hist_added) {
+          vehicle[SEGMENTS_KEY].push_back(current_ts);
+        }
       }
 
       out_obj[VEHICLES_KEY].push_back(vehicle);

@@ -435,7 +435,7 @@ void add_vehicle_hist(rapidxml::xml_node<> *edge_node,
       }
 
       //check that this is not a tower
-      if (s.rfind(TOWER_PREFIX, 0) == string::npos) {
+      if (vehicle_id.rfind(TOWER_PREFIX, 0) == std::string::npos) {
         //add the mapping
         std::unordered_map<std::string,std::unique_ptr<types::vehicle_lane_hist_t>>::iterator it = vehicle_lane_hist.find(vehicle_id);
         if (it != vehicle_lane_hist.end()) {

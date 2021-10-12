@@ -67,7 +67,7 @@
 - `segments` : the uniquer identifiers for each segment in the vehicle `segments` arrays (same as segments in tower coverage output)
 - `vehicles` : positions of vehicles relative to segments by timestep (ex: vehicle 1 was at segment s0 10 timesteps ago, segment s1 15 timesteps ago, and segment s43 35 timesteps ago):
   - `vehicle_id` : the unique identifier for the vehicle
-  - `segments` : a list of segments the vehicle has passed by timestep:
+  - `segments` : a list of segments the vehicle has passed by timestep (if the vehicle has no history for a given timestep, it is omitted):
     - `ts` : the timestep
     - `s` : visited segments in the map (if segment is not in list it has not been visited by the vehicle)
       - first element: 0-index into `segments` list
