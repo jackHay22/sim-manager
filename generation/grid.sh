@@ -1,6 +1,7 @@
 #!/bin/bash
 
 TOWERS_COUNT=81
+TOWERS_THRESHOLD=100
 GRID_JUNCTIONS=10
 
 if [ $# -eq 0 ]
@@ -38,8 +39,8 @@ generate () {
   python tower_placer.py \
         --net $NETWORK_PATH \
         --out $TOWERS_PATH \
-        --type grid \
-        --count $TOWERS_COUNT
+        --count $TOWERS_COUNT \
+        --threshold $TOWERS_THRESHOLD
 }
 
 if [ -d $1 ]
