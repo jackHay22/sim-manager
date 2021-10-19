@@ -23,7 +23,7 @@ log.addHandler(stream)
 TOWER_POSITION_OPTIONS = ["center", "junction"]
 
 class Vec2:
-    def __init__(x, y):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
 
@@ -112,10 +112,10 @@ class Edge:
         max_x = sys.float_info.min
         for l in self._lanes:
             for p in l._pts:
-                if p[0] < min_x:
-                    min_x = p[0]
-                if p[0] > max_x:
-                    max_x = p[0]
+                if p.x < min_x:
+                    min_x = p.x
+                if p.x > max_x:
+                    max_x = p.x
         self._min_x = min_x
         self._max_x = max_x
         return min_x, max_x
@@ -128,10 +128,10 @@ class Edge:
         max_y = sys.float_info.min
         for l in self._lanes:
             for p in l._pts:
-                if p[1] < min_y:
-                    min_y = p[1]
-                if p[1] > max:
-                    max_y = p[1]
+                if p.y < min_y:
+                    min_y = p.y
+                if p.y > max_y:
+                    max_y = p.y
         self._min_y = min_y
         self._max_y = max_y
         return min_y, max_y
@@ -155,17 +155,32 @@ class Tower:
         self._end_pos = lane._len / 2
         self._edge_id = lane.get_edge_id()
 
-    def generate_xml(self):
+    def to_xml(self, additional_xml):
         """Generate an xml representation for this tower"""
         #generate an xml representation for this tower
-        #For example:
-        # <parkingArea id="<tower_id>_PA" lane="<lane_id>" endPos="10" roadsideCapacity="1"/>
-        # <vehicle id="<tower_id>" depart="0.00" departPos="stop">
-        #     <route edges="<edge_id>" color="cyan"/>
-        #     <stop parkingArea="<tower_id>_PA" parking="true"/>
-        #     <param key="has.btreiver.device" value="true"/>
-        # </vehicle>
-        pass
+        additional_xml.addChild("parkingArea", {
+            "id" : "parkingArea_%s" % (self._tower_id),
+            "lane" : str(self._lane_id),
+            "endPos" : str(self._end_pos),
+            "roadsideCapacity" : "1"
+        })
+        v = additional_xml.addChild("vehicle", {
+            "id" : "tower_%s" % (self._tower_id),
+            "depart" : "0.00",
+            "departPos" : "stop"
+        })
+        v.addChild("route", {
+            "edges" : self._edge_id,
+            "color" : "cyan"
+        })
+        v.addChild("stop", {
+            "parkingArea" : "parkingArea_%s" % (self._tower_id),
+            "parking" : "true"
+        })
+        v.addChild("param", {
+            "key" : "has.btreceiver.device",
+            "value" : "true"
+        })
 
 def place_towers_grid(edges, tower_count, placement_threshold):
     """Superimpose a grid of towers on a roadway"""
@@ -196,10 +211,10 @@ def place_towers_grid(edges, tower_count, placement_threshold):
     incr_y = len_y / rows
 
     towers = []
-    for i in range(rows):
-        for j in range(cols):
-            p = Vec2(range_x + (j * incr_x),
-                     range_y + (i * incr_y))
+    for i in range(int(rows)):
+        for j in range(int(cols)):
+            p = Vec2(range_x[0] + (j * incr_x),
+                     range_y[0] + (i * incr_y))
             closest_dist = sys.float_info.max
             closest_lane = None
             #find the edge closest to the tower
@@ -217,7 +232,14 @@ def place_towers_grid(edges, tower_count, placement_threshold):
 
 def write_towers(towers, out_file):
     """Write the new towers to an exl file (path to file should be out_file)"""
-    pass
+    #create the root element
+    additional = sumolib.xml.create_document("additional")
+    for t in towers:
+        t.to_xml(additional)
+
+    with open(out_file, 'w') as out:
+        out.write(additional.toXML())
+
 
 def main(net_file, out_file, tower_count, placement_threshold):
     """Takes the network file to position towers for and the number of towers to place"""

@@ -1,5 +1,4 @@
 <routes >
-
     <vehicle depart="0.00" id="0">
         <route edges="G3G2 G2F2 F2E2 E2D2 D2C2 C2B2 B2A2 A2A3 A3A4"/>
         <param key="has.btsender.device" value="true"/>

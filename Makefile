@@ -5,12 +5,12 @@ analysis:
 	$(MAKE) -C analysis
 simulate-example:
 	./simulation/simulation.sh \
-			data/organic \
+			data/example_organic \
 			output_data \
 			example
 gui-example:
-	./gui.sh data/organic example
+	./gui.sh data/example_organic example
 edit-example:
 	$(SUMO_HOME)/bin/netedit \
-		-s data/organic/example.net.xml \
-		-a data/organic/example.towers.xml
+		-s data/example_organic/example.net.xml \
+		-a data/example_organic/example.towers.xml

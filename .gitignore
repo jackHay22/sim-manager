@@ -5,3 +5,5 @@ output_data/
 pipeline/libs/*
 pipeline/build/*
 pipeline/test_cfg.json
+data/grid
+data/organic
