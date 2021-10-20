@@ -14,8 +14,9 @@ RUN cmake ../..
 RUN make -j$(nproc)
 
 WORKDIR /
+COPY generation/ generation/
 COPY analysis/ analysis/
 COPY Makefile Makefile
 COPY simulate_analyze.sh simulate_analyze.sh
 RUN make analysis -B -j$(nproc)
-CMD [ "./simulate_analyze.sh", "/data/grid", "/output_data", "grid" ]
+CMD [ "./simulate_analyze.sh", "/data/grid", "/output_data" ]
