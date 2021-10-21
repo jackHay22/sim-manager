@@ -23,21 +23,22 @@ generate () {
         --grid.number $GRID_JUNCTIONS \
         --output-file=$NETWORK_PATH
 
-  #create random trips within the network
-  python $SUMO_HOME/tools/randomTrips.py \
+  #create random trips within the network (6 minutes)
+  python3 $SUMO_HOME/tools/randomTrips.py \
         -n $NETWORK_PATH \
         -r $ROUTES_PATH \
-        -e 3600 -p 1.0 #defaults
+        -e 360 \
+        -p 1.0
 
   rm $ROUTES_ALT_PATH || true
   rm trips.trips.xml || true
 
   #enable bluetooth on all cars in route file
-  python generation/bt_enable.py \
+  python3 generation/bt_enable.py \
         --routes $ROUTES_PATH
 
   #Run the tower placer on this network
-  python generation/tower_placer.py \
+  python3 generation/tower_placer.py \
         --net $NETWORK_PATH \
         --out $TOWERS_PATH \
         --count $TOWERS_COUNT \

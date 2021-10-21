@@ -8,6 +8,7 @@ fi
 FILE_PREFIX=grid
 
 #Generate a new simulation network into the input directory (grid)
+echo "./generation/grid.sh ${1}"
 ./generation/grid.sh $1
 
 echo "$SUMO_HOME/bin/sumo "
@@ -16,7 +17,7 @@ echo "   -r $1/${FILE_PREFIX}.rou.xml "
 echo "   -a $1/${FILE_PREFIX}.towers.xml "
 echo "   --bt-output $2/${FILE_PREFIX}.bt_output.xml "
 echo "   --netstate-dump $2/${FILE_PREFIX}.ns_output.xml"
-echo "   --device.btreceiver.range 1000.0 "
+echo "   --device.btreceiver.range 100.0 "
 echo "   --device.btreceiver.all-recognitions"
 #Run the simulation
 $SUMO_HOME/bin/sumo \
@@ -25,7 +26,7 @@ $SUMO_HOME/bin/sumo \
       -a $1/${FILE_PREFIX}.towers.xml \
       --bt-output $2/${FILE_PREFIX}.bt_output.xml \
       --netstate-dump $2/${FILE_PREFIX}.ns_output.xml \
-      --device.btreceiver.range 1000.0 \
+      --device.btreceiver.range 100.0 \
       --device.btreceiver.all-recognitions
 
 OUT_DIR=${2}/${3}/
