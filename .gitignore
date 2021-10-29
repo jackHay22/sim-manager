@@ -7,3 +7,4 @@ pipeline/build/*
 pipeline/test_cfg.json
 data/grid
 data/organic
+server/vehicleserver
