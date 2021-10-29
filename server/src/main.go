@@ -5,6 +5,7 @@ import (
   "flag"
   "jackhay.io/vehicleserver/server"
   "jackhay.io/vehicleserver/processing"
+	"jackhay.io/vehicleserver/peers"
 )
 
 //default server constraints
@@ -14,8 +15,7 @@ const bwDefault = 1
 
 /*
  * Entrypoint
- * -port  the port to serve endpoints on
- * -id    the id of this server
+ * -topo  the server topology (list of peers Note: includes self)
  * -proc  the processing constraint for this server
  * -store the storage constraint for this server
  * -bw    the bandwidth constraint for this server
@@ -23,27 +23,51 @@ const bwDefault = 1
 func main() {
 	log.SetPrefix("sim-server ")
 
-  portPtr := flag.Int("port", 8080, "port to serve requests on")
-  idPtr := flag.String("id", "", "id of this server")
-  procPtr := flag.Int("proc", procDefault, "the processing constraint for this server")
-  storePtr := flag.Int("store", storeDefault, "the storage constraint for this server")
-  bwPtr := flag.Int("bw", bwDefault, "the bandwidth constraint for this server")
+  topoPtr := flag.String("topo", "", "server topology file")
+  idxPtr := flag.Int("idx", -1, "the index of this server in the topology file")
 
   flag.Parse()
 
-  if len(*idPtr) == 0 {
-    log.Fatalf("server id must be specified")
+  if len(*topoPtr) == 0 {
+    log.Fatalf("topology file must be specified")
   }
 
-  //create server buffers
-  segmentBuffer := processing.NewSegmentBuffer(*storePtr)
-  forwardBuffer := processing.ForwardBuffer{
+	if *idxPtr < 0 {
+		log.Fatalf("index of this server in toplogy file must be specified")
+	}
 
-  }
+	//load the server topology
+	topo := peers.NewServerTopology(topoPtr)
+
+
+	if *idxPtr >= len(topo.Servers) {
+		log.Fatalf("server index out of bounds: %d", *idxPtr)
+	}
+
+	//populate peers
+	peerLookup := peers.NewPeerLookup(topo, *idxPtr)
+
+	//extract information about this server
+	procConstraint := topo.Servers[*idxPtr].ProcC
+	storeConstraint := topo.Servers[*idxPtr].StoreC
+	bandwidthConstraint := topo.Servers[*idxPtr].BandC
+	port := topo.Servers[*idxPtr].Port
+	id := topo.Servers[*idxPtr].Id
+
+	//create server buffers
+	segmentBuffer := processing.NewSegmentBuffer(storeConstraint)
+	forwardBuffer := processing.ForwardBuffer{
+
+	}
 
   //start the server processing system
-  go processing.StartProcessing(*procPtr, *storePtr, *bwPtr, segmentBuffer, &forwardBuffer)
+  go processing.StartProcessing(procConstraint,
+																storeConstraint,
+																bandwidthConstraint,
+																segmentBuffer,
+																&forwardBuffer,
+																peerLookup)
 
 	//start the server
-	server.StartServer(*portPtr, *idPtr, segmentBuffer)
+	server.StartServer(port, id, segmentBuffer)
 }

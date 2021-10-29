@@ -3,6 +3,7 @@ package processing
 import (
   "log"
   "time"
+  "jackhay.io/vehicleserver/peers"
 )
 
 /*
@@ -58,7 +59,8 @@ func StartProcessing(procConstraint int,
                      storeConstraint int,
                      bwConstraint int,
                      segmentBuffer *SegmentBuffer,
-                     forwardBuffer *ForwardBuffer) {
+                     forwardBuffer *ForwardBuffer,
+                     peerLookup *peers.PeerLookup) {
   log.Printf("processing thread starting with server constraints: processing: %d, storage: %d, bandwidth: %d",
              procConstraint,
              storeConstraint,
