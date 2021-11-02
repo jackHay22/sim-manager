@@ -1,6 +1,12 @@
+.PHONY: vehicleserver segmentprovider get
+	
 vehicleserver:
-	cd src && go build . && cd .. && mv src/vehicleserver .
+	cd server && go build . && cd .. && mv server/vehicleserver .
+segmentprovider:
+	cd segment_provider && go build . && cd .. && mv segment_provider/segmentprovider .
 get:
-	cd src && go get . && cd ..
+	cd server && go get . && cd ..
+	cd segment_provider && go get . && cd ..
 clean::
 	rm vehicleserver
+	rm segmentprovider

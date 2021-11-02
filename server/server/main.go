@@ -1,11 +1,11 @@
 package main
 
 import (
-	"log"
-  "flag"
-  "jackhay.io/vehicleserver/server"
-  "jackhay.io/vehicleserver/processing"
+	"flag"
 	"jackhay.io/vehicleserver/peers"
+	"jackhay.io/vehicleserver/processing"
+	"jackhay.io/vehicleserver/server"
+	"log"
 )
 
 //default server constraints
@@ -21,16 +21,17 @@ const bwDefault = 1
  * -bw    the bandwidth constraint for this server
  */
 func main() {
-	log.SetPrefix("sim-server ")
+	log.SetPrefix("vehicleserver ")
 
-  topoPtr := flag.String("topo", "", "server topology file")
-  idxPtr := flag.Int("idx", -1, "the index of this server in the topology file")
+	topoPtr := flag.String("topo", "", "server topology file")
+	idxPtr := flag.Int("idx", -1, "the index of this server in the topology file")
+	segmentProviderPtr := flag.String("sprov", "127.0.0.1:8080", "address of the segment provider")
 
-  flag.Parse()
+	flag.Parse()
 
-  if len(*topoPtr) == 0 {
-    log.Fatalf("topology file must be specified")
-  }
+	if len(*topoPtr) == 0 {
+		log.Fatalf("topology file must be specified")
+	}
 
 	if *idxPtr < 0 {
 		log.Fatalf("index of this server in toplogy file must be specified")
@@ -38,7 +39,6 @@ func main() {
 
 	//load the server topology
 	topo := peers.NewServerTopology(topoPtr)
-
 
 	if *idxPtr >= len(topo.Servers) {
 		log.Fatalf("server index out of bounds: %d", *idxPtr)
@@ -56,17 +56,15 @@ func main() {
 
 	//create server buffers
 	segmentBuffer := processing.NewSegmentBuffer(storeConstraint)
-	forwardBuffer := processing.ForwardBuffer{
+	forwardBuffer := processing.ForwardBuffer{}
 
-	}
-
-  //start the server processing system
-  go processing.StartProcessing(procConstraint,
-																storeConstraint,
-																bandwidthConstraint,
-																segmentBuffer,
-																&forwardBuffer,
-																peerLookup)
+	//start the server processing system
+	go processing.StartProcessing(procConstraint,
+		storeConstraint,
+		bandwidthConstraint,
+		segmentBuffer,
+		&forwardBuffer,
+		peerLookup)
 
 	//start the server
 	server.StartServer(port, id, segmentBuffer)

@@ -8,3 +8,4 @@ pipeline/test_cfg.json
 data/grid
 data/organic
 server/vehicleserver
+server/segmentprovider

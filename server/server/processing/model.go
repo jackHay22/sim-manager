@@ -1,7 +1,7 @@
 package processing
 
 import (
-  "sync"
+	"sync"
 )
 
 /*
@@ -9,12 +9,12 @@ import (
  * This is the processing storage for a given server
  */
 type SegmentBuffer struct {
-  //mutex for controlling access to buffer
-  mutex sync.Mutex
-  //the capacity of the buffer
-  cap int
-  //the current size of the buffer
-  size int
+	//mutex for controlling access to buffer
+	mutex sync.Mutex
+	//the capacity of the buffer
+	cap int
+	//the current size of the buffer
+	size int
 }
 
 /*
@@ -22,5 +22,4 @@ type SegmentBuffer struct {
  * appropriate server
  */
 type ForwardBuffer struct {
-
 }
