@@ -9,6 +9,8 @@ import (
 
 /*
  * Handle requests for segments from servers (acting as tower)
+ * - At each given timestep, twoers connect to the segment provider,
+ * download segments, and then process/forward segments to peers
  */
 func towerHandler(provider *sim.SimInfo) http.HandlerFunc {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {

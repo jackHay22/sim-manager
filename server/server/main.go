@@ -25,7 +25,7 @@ func main() {
 
 	topoPtr := flag.String("topo", "", "server topology file")
 	idxPtr := flag.Int("idx", -1, "the index of this server in the topology file")
-	segmentProviderPtr := flag.String("sprov", "127.0.0.1:8080", "address of the segment provider")
+	//segmentProviderPtr := flag.String("sprov", "127.0.0.1:8080", "address of the segment provider")
 
 	flag.Parse()
 

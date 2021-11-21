@@ -1,5 +1,5 @@
-.PHONY: vehicleserver segmentprovider get
-	
+.PHONY: all vehicleserver segmentprovider get
+all: vehicleserver segmentprovider 
 vehicleserver:
 	cd server && go build . && cd .. && mv server/vehicleserver .
 segmentprovider:

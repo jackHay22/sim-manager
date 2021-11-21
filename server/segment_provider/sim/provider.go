@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"fmt"
 )
 
 /*
@@ -30,14 +31,60 @@ func load(path *string, v interface{}) {
 }
 
 /*
+ * For a given timestep and tower, get a list of all vehicles
+ * connected to this tower by id
+ */
+func (s *SimInfo) VehiclesConnected(ts float64, towerId string) (vids []string) {
+	return vids
+}
+
+/*
  * Load simulation data from files
  */
 func LoadSimInfo(towerOutPath *string,
 	vehicleOutPath *string,
 	segmentOutPath *string) *SimInfo {
+
+	var towerData towerOutput
+	var vehicleData vehicleOutput
+	var segmentData segmentOutput
+
+	//load json
+	load(towerOutPath, &towerData)
+	load(vehicleOutPath, &vehicleData)
+	load(segmentOutPath, &segmentData)
+
+	//convert to more efficient lookup structures
 	var simInfo SimInfo
-	load(towerOutPath, &simInfo.towerData)
-	load(vehicleOutPath, &simInfo.vehicleData)
-	load(segmentOutPath, &simInfo.segmentData)
+	simInfo.towerCoverage.towers = make(map[string]map[string][]vehicleDist)
+
+	for _, t := range towerData.Towers {
+		//check if we already have a mapping for this tower
+		if _, found := simInfo.towerCoverage.towers[t.TowerId]; !found {
+			simInfo.towerCoverage.towers[t.TowerId] = make(map[string][]vehicleDist)
+		}
+
+		//all vehicles
+		for _, v := range t.Vehicles {
+			//convert the timestep to a string for use as a map key
+			ts := fmt.Sprintf("%f", v.Ts)
+			//check if we already have a mpaaing for this timestep
+			if _, found := simInfo.towerCoverage.towers[t.TowerId][ts]; !found {
+				simInfo.towerCoverage.towers[t.TowerId][ts] = make([]vehicleDist, len(v.V))
+			}
+
+			//vehicles at this timestep
+			for _, data := range v.V {
+				vid := int(data[0])
+
+				simInfo.towerCoverage.towers[t.TowerId][ts] =
+					append(simInfo.towerCoverage.towers[t.TowerId][ts], vehicleDist{
+						vehicleId: towerData.VehicleIds[vid],
+						dist: data[1],
+				})
+			}
+		}
+	}
+
 	return &simInfo
 }

@@ -63,10 +63,31 @@ type segmentOutput struct {
 }
 
 /*
+ * Pair of vehicle id, distance to tower
+ */
+type vehicleDist struct {
+	//id of the vehicle
+	vehicleId string
+	//distance to the tower
+	dist float64
+}
+
+/*
+ * For each tower, vehicles in range
+ * at each timestep
+ */
+type towerCoverageLookup struct {
+	//all timesteps (converted from floats to strings for associative lookup)
+	timesteps []string
+	//map from each tower id to all timesteps for that tower
+	//to all vehicles connected at that timestep
+	towers map[string]map[string][]vehicleDist
+}
+
+/*
  * Holds simulation information
  */
 type SimInfo struct {
-	towerData   towerOutput
-	vehicleData vehicleOutput
-	segmentData segmentOutput
+	//tower - vehicle connectivity for each timestep
+	towerCoverage towerCoverageLookup
 }
