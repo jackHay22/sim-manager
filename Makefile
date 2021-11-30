@@ -1,5 +1,5 @@
-.PHONY: simulate-example gui-example edit-example analysis server
-
+.PHONY: simulate-example gui-example edit-example all
+all: analysis server
 analysis:
 	$(MAKE) -C analysis clean
 	$(MAKE) -C analysis
