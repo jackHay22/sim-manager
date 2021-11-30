@@ -1,13 +1,24 @@
 # Sumo Simulation Manager
 - Automates the creation and management of Sumo simulations for vehicle communications optimization.
+- Runs server computation simulation based on Sumo simulation output
 
 ## Analysis transformer
+- `make analysis`
 - Requires (both can be installed as header only libraries in `analysis/libs/`)
   - [RapidXML](https://sourceforge.net/projects/rapidxml/)
   - [nlohmann json](https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp)
+- `analysis/libs/` should contain the following files:
+```
+json.hpp
+rapidxml.hpp
+rapidxml_iterators.hpp
+rapidxml_print.hpp
+rapidxml_utils.hpp
+```
 
 ## Server simulation
-See: [API spec](docs/api.md)
+- `make server`
+- See: [API spec](docs/api.md)
 
 ## Roadside towers
 - Roadside towers are represented by parked cars:

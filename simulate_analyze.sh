@@ -43,3 +43,6 @@ echo "   -o $OUT_DIR"
     -r $2/${FILE_PREFIX}.ns_output.xml \
     -n $1/${FILE_PREFIX}.net.xml \
     -o $OUT_DIR
+
+#Run server simulations
+echo "TODO: server simulations"

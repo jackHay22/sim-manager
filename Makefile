@@ -1,8 +1,11 @@
-.PHONY: simulate-example gui-example edit-example
+.PHONY: simulate-example gui-example edit-example analysis server
 
 analysis:
 	$(MAKE) -C analysis clean
 	$(MAKE) -C analysis
+server:
+	$(MAKE) -C server get
+	$(MAKE) -C server
 simulate-example:
 	./simulation/simulation.sh \
 			data/example_organic \
