@@ -34,8 +34,17 @@ func load(path *string, v interface{}) {
  * For a given timestep and tower, get a list of all vehicles
  * connected to this tower by id
  */
-func (s *SimInfo) VehiclesConnected(ts float64, towerId string) (vids []string) {
+func (s *SimInfo) VehiclesConnected(ts string, towerId string) (vids []string) {
 	return vids
+}
+
+/*
+ * For a given tower, get all segments that it
+ * is responsible for
+ */
+func (s *SimInfo) TowerCoverage(towerId string) (sids []string, e error) {
+	//TODO
+	return sids, nil
 }
 
 /*

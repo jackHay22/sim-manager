@@ -5,7 +5,9 @@ import (
 	"jackhay.io/vehicleserver/peers"
 	"jackhay.io/vehicleserver/processing"
 	"jackhay.io/vehicleserver/server"
+	"jackhay.io/vehicleserver/segmentprovider"
 	"log"
+	"fmt"
 )
 
 //default server constraints
@@ -21,11 +23,11 @@ const bwDefault = 1
  * -bw    the bandwidth constraint for this server
  */
 func main() {
-	log.SetPrefix("vehicleserver ")
+	log.SetPrefix("vehicleserver - ")
 
 	topoPtr := flag.String("topo", "", "server topology file")
 	idxPtr := flag.Int("idx", -1, "the index of this server in the topology file")
-	//segmentProviderPtr := flag.String("sprov", "127.0.0.1:8080", "address of the segment provider")
+	segmentProviderPtr := flag.String("sprov", "127.0.0.1:8080", "address of the segment provider")
 
 	flag.Parse()
 
@@ -54,9 +56,18 @@ func main() {
 	port := topo.Servers[*idxPtr].Port
 	id := topo.Servers[*idxPtr].Id
 
+	//set the correct logging prefix
+	log.SetPrefix(fmt.Sprintf("vehicleserver %s ", id))
+
 	//create server buffers
 	segmentBuffer := processing.NewSegmentBuffer(storeConstraint)
 	forwardBuffer := processing.ForwardBuffer{}
+
+	//create a segment provider (connects to provider)
+	segmentProvider, spErr := segmentprovider.NewSegmentProvider(id, *segmentProviderPtr)
+	if spErr != nil {
+		log.Fatalf("failed to connect to segment provider: %d", *idxPtr)
+	}
 
 	//start the server processing system
 	go processing.StartProcessing(procConstraint,
@@ -64,7 +75,8 @@ func main() {
 		bandwidthConstraint,
 		segmentBuffer,
 		&forwardBuffer,
-		peerLookup)
+		peerLookup,
+		segmentProvider)
 
 	//start the server
 	server.StartServer(port, id, segmentBuffer)

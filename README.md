@@ -6,6 +6,8 @@
   - [RapidXML](https://sourceforge.net/projects/rapidxml/)
   - [nlohmann json](https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp)
 
+## Server simulation
+See: [API spec](docs/api.md)
 
 ## Roadside towers
 - Roadside towers are represented by parked cars:
