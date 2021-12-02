@@ -1,7 +1,11 @@
 package sim
 
+import (
+	"sync"
+)
+
 /*
- * Note: these formats are described in
+ * Note: the next three struct json formats are described in
  * docs/output.md
  */
 
@@ -63,6 +67,10 @@ type segmentOutput struct {
 }
 
 /*
+ * The remaining structs define runtime structures
+ */
+
+/*
  * Pair of vehicle id, distance to tower
  */
 type vehicleDist struct {
@@ -90,4 +98,16 @@ type towerCoverageLookup struct {
 type SimInfo struct {
 	//tower - vehicle connectivity for each timestep
 	towerCoverage towerCoverageLookup
+	//all timesteps in order
+	allTs []string
+	//current ts index
+	currentTs int
+	//mutex for controlling counters
+	mutex sync.Mutex
+	//the total number of towers
+	towers int
+	//towers waiting for the next timestep
+	towersWaiting int
+	//condition variable for towers waiting for the next timestep
+	cond *sync.Cond
 }

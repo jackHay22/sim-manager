@@ -62,29 +62,38 @@ func towerHandler(provider *sim.SimInfo) http.HandlerFunc {
       return
     }
 
-    // //get the variables from the request path
-    // vars := mux.Vars(request)
-    // towerid, tidOk := vars["towerid"]
-    // if !tidOk {
-    //   writer.WriteHeader(http.StatusBadRequest)
-    //   log.Printf("/tower request missing towerid")
-    //   return
-    // }
-    //
-    // timestep, tsOk := vars["timestep"]
-    // if !tsOk {
-    //   writer.WriteHeader(http.StatusBadRequest)
-    //   log.Printf("/tower request missing timestep")
-    //   return
-    // }
+    //get the variables from the request path
+    vars := mux.Vars(request)
+    towerid, tidOk := vars["towerid"]
+    if !tidOk {
+      writer.WriteHeader(http.StatusBadRequest)
+      log.Printf("/tower request missing towerid")
+      return
+    }
 
-    //request the relevant information from siminfo
+    timestep, tsOk := vars["timestep"]
+    if !tsOk {
+      writer.WriteHeader(http.StatusBadRequest)
+      log.Printf("/tower request missing timestep")
+      return
+    }
 
-    // //response with json
-    // writer.Header().Set("Content-Type", "application/json")
-    // //write the string (json)
-    // io.WriteString(writer, *resBody)
+    //request the vehicles currently connected for the timestep
+    //Note: this will block until the timestep is ready
+    if res, err := provider.VehiclesConnected(timestep, towerid); err == nil {
+    	if jsonResp, jsonErr := json.Marshal(res); jsonErr == nil {
+        writer.Write(jsonResp)
+        //respond with json
+        writer.Header().Set("Content-Type", "application/json")
+    	} else {
+        log.Printf("failed to generate json response %s", jsonErr)
+        writer.WriteHeader(http.StatusInternalServerError)
+      }
 
+    } else {
+      log.Printf("failed to get vehicles connected to tower %s: %s", towerid, err)
+      writer.WriteHeader(http.StatusInternalServerError)
+    }
 	})
 }
 
