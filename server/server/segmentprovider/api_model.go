@@ -13,7 +13,7 @@ type VehicleCoverage struct {
     //the history of the vehicle
     VehicleHistory []struct {
       //how long ago in timesteps the vehicle was on this segment
-      Elapsed int `json:"elapsed"`
+      Elapsed float64 `json:"elapsed"`
       //the segment id
       SegmentId string `json:"id"`
     } `json:"hist"`

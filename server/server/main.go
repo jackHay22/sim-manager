@@ -4,7 +4,6 @@ import (
 	"flag"
 	"jackhay.io/vehicleserver/peers"
 	"jackhay.io/vehicleserver/processing"
-	"jackhay.io/vehicleserver/server"
 	"jackhay.io/vehicleserver/segmentprovider"
 	"log"
 	"fmt"
@@ -60,10 +59,10 @@ func main() {
 	log.SetPrefix(fmt.Sprintf("vehicleserver %s ", id))
 
 	//create server buffers
-	segmentBuffer := processing.NewSegmentBuffer(storeConstraint)
-	forwardBuffer := processing.ForwardBuffer{}
+	segmentBuffer := peers.NewSegmentBuffer(storeConstraint)
 
-	//create a segment provider (connects to provider)
+	//create a segment provider (connects to provider, downloads segments this
+	//server/tower is responsible for)
 	segmentProvider, spErr := segmentprovider.NewSegmentProvider(id, *segmentProviderPtr)
 	if spErr != nil {
 		log.Fatalf("failed to connect to segment provider: %d", *idxPtr)
@@ -74,10 +73,9 @@ func main() {
 		storeConstraint,
 		bandwidthConstraint,
 		segmentBuffer,
-		&forwardBuffer,
 		peerLookup,
 		segmentProvider)
 
 	//start the server
-	server.StartServer(port, id, segmentBuffer)
+	peers.StartServer(port, id, segmentBuffer)
 }

@@ -11,30 +11,6 @@ import (
 )
 
 /*
- * Server topology format
- */
-type ServerTopology struct {
-	Servers []struct {
-		Id     string `json:"id"`
-		Addr   string `json:"addr"`
-		Port   int    `json:"port"`
-		ProcC  int    `json:"processing_constraint"`
-		StoreC int    `json:"storage_constraint"`
-		BandC  int    `json:"bandwidth_constraint"`
-	} `json:"servers"`
-}
-
-/*
- * Mapping containing information
- * about the server's peers
- * (static membership)
- */
-type PeerLookup struct {
-	//map id to address
-	mapping map[string]string
-}
-
-/*
  * Load server topology from file
  */
 func NewServerTopology(path *string) *ServerTopology {
@@ -62,8 +38,8 @@ func NewServerTopology(path *string) *ServerTopology {
 /*
  * Add peers to the new lookup
  */
-func NewPeerLookup(topo *ServerTopology, serverIdx int) *PeerLookup {
-	p := PeerLookup{
+func NewPeerLookup(topo *ServerTopology, serverIdx int) *Peers {
+	p := Peers{
 		mapping: make(map[string]string),
 	}
 
@@ -82,11 +58,11 @@ func NewPeerLookup(topo *ServerTopology, serverIdx int) *PeerLookup {
 /*
  * Forward information about a segment to a different server
  */
-func (l *PeerLookup) ForwardSegment(serverId string, segmentId string, data string) bool {
+func (l *Peers) ForwardSegment(serverId string, segmentId string, data string) bool {
 	//the post body
-	body, _ := json.Marshal(map[string]string{
-		"segmentId": segmentId,
-		"data":      data,
+	body, _ := json.Marshal(ForwardedSegment{
+		SegmentId: segmentId,
+		Data: data,
 	})
 	postBody := bytes.NewBuffer(body)
 
