@@ -22,7 +22,7 @@
       "dist" : 0.0,
       "hist" : [
         {
-          "elapsed" : 0,
+          "elapsed" : 0.0,
           "id" : "some_segment_id"
         },
         ...

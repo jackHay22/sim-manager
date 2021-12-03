@@ -33,6 +33,24 @@ func load(path *string, v interface{}) {
 }
 
 /*
+ * Get the vehicle segment history up to the given timestep
+ */
+func (s *SimInfo) getVehicleHist(vehicleId string, ts string) (h []vehicleHist, e error) {
+	if v, foundV := s.vehicleHist.vehicles[vehicleId]; foundV {
+		if segments, foundT := v[ts]; foundT {
+			for _, s := range segments {
+				h = append(h, vehicleHist{
+					Elapsed: s.tsAgo,
+					SegmentId: s.segmentId,
+				})
+			}
+			return h, nil
+		}
+	}
+	return nil, errors.New(fmt.Sprintf("no history for vehicle %s at timestep %s", vehicleId, ts))
+}
+
+/*
  * For a given timestep and tower, get a list of all vehicles
  * connected to this tower by id
  *
@@ -54,9 +72,16 @@ func (s *SimInfo) VehiclesConnected(ts string, towerId string) (*vehicleCoverage
 
 				//generate a response with the connected vehicles
 				for _, v := range vs {
-					cov.Vehicles = append(cov.Vehicles, vehicle{
-						
-					})
+					if hist, err := s.getVehicleHist(v.vehicleId, ts); err == nil {
+						//add the connected vehicle
+						cov.Vehicles = append(cov.Vehicles, vehicle{
+							VehicleId: v.vehicleId,
+							Distance: v.dist,
+							VehicleHistory: hist,
+						})
+					} else {
+						return nil, err
+					}
 				}
 				return &cov, nil
 
@@ -108,9 +133,13 @@ func (s *SimInfo) VehiclesConnected(ts string, towerId string) (*vehicleCoverage
  * For a given tower, get all segments that it
  * is responsible for
  */
-func (s *SimInfo) TowerCoverage(towerId string) (sids []string, e error) {
-	//TODO
-	return sids, nil
+func (s *SimInfo) TowerCoverage(towerId string) ([]string, error) {
+	//look for the tower
+	if t, found := s.towerAssignments.towers[towerId]; found {
+		return t, nil
+	} else {
+		return nil, errors.New(fmt.Sprintf("no such tower: %s", towerId))
+	}
 }
 
 /*
@@ -132,6 +161,8 @@ func LoadSimInfo(towerOutPath *string,
 	//convert to more efficient lookup structures
 	var simInfo SimInfo
 	simInfo.towerCoverage.towers = make(map[string]map[string][]vehicleDist)
+	simInfo.vehicleHist.vehicles = make(map[string]map[string][]segmentPos)
+	simInfo.towerAssignments.towers = make(map[string][]string)
 	simInfo.towers = 0
 	simInfo.towersWaiting = 0
 	simInfo.currentTs = 0
@@ -153,7 +184,7 @@ func LoadSimInfo(towerOutPath *string,
 				simInfo.allTs = append(simInfo.allTs, ts)
 			}
 
-			//check if we already have a mpaaing for this timestep
+			//check if we already have a maping for this timestep
 			if _, found := simInfo.towerCoverage.towers[t.TowerId][ts]; !found {
 				simInfo.towerCoverage.towers[t.TowerId][ts] = make([]vehicleDist, len(v.V))
 			}
@@ -170,6 +201,43 @@ func LoadSimInfo(towerOutPath *string,
 			}
 		}
 	}
+
+	for _, v := range vehicleData.Vehicles {
+		//check if we already have a mapping for this vehicle
+		if _, found := simInfo.vehicleHist.vehicles[v.VehicleId]; !found {
+			simInfo.vehicleHist.vehicles[v.VehicleId] = make(map[string][]segmentPos)
+		}
+
+		//get segments
+		for _, s := range v.Segments {
+			ts := fmt.Sprintf("%f", s.Ts)
+
+			//check if we already have a maping for this timestep
+			if _, found := simInfo.vehicleHist.vehicles[v.VehicleId][ts]; !found {
+				simInfo.vehicleHist.vehicles[v.VehicleId][ts] = make([]segmentPos, len(s.S))
+			}
+
+			//segments at this timestep
+			for _, data := range s.S {
+				sid := int(data[0])
+
+				simInfo.vehicleHist.vehicles[v.VehicleId][ts] =
+					append(simInfo.vehicleHist.vehicles[v.VehicleId][ts], segmentPos{
+						segmentId: vehicleData.Segments[sid],
+						tsAgo: data[1],
+				})
+			}
+		}
+	}
+
+	for _, t := range segmentData.Towers {
+		for _, s := range t.Segments {
+			simInfo.towerAssignments.towers[t.TowerId] =
+				append(simInfo.towerAssignments.towers[t.TowerId],
+							 segmentData.Segments[s])
+		}
+	}
+
 
 	return &simInfo
 }

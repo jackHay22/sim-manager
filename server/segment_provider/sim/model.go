@@ -46,7 +46,7 @@ type vehicleOutput struct {
 			Ts float64 `json:"ts"`
 			//Segment index, how long ago in
 			//timesteps vehicle passed segment
-			V [][]float64 `json:"s"`
+			S [][]float64 `json:"s"`
 		} `json:"segments"`
 	} `json:"vehicles"`
 }
@@ -92,12 +92,40 @@ type towerCoverageLookup struct {
 	towers map[string]map[string][]vehicleDist
 }
 
+type segmentPos struct {
+	//the id of the segment
+	segmentId string
+	//how long ago in timesteps
+	tsAgo float64
+}
+
+/*
+ * History of segments that each vehicle in the sim passed
+ */
+type vehicleHistLookup struct {
+	//map from vehicle id to timesteps to lists of segments visited
+	//(includes timesteps since this position)
+	vehicles map[string]map[string][]segmentPos
+}
+
+/*
+ * Maps tower id to segments that tower is responsible for
+ */
+type towerAssignmentLookup struct {
+	//map from tower id to list of segment ids
+	towers map[string][]string
+}
+
 /*
  * Holds simulation information
  */
 type SimInfo struct {
 	//tower - vehicle connectivity for each timestep
 	towerCoverage towerCoverageLookup
+	//vehicle history lookup
+	vehicleHist vehicleHistLookup
+	//map from tower id to the segments it is responsible for
+	towerAssignments towerAssignmentLookup
 	//all timesteps in order
 	allTs []string
 	//current ts index
