@@ -24,58 +24,52 @@ const bwDefault = 1
 func main() {
 	log.SetPrefix("vehicleserver - ")
 
-	topoPtr := flag.String("topo", "", "server topology file")
-	idxPtr := flag.Int("idx", -1, "the index of this server in the topology file")
+	idxPtr := flag.Int("idx", -1, "the index of this server")
+	peerCountPtr := flag.Int("peer-count", -1, "the number of peer servers")
+	portOffset := flag.Int("port-range-start", 9000, "the start of the port range")
 	segmentProviderPtr := flag.String("sprov", "127.0.0.1:8080", "address of the segment provider")
+
+	//constraints
+	procConstraintPtr := flag.Int("proc-constraint", 0, "the processing constraint")
+	storeConstraintPtr := flag.Int("store-constraint", 0, "the storage constraint")
+	bandwidthConstraintPtr := flag.Int("band-constraint", 0, "the bandwidth constraint")
 
 	flag.Parse()
 
-	if len(*topoPtr) == 0 {
-		log.Fatalf("topology file must be specified")
-	}
-
 	if *idxPtr < 0 {
-		log.Fatalf("index of this server in toplogy file must be specified")
+		log.Fatalf("server index must be specified")
 	}
 
-	//load the server topology
-	topo := peers.NewServerTopology(topoPtr)
-
-	if *idxPtr >= len(topo.Servers) {
-		log.Fatalf("server index out of bounds: %d", *idxPtr)
+	if *peerCountPtr < 0 {
+		log.Fatalf("number of peers must be specified")
 	}
+
+	towerId := fmt.Sprintf("tower_%s", *idxPtr)
 
 	//populate peers
-	peerLookup := peers.NewPeerLookup(topo, *idxPtr)
-
-	//extract information about this server
-	procConstraint := topo.Servers[*idxPtr].ProcC
-	storeConstraint := topo.Servers[*idxPtr].StoreC
-	bandwidthConstraint := topo.Servers[*idxPtr].BandC
-	port := topo.Servers[*idxPtr].Port
-	id := topo.Servers[*idxPtr].Id
+	peerLookup := peers.NewPeerLookup(*idxPtr, *peerCountPtr, *portOffset)
 
 	//set the correct logging prefix
-	log.SetPrefix(fmt.Sprintf("vehicleserver %s ", id))
+	log.SetPrefix(fmt.Sprintf("vehicleserver %s ", towerId))
 
 	//create server buffers
-	segmentBuffer := peers.NewSegmentBuffer(storeConstraint)
+	segmentBuffer := peers.NewSegmentBuffer(*storeConstraintPtr)
 
 	//create a segment provider (connects to provider, downloads segments this
 	//server/tower is responsible for)
-	segmentProvider, spErr := segmentprovider.NewSegmentProvider(id, *segmentProviderPtr)
+	segmentProvider, spErr := segmentprovider.NewSegmentProvider(towerId, *segmentProviderPtr)
 	if spErr != nil {
 		log.Fatalf("failed to connect to segment provider: %d", *idxPtr)
 	}
 
 	//start the server processing system
-	go processing.StartProcessing(procConstraint,
-		storeConstraint,
-		bandwidthConstraint,
+	go processing.StartProcessing(*procConstraintPtr,
+		*storeConstraintPtr,
+		*bandwidthConstraintPtr,
 		segmentBuffer,
 		peerLookup,
 		segmentProvider)
 
 	//start the server
-	peers.StartServer(port, id, segmentBuffer)
+	peers.StartServer(*portOffset + *idxPtr, towerId, segmentBuffer)
 }

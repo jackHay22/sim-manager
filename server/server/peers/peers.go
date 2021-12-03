@@ -4,49 +4,23 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 )
-
-/*
- * Load server topology from file
- */
-func NewServerTopology(path *string) *ServerTopology {
-	file, fileErr := os.Open(*path)
-	if fileErr != nil {
-		log.Fatalf("unable to open topology file %s: %v", *path, fileErr)
-	}
-	defer file.Close()
-
-	//read the file
-	fileBytes, readErr := ioutil.ReadAll(file)
-	if readErr != nil {
-		log.Fatalf("failed to read from topology file %s: %v", *path, readErr)
-	}
-
-	var topo ServerTopology
-	jsonErr := json.Unmarshal(fileBytes, &topo)
-	if jsonErr != nil {
-		log.Fatalf("failed to parse topology file %s: %v", *path, jsonErr)
-	}
-
-	return &topo
-}
 
 /*
  * Add peers to the new lookup
  */
-func NewPeerLookup(topo *ServerTopology, serverIdx int) *Peers {
+func NewPeerLookup(thisIdx int, peerCount int, portOffset int) *Peers {
 	p := Peers{
 		mapping: make(map[string]string),
 	}
 
 	//add mappings that don't correspond to the current server
-	for i, a := range topo.Servers {
-		if i != serverIdx {
-			p.mapping[a.Id] = fmt.Sprintf("%s:%d", a.Addr, a.Port)
+	for i := 0; i<peerCount; i++ {
+		if i != thisIdx {
+			//add the mapping
+			p.mapping[fmt.Sprintf("tower_%s", i)] = fmt.Sprintf("127.0.0.1:%d", portOffset + i)
 		}
 	}
 

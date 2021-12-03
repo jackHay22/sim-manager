@@ -3,20 +3,6 @@ package peers
 import "sync"
 
 /*
- * Server topology format
- */
-type ServerTopology struct {
-	Servers []struct {
-		Id     string `json:"id"`
-		Addr   string `json:"addr"`
-		Port   int    `json:"port"`
-		ProcC  int    `json:"processing_constraint"`
-		StoreC int    `json:"storage_constraint"`
-		BandC  int    `json:"bandwidth_constraint"`
-	} `json:"servers"`
-}
-
-/*
  * Mapping containing information
  * about the server's peers
  * (static membership)
