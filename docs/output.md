@@ -5,7 +5,7 @@
 
 ```json
 {
-  "vehicle_ids" : ["0", "1", ...],
+  "vehicles" : ["0", "1", ...],
   "towers" : [
     {
       "tower_id" : "tower_parkingArea_A1A0_0_81",
@@ -28,7 +28,7 @@
 }
 
 ```
-- `vehicle_ids` : the ids of vehicles corresponding to the `v` array for each tower
+- `vehicles` : the ids of vehicles corresponding to the `v` array for each tower
 - `towers` : connections for each tower:
   - `tower_id` : unique identifier for the tower
   - `vehicles` : a list of connections:

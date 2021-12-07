@@ -166,7 +166,7 @@ func LoadSimInfo(towerOutPath *string,
 	simInfo.towers = 0
 	simInfo.towersWaiting = 0
 	simInfo.currentTs = 0
-	simInfo.cond.L = new(sync.Mutex)
+	simInfo.cond = sync.NewCond(&simInfo.cMutex)
 
 	for i, t := range towerData.Towers {
 		//check if we already have a mapping for this tower

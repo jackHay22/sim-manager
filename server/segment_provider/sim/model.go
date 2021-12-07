@@ -15,7 +15,7 @@ import (
  */
 type towerOutput struct {
 	//the ids of vehicles in the simulation
-	VehicleIds []string `json:"vehicle_ids"`
+	VehicleIds []string `json:"vehicles"`
 	//tower communications
 	Towers []struct {
 		//the id of this tower
@@ -136,6 +136,8 @@ type SimInfo struct {
 	towers int
 	//towers waiting for the next timestep
 	towersWaiting int
+	//mutex for waiting for next timestep
+	cMutex sync.Mutex
 	//condition variable for towers waiting for the next timestep
 	cond *sync.Cond
 }
