@@ -61,8 +61,8 @@ type segmentOutput struct {
 	Towers []struct {
 		//the id of this tower
 		TowerId string `json:"tower_id"`
-		//segments covered by this tower
-		Segments []int `json:"segments"`
+		//for each segment, distance to tower
+		Segments []float64 `json:"segments"`
 	} `json:"towers"`
 }
 

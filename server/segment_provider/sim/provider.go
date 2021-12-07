@@ -230,14 +230,31 @@ func LoadSimInfo(towerOutPath *string,
 		}
 	}
 
+	//map segment id to the closest tower so far
+	bestTower := make([]struct {
+		//best tower so far
+		t string
+		//the distance to that tower
+		d float64  `default:"1000000"`
+	}, len(segmentData.Segments))
+
+	//based on tower distances, determine segments that a tower is responsible for
 	for _, t := range segmentData.Towers {
-		for _, s := range t.Segments {
-			simInfo.towerAssignments.towers[t.TowerId] =
-				append(simInfo.towerAssignments.towers[t.TowerId],
-							 segmentData.Segments[s])
+		for i, s := range t.Segments {
+			if s < bestTower[i].d {
+				//set as the best tower so far
+				bestTower[i].t = t.TowerId
+				bestTower[i].d = s
+			}
 		}
 	}
 
+	//make assignments based on closest tower
+	for i, t := range bestTower {
+		simInfo.towerAssignments.towers[t.t] =
+			append(simInfo.towerAssignments.towers[t.t],
+						 segmentData.Segments[i])
+	}
 
 	return &simInfo
 }
