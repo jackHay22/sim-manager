@@ -44,7 +44,7 @@ func main() {
 		log.Fatalf("number of peers must be specified")
 	}
 
-	towerId := fmt.Sprintf("tower_%s", *idxPtr)
+	towerId := fmt.Sprintf("tower_%d", *idxPtr)
 
 	//populate peers
 	peerLookup := peers.NewPeerLookup(*idxPtr, *peerCountPtr, *portOffset)
@@ -59,7 +59,7 @@ func main() {
 	//server/tower is responsible for)
 	segmentProvider, spErr := segmentprovider.NewSegmentProvider(towerId, *segmentProviderPtr)
 	if spErr != nil {
-		log.Fatalf("failed to connect to segment provider: %d", *idxPtr)
+		log.Fatalf("failed to connect to segment provider: %s", spErr)
 	}
 
 	//start the server processing system

@@ -20,10 +20,10 @@ func NewSegmentProvider(towerId string, segmentProviderAddr string) (*SegmentPro
   log.Printf("requesting segments: %s", getPath)
 
   //request segment ids from the server
-  if resp, err := http.Get(getPath); err != nil {
+  if resp, err := http.Get(getPath); err == nil {
     defer resp.Body.Close()
 
-    if jsonErr := json.NewDecoder(resp.Body).Decode(prov.SegmentIds); jsonErr != nil {
+    if jsonErr := json.NewDecoder(resp.Body).Decode(&prov.SegmentIds); jsonErr != nil {
       log.Printf("failed to deserialize json: %v", jsonErr)
       return nil, jsonErr
     }
@@ -46,10 +46,10 @@ func (p *SegmentProvider) GetVehicles(ts string) (*VehicleCoverage, error) {
   log.Printf("requesting vehicles: %s", getPath)
 
   //request connected vehicles
-  if resp, err := http.Get(getPath); err != nil {
+  if resp, err := http.Get(getPath); err == nil {
     defer resp.Body.Close()
 
-    if jsonErr := json.NewDecoder(resp.Body).Decode(cov); jsonErr != nil {
+    if jsonErr := json.NewDecoder(resp.Body).Decode(&cov); jsonErr != nil {
       log.Printf("failed to deserialize json: %v", jsonErr)
       return nil, jsonErr
     }

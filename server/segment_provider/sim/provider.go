@@ -138,7 +138,9 @@ func (s *SimInfo) TowerCoverage(towerId string) ([]string, error) {
 	if t, found := s.towerAssignments.towers[towerId]; found {
 		return t, nil
 	} else {
-		return nil, errors.New(fmt.Sprintf("no such tower: %s", towerId))
+		log.Printf("warning, no segments found for tower %s", towerId)
+		var empty []string
+		return empty, nil
 	}
 }
 

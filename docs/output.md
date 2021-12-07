@@ -8,7 +8,7 @@
   "vehicles" : ["0", "1", ...],
   "towers" : [
     {
-      "tower_id" : "tower_parkingArea_A1A0_0_81",
+      "tower_id" : "tower_0",
       "vehicles" : [
         {"ts" : 0.0, "v" : [[1, 20], [2, 3], [23, 12], ...]},
         {"ts" : 1.0, "v" : [[1, 19], [2, 5], [23, 11], ...]}
@@ -16,7 +16,7 @@
       ]
     },
     {
-      "tower_id" : "tower0_parkingArea_A2A1_0_71",
+      "tower_id" : "tower_1",
       "vehicles" : [
         {"ts" : 0.0, "v" : [[1, 0], [2, 100], [7, 10], ...]},
         {"ts" : 1.0, "v" : [[1, 0], [47, 100], [7, 11], ...]}
@@ -81,11 +81,11 @@
   "segments" : ["s0", "s1", ...],
   "towers" : [
     {
-      "tower_id" : "tower_parkingArea_A1A0_0_81",
+      "tower_id" : "tower_0",
       "segments" : [0, 23, 6, 2, 87, ...]
     },
     {
-      "tower_id" : "tower0_parkingArea_A2A1_0_71",
+      "tower_id" : "tower_1",
       "segments" : [0, 1, 4, 3, 97, ...]
     },
     ...
