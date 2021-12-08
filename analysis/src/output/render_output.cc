@@ -96,7 +96,7 @@ namespace output {
         }
 
         //ignore empty timesteps
-        if (!positions.empty()) {
+        if (!positions[V_KEY].empty()) {
           elem[VEHICLES_KEY].push_back(positions);
         }
       }
