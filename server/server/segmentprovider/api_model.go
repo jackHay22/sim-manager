@@ -18,6 +18,6 @@ type VehicleCoverage struct {
       SegmentId string `json:"id"`
     } `json:"hist"`
   } `json:"vehicles"`
-  //the next timestep to request
-  NextTs string `json:"next_ts"`
+  //the max timestep (inclusive)
+  MaxTs int `json:"max_ts"`
 }

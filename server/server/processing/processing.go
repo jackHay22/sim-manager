@@ -24,7 +24,7 @@ func StartProcessing(procConstraint int,
              bwConstraint)
 
   //the initial timestep to request
-  currentTs := "0.0"
+  currentTs := 1
 
   //while the server is running, process
   for ;; {
@@ -33,15 +33,13 @@ func StartProcessing(procConstraint int,
 
       //TODO processing
 
-      log.Printf("finished processing for timestep %s", currentTs)
+      log.Printf("finished processing for timestep %d", currentTs)
       //set the next timestep
-      currentTs = cov.NextTs
+      currentTs++
 
       //TODO make sure the queue is empty
-
-      if currentTs == "" {
-        log.Fatalf("completed final timestep in simulation")
-        return
+      if cov.MaxTs < currentTs {
+        log.Fatalf("completed final timestep (%d)", cov.MaxTs)
       }
 
     } else {

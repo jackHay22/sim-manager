@@ -2,7 +2,7 @@ package sim
 
 type vehicleHist struct {
   //how long ago in timesteps the vehicle was on this segment
-  Elapsed float64 `json:"elapsed"`
+  Elapsed int `json:"elapsed"`
   //the segment id
   SegmentId string `json:"id"`
 }
@@ -22,6 +22,6 @@ type vehicle struct {
 type vehicleCoverage struct {
   //Vehicles in range and their distance
   Vehicles []vehicle `json:"vehicles"`
-  //the next timestep to request
-  NextTs string `json:"next_ts"`
+  //the max timestep (inclusive)
+  MaxTs int `json:"max_ts"`
 }

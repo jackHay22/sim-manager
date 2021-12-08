@@ -39,10 +39,10 @@ func NewSegmentProvider(towerId string, segmentProviderAddr string) (*SegmentPro
 /*
  * For a given timestep, get connected vehicles
  */
-func (p *SegmentProvider) GetVehicles(ts string) (*VehicleCoverage, error) {
+func (p *SegmentProvider) GetVehicles(ts int) (*VehicleCoverage, error) {
   var cov VehicleCoverage
 
-  getPath := fmt.Sprintf("http://%s/towers/%s/%s", p.segmentProviderAddr, p.towerId, ts)
+  getPath := fmt.Sprintf("http://%s/tower/%s/%d", p.segmentProviderAddr, p.towerId, ts)
   log.Printf("requesting vehicles: %s", getPath)
 
   //request connected vehicles

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make server -B
+make server -B || exit 1
 
 echo "starting segment provider"
 ./server/segmentprovider \

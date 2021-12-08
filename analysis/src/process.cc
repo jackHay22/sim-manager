@@ -262,7 +262,7 @@ void add_recognition_points(types::tower_recognitions_t& tower,
   for (rapidxml::xml_node<> *rp_node = seen_node->first_node(RECOGNITION_POINT_NODE);
        rp_node;
        rp_node = rp_node->next_sibling()) {
-    std::string ts = "0.0";
+    std::string ts;
     double v_x = 0.0;
     double v_y = 0.0;
 
@@ -273,7 +273,9 @@ void add_recognition_points(types::tower_recognitions_t& tower,
          rp_attr = rp_attr->next_attribute()) {
 
       if (strcmp(rp_attr->name(), T_ATTR) == 0) {
-        ts = std::string(rp_attr->value());
+        //because we simulate at the granularity of seconds, truncate
+        double ts_d = atof(rp_attr->value());
+        ts = std::to_string((int) ts_d);
         not_found--;
 
       } else if (strcmp(rp_attr->name(), SEEN_POS_ATTR) == 0) {
@@ -386,7 +388,7 @@ void add_edge(rapidxml::xml_node<> *edge_node,
  * @param  vehicle_lane_hist the history lookup
  */
 void add_vehicle_hist(rapidxml::xml_node<> *edge_node,
-                      double timestep,
+                      int timestep,
                       std::unordered_map<std::string,std::unique_ptr<types::vehicle_lane_hist_t>>& vehicle_lane_hist) {
   //get each lane
   for (rapidxml::xml_node<> *lane_node = edge_node->first_node(LANE_NODE);
@@ -582,7 +584,7 @@ int process_output_data(const std::string& bt_output_path,
     for (rapidxml::xml_node<> *ts_node = doc.first_node(NETSTATE_NODE)->first_node(TIMESTEP_NODE);
          ts_node;
          ts_node = ts_node->next_sibling()) {
-      double ts = 0.0;
+      int ts = 0;
       bool ts_found = false;
 
       //parse the timestep value
@@ -591,7 +593,8 @@ int process_output_data(const std::string& bt_output_path,
            ts_attr = ts_attr->next_attribute()) {
         //check the attribute name
         if (strcmp(ts_attr->name(), TIME_ATTR) == 0) {
-          ts = atof(ts_attr->value());
+          double ts_d = atof(ts_attr->value());
+          ts = (int) ts_d;
           ts_found = true;
         }
       }

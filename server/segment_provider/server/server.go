@@ -7,6 +7,7 @@ import (
   "net/http"
   "fmt"
   "encoding/json"
+  "strconv"
 )
 
 /*
@@ -78,9 +79,17 @@ func towerHandler(provider *sim.SimInfo) http.HandlerFunc {
       return
     }
 
+    //conver the timestep to an int
+    ts, intErr := strconv.Atoi(timestep)
+    if intErr != nil {
+      writer.WriteHeader(http.StatusBadRequest)
+      log.Printf("/tower request timestep not an int: %s", intErr)
+      return
+    }
+
     //request the vehicles currently connected for the timestep
     //Note: this will block until the timestep is ready
-    if res, err := provider.VehiclesConnected(timestep, towerid); err == nil {
+    if res, err := provider.VehiclesConnected(ts, towerid); err == nil {
     	if jsonResp, jsonErr := json.Marshal(res); jsonErr == nil {
         writer.Write(jsonResp)
         //respond with json

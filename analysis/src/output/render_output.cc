@@ -77,7 +77,7 @@ namespace output {
       //create array for each timestep
       for (const std::string& ts : timesteps) {
         json_t positions = json_t::object();
-        positions[TS_KEY] = std::stod(ts);
+        positions[TS_KEY] = std::stoi(ts);
         positions[V_KEY] = json_t::array();
 
         int vidx = 0;
@@ -95,7 +95,10 @@ namespace output {
           vidx++;
         }
 
-        elem[VEHICLES_KEY].push_back(positions);
+        //ignore empty timesteps
+        if (!positions.empty()) {
+          elem[VEHICLES_KEY].push_back(positions);
+        }
       }
 
       //add the tower element
@@ -142,10 +145,10 @@ namespace output {
       out_obj[SEGMENTS_KEY].push_back(edge_id);
     }
 
-    std::vector<double> ts;
+    std::vector<int> ts;
     //convert timesteps to numeric values
     for (const std::string& ts_s : timesteps) {
-      ts.push_back(atof(ts_s.c_str()));
+      ts.push_back(std::stoi(ts_s));
     }
 
     std::unordered_map<std::string, std::unique_ptr<types::vehicle_lane_hist_t>>::const_iterator it
@@ -167,7 +170,7 @@ namespace output {
         //check all segments
         size_t j=0;
         for (const std::string& edge_id : edges) {
-          double ts_since_seen = it->second->timesteps_since_seen(edge_id, ts.at(i));
+          int ts_since_seen = it->second->timesteps_since_seen(edge_id, ts.at(i));
           if (ts_since_seen >= 0) {
             json_t pair = json_t::array();
             pair.push_back(j);

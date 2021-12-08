@@ -23,7 +23,7 @@ type towerOutput struct {
 		//vehicles that have communicated with this tower
 		Vehicles []struct {
 			//timestep
-			Ts float64 `json:"ts"`
+			Ts int `json:"ts"`
 			//Vehicle index, distance from tower
 			V [][]float64 `json:"v"`
 		} `json:"vehicles"`
@@ -43,7 +43,7 @@ type vehicleOutput struct {
 		//timestep and segments passed by vehicle
 		Segments []struct {
 			//timestep
-			Ts float64 `json:"ts"`
+			Ts int `json:"ts"`
 			//Segment index, how long ago in
 			//timesteps vehicle passed segment
 			S [][]float64 `json:"s"`
@@ -85,18 +85,16 @@ type vehicleDist struct {
  * at each timestep
  */
 type towerCoverageLookup struct {
-	//all timesteps (converted from floats to strings for associative lookup)
-	timesteps []string
 	//map from each tower id to all timesteps for that tower
 	//to all vehicles connected at that timestep
-	towers map[string]map[string][]vehicleDist
+	towers map[string]map[int][]vehicleDist
 }
 
 type segmentPos struct {
 	//the id of the segment
 	segmentId string
 	//how long ago in timesteps
-	tsAgo float64
+	tsAgo int
 }
 
 /*
@@ -105,7 +103,7 @@ type segmentPos struct {
 type vehicleHistLookup struct {
 	//map from vehicle id to timesteps to lists of segments visited
 	//(includes timesteps since this position)
-	vehicles map[string]map[string][]segmentPos
+	vehicles map[string]map[int][]segmentPos
 }
 
 /*
@@ -126,10 +124,10 @@ type SimInfo struct {
 	vehicleHist vehicleHistLookup
 	//map from tower id to the segments it is responsible for
 	towerAssignments towerAssignmentLookup
-	//all timesteps in order
-	allTs []string
-	//current ts index
+	//the current timestep
 	currentTs int
+	//the max timestep
+	maxTs int
 	//mutex for controlling counters
 	mutex sync.Mutex
 	//the total number of towers
