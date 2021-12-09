@@ -6,10 +6,11 @@ if [ $# -lt 2 ]; then
 fi
 
 FILE_PREFIX=grid
+TOWERS_COUNT=81
 
 #Generate a new simulation network into the input directory (grid)
 echo "./generation/grid.sh ${1}"
-./generation/grid.sh $1
+./generation/grid.sh $1 $TOWERS_COUNT
 
 echo "$SUMO_HOME/bin/sumo "
 echo "   -n $1/${FILE_PREFIX}.net.xml "
@@ -45,4 +46,4 @@ echo "   -o $OUT_DIR"
     -o $OUT_DIR
 
 #Run server simulations
-./server_simulation.sh $2
+./server_simulation.sh $2 $TOWERS_COUNT

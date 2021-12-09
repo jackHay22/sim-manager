@@ -15,6 +15,8 @@ WORKDIR /sumo/build/cmake-build
 RUN cmake ../..
 RUN make -j$(nproc)
 
+ENV PATH $PATH:/usr/local/go/bin
+
 WORKDIR /
 COPY generation/ generation/
 COPY analysis/ analysis/

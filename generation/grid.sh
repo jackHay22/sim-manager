@@ -1,12 +1,10 @@
 #!/bin/bash
 
-TOWERS_COUNT=81
 TOWERS_THRESHOLD=100
 GRID_JUNCTIONS=10
 
-if [ $# -eq 0 ]
-then
-  echo "No output directory specified"
+if [ $# -lt 2 ]; then
+  echo "Usage: ./grid.sh <output_directory> <towers_count>"
   exit 1
 fi
 
@@ -41,13 +39,13 @@ generate () {
   python3 generation/tower_placer.py \
         --net $NETWORK_PATH \
         --out $TOWERS_PATH \
-        --count $TOWERS_COUNT \
+        --count $2 \
         --threshold $TOWERS_THRESHOLD
 }
 
 if [ -d $1 ]
 then
-    generate $1
+    generate $1 $2
 else
     echo "directory $1 does not exist"
     exit 1

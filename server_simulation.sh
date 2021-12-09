@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ $# -lt 1 ]; then
-  echo "Usage: ./simulate_analyze.sh <output_directory>"
+if [ $# -lt 2 ]; then
+  echo "Usage: ./simulate_analyze.sh <output_directory> <towers_count>"
   exit 1
 fi
 
@@ -15,15 +15,25 @@ echo "starting segment provider"
 
 sleep 10
 
-#Start servers for all towers
-for i in {0..80}
-do
+vehicle_server () {
   ./server/vehicleserver \
-    -idx $i \
-    -peer-count 80 \
+    -idx $1 \
+    -peer-count $2 \
     -port-range-start 9000 \
     -sprov 127.0.0.1:8080 \
     -proc-constraint 0 \
     -store-constraint 0 \
-    -band-constraint 0 &
+    -band-constraint 0
+}
+
+MAX_TOWER_IDX="$(($2-1))"
+
+for ((i=0; i<=$MAX_TOWER_IDX; i++))
+do
+  if [ $i != $MAX_TOWER_IDX ]
+  then
+    vehicle_server $i $MAX_TOWER_IDX &
+  else
+    vehicle_server $i $MAX_TOWER_IDX
+  fi
 done
