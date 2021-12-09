@@ -146,11 +146,21 @@ func (s *SimInfo) TowerCoverage(towerId string) ([]string, error) {
 }
 
 /*
+ * Called when a tower is done processing
+ */
+func (s *SimInfo) TowersComplete(count int) {
+	if count == s.towers {
+		log.Fatalf("all towers completed simulation")
+	}
+}
+
+/*
  * Load simulation data from files
  */
 func LoadSimInfo(towerOutPath *string,
 	vehicleOutPath *string,
-	segmentOutPath *string) *SimInfo {
+	segmentOutPath *string,
+	towersOverride int) *SimInfo {
 
 	var towerData towerOutput
 	var vehicleData vehicleOutput
@@ -183,7 +193,7 @@ func LoadSimInfo(towerOutPath *string,
 		for _, v := range t.Vehicles {
 			//check if we already have a maping for this timestep
 			if _, found := simInfo.towerCoverage.towers[t.TowerId][v.Ts]; !found {
-				simInfo.towerCoverage.towers[t.TowerId][v.Ts] = make([]vehicleDist, len(v.V))
+				simInfo.towerCoverage.towers[t.TowerId][v.Ts] = make([]vehicleDist, 0, len(v.V))
 			}
 
 			//vehicles at this timestep
@@ -213,7 +223,7 @@ func LoadSimInfo(towerOutPath *string,
 
 			//check if we already have a maping for this timestep
 			if _, found := simInfo.vehicleHist.vehicles[v.VehicleId][s.Ts]; !found {
-				simInfo.vehicleHist.vehicles[v.VehicleId][s.Ts] = make([]segmentPos, len(s.S))
+				simInfo.vehicleHist.vehicles[v.VehicleId][s.Ts] = make([]segmentPos, 0, len(s.S))
 			}
 
 			//segments at this timestep
@@ -253,6 +263,11 @@ func LoadSimInfo(towerOutPath *string,
 		simInfo.towerAssignments.towers[t.t] =
 			append(simInfo.towerAssignments.towers[t.t],
 						 segmentData.Segments[i])
+	}
+
+	//set the override
+	if towersOverride > 0 {
+		simInfo.towers = towersOverride
 	}
 
 	return &simInfo

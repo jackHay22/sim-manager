@@ -37,6 +37,18 @@ func NewSegmentProvider(towerId string, segmentProviderAddr string) (*SegmentPro
 }
 
 /*
+ * Called when simulation has completed
+ */
+func (p *SegmentProvider) Complete() {
+  getPath := fmt.Sprintf("http://%s/complete", p.segmentProviderAddr)
+  log.Printf("notifying segment provider of completion")
+
+  if resp, err := http.Get(getPath); err == nil {
+    defer resp.Body.Close()
+  }
+}
+
+/*
  * For a given timestep, get connected vehicles
  */
 func (p *SegmentProvider) GetVehicles(ts int) (*VehicleCoverage, error) {

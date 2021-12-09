@@ -147,6 +147,17 @@ func coverageHandler(provider *sim.SimInfo) http.HandlerFunc {
 }
 
 /*
+ * Towers make this request once they have completed the final timestep
+ */
+func completeHandler(provider *sim.SimInfo) http.HandlerFunc {
+  completed := 0
+  return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+    completed++
+    provider.TowersComplete(completed)
+  })
+}
+
+/*
  * Register endpoints, start server
  */
 func StartServer(port int, provider *sim.SimInfo) {
@@ -155,6 +166,8 @@ func StartServer(port int, provider *sim.SimInfo) {
 	log.Printf("segment provider serving segment info at http://0.0.0.0:%d/tower/{towerid}/{timestep}", port)
   r.HandleFunc("/segments/{towerid}", endpointLogger(coverageHandler(provider)))
   log.Printf("segment provider serving segment info at http://0.0.0.0:%d/segments/{towerid}", port)
+  r.HandleFunc("/complete", endpointLogger(completeHandler(provider)))
+  log.Printf("segment provider serving completion endpoint at http://0.0.0.0:%d/complete", port)
 
 	//serve the endpoint
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))

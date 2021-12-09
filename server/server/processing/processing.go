@@ -39,6 +39,9 @@ func StartProcessing(procConstraint int,
 
       //TODO make sure the queue is empty
       if cov.MaxTs < currentTs {
+        //notify segment provider
+        segmentProvider.Complete()
+
         log.Fatalf("completed final timestep (%d)", cov.MaxTs)
       }
 
