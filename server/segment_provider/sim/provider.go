@@ -97,31 +97,30 @@ func (s *SimInfo) VehiclesConnected(ts int, towerId string) (*vehicleCoverage, e
 		}
 
 	} else {
-		s.mutex.Lock()
-		//tower waiting for a future timestep
+		//lock
+		s.cond.L.Lock()
+		//update waiting count
 		s.towersWaiting++
+
+		log.Printf("towers waiting: (%d/%d)", s.towersWaiting, s.towers)
 
 		if s.towersWaiting == s.towers {
 			log.Printf("timestep %d complete", s.currentTs)
-
 			//this tower was the last one, wake the others, continue
 			s.towersWaiting = 0
 			s.currentTs++
-			//release the lock on siminfo
-			s.mutex.Unlock()
+			s.cond.L.Unlock()
 
 			//wake waiting towers
-			s.cond.Signal()
-
+			s.cond.Broadcast()
 			//try again
 			return s.VehiclesConnected(ts, towerId)
 
 		} else {
-			//release the lock on Siminfo and wait for the current ts to complete
-			s.mutex.Unlock()
-
-			s.cond.L.Lock()
-			s.cond.Wait()
+			//wait for all towers to complete, then continue
+			for s.currentTs < ts {
+				s.cond.Wait()
+			}
 			s.cond.L.Unlock()
 
 			//try again

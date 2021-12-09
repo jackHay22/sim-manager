@@ -128,8 +128,6 @@ type SimInfo struct {
 	currentTs int
 	//the max timestep
 	maxTs int
-	//mutex for controlling counters
-	mutex sync.Mutex
 	//the total number of towers
 	towers int
 	//towers waiting for the next timestep

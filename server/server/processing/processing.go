@@ -33,7 +33,6 @@ func StartProcessing(procConstraint int,
 
       //TODO processing
 
-      log.Printf("finished processing for timestep %d", currentTs)
       //set the next timestep
       currentTs++
 
