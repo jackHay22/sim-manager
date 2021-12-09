@@ -45,4 +45,4 @@ echo "   -o $OUT_DIR"
     -o $OUT_DIR
 
 #Run server simulations
-echo "TODO: server simulations"
+./server_simulation.sh $2

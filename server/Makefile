@@ -1,12 +1,15 @@
+GO = /usr/local/go/bin/go
+
 .PHONY: all vehicleserver segmentprovider get
-all: vehicleserver segmentprovider 
+
+all: vehicleserver segmentprovider
 vehicleserver:
-	cd server && go build . && cd .. && mv server/vehicleserver .
+	cd server && $(GO) build . && cd .. && mv server/vehicleserver .
 segmentprovider:
-	cd segment_provider && go build . && cd .. && mv segment_provider/segmentprovider .
+	cd segment_provider && $(GO) build . && cd .. && mv segment_provider/segmentprovider .
 get:
-	cd server && go get . && cd ..
-	cd segment_provider && go get . && cd ..
+	cd server && $(GO) get . && cd ..
+	cd segment_provider && $(GO) get . && cd ..
 clean::
 	rm vehicleserver
 	rm segmentprovider

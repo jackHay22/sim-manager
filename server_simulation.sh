@@ -1,12 +1,17 @@
 #!/bin/bash
 
+if [ $# -lt 1 ]; then
+  echo "Usage: ./simulate_analyze.sh <output_directory>"
+  exit 1
+fi
+
 make server -B || exit 1
 
 echo "starting segment provider"
 ./server/segmentprovider \
-  -tower-output output_data/tower_output.json \
-  -vehicle-output output_data/vehicle_history_output.json \
-  -segment-output output_data/tower_coverage_output.json &
+  -tower-output $1/tower_output.json \
+  -vehicle-output $1/vehicle_history_output.json \
+  -segment-output $1/tower_coverage_output.json &
 
 sleep 10
 

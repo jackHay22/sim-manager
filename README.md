@@ -22,7 +22,7 @@ rapidxml_utils.hpp
 - `make server`
 - See: [API spec](docs/api.md)
 ```
-./server_simulation.sh
+./server_simulation.sh output_data
 ```
 
 ## Roadside towers

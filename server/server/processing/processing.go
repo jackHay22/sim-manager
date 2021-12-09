@@ -41,6 +41,7 @@ func StartProcessing(procConstraint int,
         //notify segment provider
         segmentProvider.Complete()
 
+        //Note: need fatalf to exit
         log.Fatalf("completed final timestep (%d)", cov.MaxTs)
       }
 
