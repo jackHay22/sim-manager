@@ -241,8 +241,13 @@ func LoadSimInfo(towerOutPath *string,
 		//best tower so far
 		t string
 		//the distance to that tower
-		d float64  `default:"1000000"`
+		d float64
 	}, len(segmentData.Segments))
+
+	//set high, then minimize
+	for i, _ := range bestTower {
+		bestTower[i].d = 100000
+	}
 
 	//based on tower distances, determine segments that a tower is responsible for
 	for _, t := range segmentData.Towers {

@@ -11,7 +11,7 @@ echo "starting segment provider"
 sleep 10
 
 #Start servers for all towers
-for i in {0..81}
+for i in {0..80}
 do
   ./server/vehicleserver \
     -idx $i \

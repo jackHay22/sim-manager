@@ -17,8 +17,13 @@ rapidxml_utils.hpp
 ```
 
 ## Server simulation
+- Creates a "segment provider" that distributes simulation information to different towers
+- Each tower is a separate process
 - `make server`
 - See: [API spec](docs/api.md)
+```
+./server_simulation.sh
+```
 
 ## Roadside towers
 - Roadside towers are represented by parked cars:

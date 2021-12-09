@@ -17,7 +17,6 @@ func NewSegmentProvider(towerId string, segmentProviderAddr string) (*SegmentPro
   }
 
   getPath := fmt.Sprintf("http://%s/segments/%s", segmentProviderAddr, towerId)
-  log.Printf("requesting segments: %s", getPath)
 
   //request segment ids from the server
   if resp, err := http.Get(getPath); err == nil {
@@ -41,8 +40,6 @@ func NewSegmentProvider(towerId string, segmentProviderAddr string) (*SegmentPro
  */
 func (p *SegmentProvider) Complete() {
   getPath := fmt.Sprintf("http://%s/complete", p.segmentProviderAddr)
-  log.Printf("notifying segment provider of completion")
-
   if resp, err := http.Get(getPath); err == nil {
     defer resp.Body.Close()
   }
@@ -55,7 +52,6 @@ func (p *SegmentProvider) GetVehicles(ts int) (*VehicleCoverage, error) {
   var cov VehicleCoverage
 
   getPath := fmt.Sprintf("http://%s/tower/%s/%d", p.segmentProviderAddr, p.towerId, ts)
-  log.Printf("requesting vehicles: %s", getPath)
 
   //request connected vehicles
   if resp, err := http.Get(getPath); err == nil {

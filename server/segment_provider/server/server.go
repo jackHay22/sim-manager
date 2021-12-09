@@ -40,12 +40,14 @@ func endpointLogger(handler http.HandlerFunc) http.HandlerFunc {
 		//handle the request
 		handler.ServeHTTP(&res, request)
 
-		//log the request
-		log.Printf("%s %s %s %d",
-			request.Method,
-			request.URL.Path,
-			request.Proto,
-			res.Status)
+    if res.Status != 200 {
+      //log the request
+      log.Printf("%s %s %s %d",
+        request.Method,
+        request.URL.Path,
+        request.Proto,
+        res.Status)
+    }
 	})
 }
 

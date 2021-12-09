@@ -73,8 +73,6 @@ func segmentHandler(buffer *SegmentBuffer) http.HandlerFunc {
 func StartServer(port int, id string, buffer *SegmentBuffer) {
 	//Handle requests from other servers forwarding
 	http.HandleFunc("/segment", segmentHandler(buffer))
-	log.Printf("server %s can receive forwarded segments at http://0.0.0.0:%d/segment", id, port)
-
 	//serve the endpoint
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
 }

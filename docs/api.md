@@ -22,7 +22,7 @@
       "dist" : 0.0,
       "hist" : [
         {
-          "elapsed" : 0.0,
+          "elapsed" : 10,
           "id" : "some_segment_id"
         },
         ...
@@ -30,6 +30,6 @@
     },
     ...
   ],
-  "next_ts": "1.0"
+  "max_ts": 100
 }
 ```
