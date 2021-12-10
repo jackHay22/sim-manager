@@ -1,8 +1,15 @@
 package peers
 
+import (
+  "jackhay.io/vehicleserver/data"
+)
+
+/*
+ * Information forwarded between peers
+ */
 type ForwardedSegment struct {
-  //how long ago in timesteps the vehicle was on this segment
-  SegmentId string `json:"segment_id"`
-  //the segment id
-  Data string `json:"id"`
+  //the timestamp at which the segment was forwarded
+  ForwardTs int `json:"forward_ts"`
+  //information about the vehicle
+  Vehicle data.VehicleData `json:"vehicle"`
 }

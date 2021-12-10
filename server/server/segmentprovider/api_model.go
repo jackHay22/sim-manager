@@ -1,23 +1,15 @@
 package segmentprovider
 
+import (
+  "jackhay.io/vehicleserver/data"
+)
+
 /*
  * Vehicles connected to a tower at a given timestep
  */
 type VehicleCoverage struct {
   //Vehicles in range and their distance
-  Vehicles []struct {
-    //the id of the vehicle
-    VehicleId string `json:"id"`
-    //the distance to the tower
-    Distance float64 `json:"dist"`
-    //the history of the vehicle
-    VehicleHistory []struct {
-      //how long ago in timesteps the vehicle was on this segment
-      Elapsed float64 `json:"elapsed"`
-      //the segment id
-      SegmentId string `json:"id"`
-    } `json:"hist"`
-  } `json:"vehicles"`
+  Vehicles []data.VehicleData `json:"vehicles"`
   //the max timestep (inclusive)
   MaxTs int `json:"max_ts"`
 }

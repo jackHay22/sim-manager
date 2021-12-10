@@ -25,6 +25,11 @@ rapidxml_utils.hpp
 ./server_simulation.sh output_data 81
 ```
 
+### Greedy Algorithm
+- The greedy algorithm is implemented in [server/python/impl.py](server/python/impl.py)
+- At each timestep, the python main() function receives the json structure defined [here](docs/api.md) containing the vehicles in range of the tower.
+- The server decides which information to download. Of this data, it forwards some to peers and processes the rest. It can also process data that has been forwarded by a peer.
+
 ## Roadside towers
 - Roadside towers are represented by parked cars:
 ![Screenshot](docs/images/example_server.png)

@@ -4,9 +4,13 @@ USER root
 
 WORKDIR /
 ENV SUMO_HOME=/sumo
+ENV PKG_CONFIG_PATH=/server/python
 
 RUN apt-get update -y --fix-missing && apt-get -y upgrade
-RUN apt-get install -y wget valgrind make git cmake python3 g++ libxerces-c-dev libfox-1.6-dev libgdal-dev libproj-dev libgl2ps-dev
+RUN apt-get install -y wget valgrind make git cmake python3 \
+                       python3.7-dev python3.7 python3-pip \
+                       pkg-config g++ libxerces-c-dev \
+                       libfox-1.6-dev libgdal-dev libproj-dev libgl2ps-dev
 RUN wget https://golang.org/dl/go1.16.5.linux-amd64.tar.gz && \
     rm -rf /usr/local/go && tar -C /usr/local -xzf go1.16.5.linux-amd64.tar.gz
 RUN git clone --recursive https://github.com/eclipse/sumo

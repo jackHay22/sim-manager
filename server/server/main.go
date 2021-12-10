@@ -29,11 +29,6 @@ func main() {
 	portOffset := flag.Int("port-range-start", 9000, "the start of the port range")
 	segmentProviderPtr := flag.String("sprov", "127.0.0.1:8080", "address of the segment provider")
 
-	//constraints
-	procConstraintPtr := flag.Int("proc-constraint", 0, "the processing constraint")
-	storeConstraintPtr := flag.Int("store-constraint", 0, "the storage constraint")
-	bandwidthConstraintPtr := flag.Int("band-constraint", 0, "the bandwidth constraint")
-
 	flag.Parse()
 
 	if *idxPtr < 0 {
@@ -53,7 +48,7 @@ func main() {
 	log.SetPrefix(fmt.Sprintf("vehicleserver %s ", towerId))
 
 	//create server buffers
-	segmentBuffer := peers.NewSegmentBuffer(*storeConstraintPtr)
+	segmentBuffer := peers.NewSegmentBuffer()
 
 	//create a segment provider (connects to provider, downloads segments this
 	//server/tower is responsible for)
@@ -63,10 +58,7 @@ func main() {
 	}
 
 	//start the server processing system
-	go processing.StartProcessing(*procConstraintPtr,
-		*storeConstraintPtr,
-		*bandwidthConstraintPtr,
-		segmentBuffer,
+	go processing.StartProcessing(segmentBuffer,
 		peerLookup,
 		segmentProvider)
 

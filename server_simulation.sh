@@ -20,10 +20,7 @@ vehicle_server () {
     -idx $1 \
     -peer-count $2 \
     -port-range-start 9000 \
-    -sprov 127.0.0.1:8080 \
-    -proc-constraint 0 \
-    -store-constraint 0 \
-    -band-constraint 0
+    -sprov 127.0.0.1:8080
 }
 
 MAX_TOWER_IDX="$(($2-1))"

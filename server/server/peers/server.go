@@ -14,11 +14,6 @@ import (
 func (b *SegmentBuffer) Enqueue(segment ForwardedSegment) bool {
   b.mutex.Lock()
   defer b.mutex.Unlock()
-
-  if len(b.segments) >= (b.cap - 1) {
-    log.Printf("unable to enqueue segment to process, buffer full")
-    return false;
-  }
   b.segments = append(b.segments, segment)
   return true
 }
@@ -40,13 +35,16 @@ func (b *SegmentBuffer) Dequeue() (*ForwardedSegment, bool) {
   return nil, false
 }
 
+func (b *SegmentBuffer) ToJson() string {
+	//TODO
+	return ""
+}
+
 /*
  * Create a new segment buffer
  */
-func NewSegmentBuffer(capacity int) (*SegmentBuffer) {
-  return &SegmentBuffer{
-    cap: capacity,
-  }
+func NewSegmentBuffer() (*SegmentBuffer) {
+  return &SegmentBuffer{}
 }
 
 /*

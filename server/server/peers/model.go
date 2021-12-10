@@ -21,6 +21,4 @@ type SegmentBuffer struct {
 	mutex sync.Mutex
 	//the enqueued forwarded segments
 	segments []ForwardedSegment
-	//the capacity of the buffer
-	cap int
 }

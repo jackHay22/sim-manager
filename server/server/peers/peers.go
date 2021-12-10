@@ -32,11 +32,10 @@ func NewPeerLookup(thisIdx int, peerCount int, portOffset int) *Peers {
 /*
  * Forward information about a segment to a different server
  */
-func (l *Peers) ForwardSegment(serverId string, segmentId string, data string) bool {
+func (l *Peers) ForwardSegment(serverId string, segmentId string, data string, ts int) bool {
 	//the post body
 	body, _ := json.Marshal(ForwardedSegment{
-		SegmentId: segmentId,
-		Data: data,
+		ForwardTs: ts, //TODO
 	})
 	postBody := bytes.NewBuffer(body)
 
