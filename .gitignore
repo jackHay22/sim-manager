@@ -9,3 +9,4 @@ data/grid
 data/organic
 server/vehicleserver
 server/segmentprovider
+*.pyc
