@@ -1,6 +1,9 @@
 package peers
 
-import "sync"
+import (
+	"jackhay.io/vehicleserver/data"
+	"sync"
+)
 
 /*
  * Mapping containing information
@@ -16,9 +19,12 @@ type Peers struct {
  * The current buffer on this server
  * This is the processing storage for a given server
  */
-type SegmentBuffer struct {
+type ForwardBuffer struct {
 	//mutex for controlling access to buffer
 	mutex sync.Mutex
-	//the enqueued forwarded segments
-	segments []ForwardedSegment
+	//the data available at this timestep
+	data []data.VehicleData
+	//data arriving for the next timestep
+	//these are merged into data for the next ts
+	nextData []data.VehicleData
 }

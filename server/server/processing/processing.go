@@ -3,6 +3,8 @@ package processing
 import (
   "log"
   "errors"
+  "strings"
+  "encoding/json"
   "jackhay.io/vehicleserver/peers"
   "jackhay.io/vehicleserver/segmentprovider"
   "github.com/DataDog/go-python3"
@@ -32,11 +34,22 @@ func initPythonImpl() *python3.PyObject {
 }
 
 /*
+ * Convert data to a json string representation
+ */
+func toJsonStr(val interface{}) (string, error) {
+  if b, err := json.Marshal(val); err == nil {
+    return string(b), nil
+  } else {
+    return "", err
+  }
+}
+
+/*
  * Send the current simulation state to the
  */
 func sendState(mainFn *python3.PyObject,
                coverage *segmentprovider.VehicleCoverage,
-               segmentBuffer *peers.SegmentBuffer,
+               forwardBuffer *peers.ForwardBuffer,
                peerForwarder *peers.Peers,
                segmentProvider *segmentprovider.SegmentProvider) (*implRes, error) {
 
@@ -49,10 +62,28 @@ func sendState(mainFn *python3.PyObject,
 
   defer args.DecRef()
 
-  //add the args as strings
-  python3.PyTuple_SetItem(args, 0, python3.PyUnicode_FromString(segmentProvider.ToJson()))
-  python3.PyTuple_SetItem(args, 1, python3.PyUnicode_FromString(coverage.ToJson()))
-  python3.PyTuple_SetItem(args, 2, python3.PyUnicode_FromString(segmentBuffer.ToJson()))
+  //get the components to transfer and add as args
+
+  //get the segment ids that this server is responsible for
+  if segmentsStr, segmentsErr := toJsonStr(segmentProvider.SegmentIds); segmentsErr == nil {
+    python3.PyTuple_SetItem(args, 0, python3.PyUnicode_FromString(segmentsStr))
+  } else {
+    return nil, segmentsErr
+  }
+
+  //get the vehicles in range of the tower
+  if coverageStr, coverageErr := toJsonStr(coverage.Vehicles); coverageErr == nil {
+    python3.PyTuple_SetItem(args, 1, python3.PyUnicode_FromString(coverageStr))
+  } else {
+    return nil, coverageErr
+  }
+
+  //get the forward buffer (also acts as local storage)
+  if bufferStr, bufferErr := toJsonStr(forwardBuffer.GetCurrentBuffer()); bufferErr == nil {
+    python3.PyTuple_SetItem(args, 2, python3.PyUnicode_FromString(bufferStr))
+  } else {
+    return nil, bufferErr
+  }
 
   //call function
 	callRes := mainFn.Call(args, python3.PyDict_New())
@@ -69,16 +100,19 @@ func sendState(mainFn *python3.PyObject,
 		return nil, errors.New("failed to parse string from python response")
 	}
 
-  log.Printf("%s", jsonStr)
-  //TODO
-  return &implRes{}, nil
+  var result implRes
+  if jsonErr := json.NewDecoder(strings.NewReader(jsonStr)).Decode(&result); jsonErr != nil {
+    log.Printf("failed to deserialize implementation result as json: %v", jsonErr)
+    return nil, jsonErr
+  }
+  return &result, nil
 }
 
 /*
  * Takes forwarded segment buffer, peer list, and provider that
  * manages timestep and vehicle connectivity information
  */
-func StartProcessing(segmentBuffer *peers.SegmentBuffer,
+func StartProcessing(forwardBuffer *peers.ForwardBuffer,
                      peerForwarder *peers.Peers,
                      segmentProvider *segmentprovider.SegmentProvider) {
 
@@ -100,12 +134,18 @@ func StartProcessing(segmentBuffer *peers.SegmentBuffer,
     if cov, err := segmentProvider.GetVehicles(currentTs); err == nil {
 
       //send state to python implementation
-      _, implErr := sendState(mainFn, cov, segmentBuffer, peerForwarder, segmentProvider)
+      implRes, implErr := sendState(mainFn, cov, forwardBuffer, peerForwarder, segmentProvider)
       if implErr != nil {
         log.Fatalf("implementation error: %s", implErr)
       }
 
-      // implRes
+      //forward segments
+      for _, s := range implRes.toForward {
+        peerForwarder.ForwardSegment(s.towerId, s.data)
+      }
+
+      //set updated buffer
+      forwardBuffer.SetCurrentBuffer(implRes.buffer)
 
       //set the next timestep
       currentTs++

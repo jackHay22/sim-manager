@@ -48,7 +48,7 @@ func main() {
 	log.SetPrefix(fmt.Sprintf("vehicleserver %s ", towerId))
 
 	//create server buffers
-	segmentBuffer := peers.NewSegmentBuffer()
+	segmentBuffer := peers.NewForwardBuffer()
 
 	//create a segment provider (connects to provider, downloads segments this
 	//server/tower is responsible for)

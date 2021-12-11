@@ -46,25 +46,6 @@ func (p *SegmentProvider) Complete() {
 }
 
 /*
- * Get the json representation of the segments
- * this tower is responsible for
- */
-func (p *SegmentProvider) ToJson() string {
-  //TODO
-  return ""
-}
-
-/*
- * Get the json representation of the segments
- * this tower is responsible for
- */
-func (p *VehicleCoverage) ToJson() string {
-  //TODO
-  return ""
-}
-
-
-/*
  * For a given timestep, get connected vehicles
  */
 func (p *SegmentProvider) GetVehicles(ts int) (*VehicleCoverage, error) {

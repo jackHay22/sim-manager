@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"jackhay.io/vehicleserver/data"
 )
 
 /*
@@ -24,32 +25,34 @@ func NewPeerLookup(thisIdx int, peerCount int, portOffset int) *Peers {
 		}
 	}
 
-	log.Printf("added %d peers to lookup", len(p.mapping))
-
 	return &p
 }
 
 /*
  * Forward information about a segment to a different server
  */
-func (l *Peers) ForwardSegment(serverId string, segmentId string, data string, ts int) bool {
+func (l *Peers) ForwardSegment(serverId string, data data.VehicleData) {
 	//the post body
-	body, _ := json.Marshal(ForwardedSegment{
-		ForwardTs: ts, //TODO
-	})
+	body, jsonErr := json.Marshal(data)
+	if jsonErr != nil {
+		log.Printf("error serializing data to send to peer %s: %v", serverId, jsonErr)
+		return
+	}
 	postBody := bytes.NewBuffer(body)
 
 	//identify the server to send to
 	if peerAddr, found := l.mapping[serverId]; found {
 		//make the request
-		resp, postErr := http.Post(fmt.Sprintf("http://%s/segment", peerAddr), "application/json", postBody)
+		resp, postErr := http.Post(fmt.Sprintf("http://%s/forward", peerAddr), "application/json", postBody)
 		if postErr != nil {
 			log.Printf("error forwarding segment to server %s: %v", serverId, postErr)
+			return
 		}
 		defer resp.Body.Close()
+
 	} else {
 		log.Printf("warning, server id not found in peer lookup: %s", serverId)
-		return false
+		return
 	}
-	return true
+	return
 }

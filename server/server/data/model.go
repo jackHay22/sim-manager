@@ -11,7 +11,7 @@ type VehicleData struct {
   //the history of the vehicle
   VehicleHistory []struct {
     //how long ago in timesteps the vehicle was on this segment
-    Elapsed float64 `json:"elapsed"`
+    Elapsed int `json:"elapsed"`
     //the segment id
     SegmentId string `json:"id"`
   } `json:"hist"`

@@ -29,5 +29,6 @@ COPY Makefile Makefile
 COPY simulate_analyze.sh simulate_analyze.sh
 COPY server_simulation.sh server_simulation.sh
 RUN make analysis -B -j$(nproc)
+RUN make server-get
 RUN make server -B
 CMD [ "./simulate_analyze.sh", "/data/grid", "/output_data" ]

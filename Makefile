@@ -3,8 +3,9 @@ all: analysis server
 analysis:
 	$(MAKE) -C analysis clean
 	$(MAKE) -C analysis
-server:
+server-get:
 	$(MAKE) -C server get
+server:
 	$(MAKE) -C server
 simulate-example:
 	./simulation/simulation.sh \

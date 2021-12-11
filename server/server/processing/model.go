@@ -1,5 +1,9 @@
 package processing
 
+import (
+	"jackhay.io/vehicleserver/data"
+)
+
 /*
  * Defines the decisions made by the
  * algorithm. This includes:
@@ -8,5 +12,11 @@ package processing
  * - Segments to forward to peers
  */
 type implRes struct {
-
+  //the segments to forward to peers
+  toForward []struct {
+    towerId string `json:"tower_id"`
+    data data.VehicleData `json:"data"`
+  } `json:"to_forward"`
+  //the updated buffer (forwarded and stored)
+  buffer []data.VehicleData `json:"buffer"`
 }
