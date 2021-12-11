@@ -67,6 +67,7 @@ func (s *SimInfo) VehiclesConnected(ts int, towerId string) (*vehicleCoverage, e
 		//serve information for the current timestep
 		if t, found := s.towerCoverage.towers[towerId]; found {
 			var cov vehicleCoverage
+			cov.Vehicles = make([]vehicle, 0)
 			//the max timestep (inclusive)
 			cov.MaxTs = s.maxTs
 			//look for the requested timestep

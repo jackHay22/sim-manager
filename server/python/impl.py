@@ -28,7 +28,7 @@ class VehicleData:
 
     def from_json(self, json):
         self._id = json['id']
-        self._dist = json[dist]
+        self._dist = json['dist']
         for h in json['hist']:
             self._hist.append(VehicleHistory(h))
 
@@ -76,8 +76,18 @@ def main(segments_s, vehicle_coverage_s, buffer_s):
     forwarded to the tower"""
     result = Result()
 
+    #list of segments this tower is responsible for
     segments = json.loads(segments_s)
-    vehicle_coverage = json.loads(vehicle_coverage_s)
-    buffer = json.loads(buffer_s)
+
+    #vehicles in range of this tower
+    vehicle_coverage = []
+    coverage_json = json.loads(vehicle_coverage_s)
+    for c in coverage_json:
+        vehicle_coverage.append(VehicleData(c))
+    #vehicle data storage and forwarded data
+    buffer = []
+    buffer_json = json.loads(buffer_s)
+    for b in buffer_json:
+        buffer.append(VehicleData(b))
 
     return result.to_json()
