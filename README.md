@@ -2,6 +2,9 @@
 - Automates the creation and management of Sumo simulations for vehicle communications optimization.
 - Runs server computation simulation based on Sumo simulation output
 
+## Architecture
+![Architecture Diagram](docs/images/precise_arch.png)
+
 ## Analysis transformer
 - `make analysis`
 - Requires (both can be installed as header only libraries in `analysis/libs/`)

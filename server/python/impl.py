@@ -68,13 +68,20 @@ class Result:
             "buffer" : buffer_data
         })
 
+def impl(segments, vehicle_coverage, buffer):
+    """Implementation of the algorithm"""
+    result = Result()
+
+    #TODO the greedy algo
+
+    return result
+
 def main(segments_s, vehicle_coverage_s, buffer_s):
     """Function called by the server. The server passes
     in a list of segment ids that this tower is responsible for,
     the vehicles currently in range of the tower and their
     respective segment history, and the buffer of segments
     forwarded to the tower"""
-    result = Result()
 
     #list of segments this tower is responsible for
     segments = json.loads(segments_s)
@@ -90,4 +97,4 @@ def main(segments_s, vehicle_coverage_s, buffer_s):
     for b in buffer_json:
         buffer.append(VehicleData(b))
 
-    return result.to_json()
+    return impl(segments, vehicle_coverage, buffer).to_json()
