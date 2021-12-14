@@ -13,9 +13,6 @@ class VehicleHistory:
         self._segment_id = json['id']
         self._downloaded = json['downloaded']
 
-    def is_downloaded(self):
-        return self._downloaded
-
     def get_data(self):
         return {
             "elapsed" : self._elapsed,
@@ -41,7 +38,7 @@ class VehicleData:
     def mark_downloaded(self, segment_id):
         for h in self._hist:
             if h._segment_id == segment_id:
-                h._downloaded = true
+                h._downloaded = True
 
     def get_data(self):
         vehicle_hist = []
@@ -61,6 +58,7 @@ class Result:
         self._downloaded = []
 
     def forward(self, server, data, segment_ids):
+        """Take vehicle data, mark as downloaded, and forward"""
         #remove undownloaded segment ids
         #TODO
         self._to_forward.append((server,data))
@@ -70,8 +68,8 @@ class Result:
         also notifies the segment provider to mark this segment as downloaded"""
         #TODO remove undownloaded segment ids
         for s in segment_ids:
-            vehicle_data.mark_downloaded(segment_id)
-            self._downloaded.append((vehicle_data._id, segment_id))
+            vehicle_data.mark_downloaded(s)
+            self._downloaded.append((vehicle_data._id, s))
 
         #add to the buffer
         self._buffer.append(vehicle_data)
@@ -105,7 +103,22 @@ def impl(segments, vehicle_coverage, buffer):
     """Implementation of the algorithm"""
     result = Result()
 
-    #TODO the greedy algo
+    #look through vehicles in range
+    for v in vehicle_coverage:
+        to_download = []
+        #look through segment information for vehicle
+        for s in v._hist:
+            #only consider segments that haven't been previously downloaded
+            if not s._downloaded:
+                #check if tower responsible for this segment
+                if s._segment_id in segments:
+                    #download, add to buffer
+                    to_download.append(s._segment_id)
+                else:
+                    pass
+                    #forward to peer
+                    #TODO based on segment id?
+        result.download_segments(v, to_download)
 
     return result
 
@@ -118,6 +131,8 @@ def main(segments_s, vehicle_coverage_s, buffer_s):
 
     #list of segments this tower is responsible for
     segments = json.loads(segments_s)
+    if segments == None:
+        segments = []
 
     #vehicles in range of this tower
     vehicle_coverage = []
