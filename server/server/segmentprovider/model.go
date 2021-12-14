@@ -8,6 +8,6 @@ type SegmentProvider struct {
   segmentProviderAddr string
   //the id of this tower
   towerId string
-  //the segments that this tower is responsible for
-  SegmentIds []string
+  //mappings from tower to segments the tower is responsible for
+  Segments TowerSegmentAssignments
 }

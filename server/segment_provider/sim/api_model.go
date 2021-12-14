@@ -38,3 +38,21 @@ type DownloadedSegment struct {
   //the id for the segment
   SegmentId string `json:"segment_id"`
 }
+
+/*
+ * The segments that a tower is responsible for
+ */
+type TowerAssignment struct {
+  //the id of this tower
+  TowerId string `json:"tower_id"`
+  //segments this tower is responsible for
+  Segments []string `json:"segments"`
+}
+
+/*
+ * Tower/segment assignments sent to towers
+ * before starting the simulation
+ */
+type TowerSegmentAssignments struct {
+  Towers []TowerAssignment  `json:"towers"`
+}

@@ -7,7 +7,17 @@
 - On startup, tower servers request a list of segment ids that they are responsible for. A single tower is responsible for each segment.
 - Response:
 ```json
-["id1", "id2", "id3"]
+{
+  "towers" : [
+    {
+      "tower_id" : "1",
+      "segments" : [
+        "a", "b", "c"
+      ]
+    },
+    ...
+  ]
+}
 ```
 
 ### Vehicles in range

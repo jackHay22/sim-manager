@@ -48,13 +48,14 @@ func toJsonStr(val interface{}) (string, error) {
  * Send the current simulation state to the
  */
 func sendState(mainFn *python3.PyObject,
+               towerid string,
                coverage *segmentprovider.VehicleCoverage,
                forwardBuffer *peers.ForwardBuffer,
                peerForwarder *peers.Peers,
                segmentProvider *segmentprovider.SegmentProvider) (*implRes, error) {
 
   //create the args tuple
-  args := python3.PyTuple_New(3)
+  args := python3.PyTuple_New(4)
   if args == nil {
     python3.PyErr_Print()
     return nil, errors.New("failed to create python args tuple")
@@ -64,23 +65,26 @@ func sendState(mainFn *python3.PyObject,
 
   //get the components to transfer and add as args
 
+  //tower id as string
+  python3.PyTuple_SetItem(args, 0, python3.PyUnicode_FromString(towerid))
+
   //get the segment ids that this server is responsible for
-  if segmentsStr, segmentsErr := toJsonStr(segmentProvider.SegmentIds); segmentsErr == nil {
-    python3.PyTuple_SetItem(args, 0, python3.PyUnicode_FromString(segmentsStr))
+  if segmentsStr, segmentsErr := toJsonStr(segmentProvider.Segments); segmentsErr == nil {
+    python3.PyTuple_SetItem(args, 1, python3.PyUnicode_FromString(segmentsStr))
   } else {
     return nil, segmentsErr
   }
 
   //get the vehicles in range of the tower
   if coverageStr, coverageErr := toJsonStr(coverage.Vehicles); coverageErr == nil {
-    python3.PyTuple_SetItem(args, 1, python3.PyUnicode_FromString(coverageStr))
+    python3.PyTuple_SetItem(args, 2, python3.PyUnicode_FromString(coverageStr))
   } else {
     return nil, coverageErr
   }
 
   //get the forward buffer (also acts as local storage)
   if bufferStr, bufferErr := toJsonStr(forwardBuffer.GetCurrentBuffer()); bufferErr == nil {
-    python3.PyTuple_SetItem(args, 2, python3.PyUnicode_FromString(bufferStr))
+    python3.PyTuple_SetItem(args, 3, python3.PyUnicode_FromString(bufferStr))
   } else {
     return nil, bufferErr
   }
@@ -112,7 +116,8 @@ func sendState(mainFn *python3.PyObject,
  * Takes forwarded segment buffer, peer list, and provider that
  * manages timestep and vehicle connectivity information
  */
-func StartProcessing(forwardBuffer *peers.ForwardBuffer,
+func StartProcessing(towerid string,
+                     forwardBuffer *peers.ForwardBuffer,
                      peerForwarder *peers.Peers,
                      segmentProvider *segmentprovider.SegmentProvider) {
 
@@ -139,7 +144,7 @@ func StartProcessing(forwardBuffer *peers.ForwardBuffer,
     if cov, err := segmentProvider.GetVehicles(currentTs); err == nil {
 
       //send state to python implementation
-      implRes, implErr := sendState(mainFn, cov, forwardBuffer, peerForwarder, segmentProvider)
+      implRes, implErr := sendState(mainFn, towerid, cov, forwardBuffer, peerForwarder, segmentProvider)
       if implErr != nil {
         log.Fatalf("implementation error: %s", implErr)
       }

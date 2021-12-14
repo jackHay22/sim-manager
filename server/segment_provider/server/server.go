@@ -130,19 +130,12 @@ func coverageHandler(provider *sim.SimInfo) http.HandlerFunc {
       return
     }
 
-    //request tower info
-    if res, err := provider.TowerCoverage(towerid); err == nil {
-    	if jsonResp, jsonErr := json.Marshal(res); jsonErr == nil {
-        writer.Write(jsonResp)
-        //respond with json
-        writer.Header().Set("Content-Type", "application/json")
-    	} else {
-        log.Printf("failed to generate json response %s", jsonErr)
-        writer.WriteHeader(http.StatusInternalServerError)
-      }
-
+    if jsonResp, jsonErr := json.Marshal(provider.TowerCoverage(towerid)); jsonErr == nil {
+      writer.Write(jsonResp)
+      //respond with json
+      writer.Header().Set("Content-Type", "application/json")
     } else {
-      log.Printf("failed to get coverage for tower %s: %s", towerid, err)
+      log.Printf("failed to generate json response %s", jsonErr)
       writer.WriteHeader(http.StatusInternalServerError)
     }
   })

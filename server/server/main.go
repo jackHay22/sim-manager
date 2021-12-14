@@ -58,7 +58,8 @@ func main() {
 	}
 
 	//start the server processing system
-	go processing.StartProcessing(segmentBuffer,
+	go processing.StartProcessing(towerId,
+		segmentBuffer,
 		peerLookup,
 		segmentProvider)
 

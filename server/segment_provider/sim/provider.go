@@ -145,15 +145,8 @@ func (s *SimInfo) VehiclesConnected(ts int, towerId string) (*vehicleCoverage, e
  * For a given tower, get all segments that it
  * is responsible for
  */
-func (s *SimInfo) TowerCoverage(towerId string) ([]string, error) {
-	//look for the tower
-	if t, found := s.towerAssignments.towers[towerId]; found {
-		return t, nil
-	} else {
-		log.Printf("warning, no segments found for tower %s", towerId)
-		var empty []string
-		return empty, nil
-	}
+func (s *SimInfo) TowerCoverage(towerId string) *TowerSegmentAssignments {
+	return &s.towerAssignments
 }
 
 /*
@@ -200,7 +193,6 @@ func LoadSimInfo(towerOutPath *string,
 	var simInfo SimInfo
 	simInfo.towerCoverage.towers = make(map[string]map[int][]vehicleDist)
 	simInfo.vehicleHist.vehicles = make(map[string]map[int][]segmentPos)
-	simInfo.towerAssignments.towers = make(map[string][]string)
 	simInfo.downloadedSegments = make(map[string]map[string]bool)
 	simInfo.towers = 0
 	simInfo.towersWaiting = 0
@@ -289,11 +281,21 @@ func LoadSimInfo(towerOutPath *string,
 		}
 	}
 
+	//map tower to the current segments assigned
+	towers := make(map[string][]string)
+
 	//make assignments based on closest tower
 	for i, t := range bestTower {
-		simInfo.towerAssignments.towers[t.t] =
-			append(simInfo.towerAssignments.towers[t.t],
-						 segmentData.Segments[i])
+		towers[t.t] = append(towers[t.t], segmentData.Segments[i])
+	}
+
+	//add to struct sent to towers
+	for tid, segments := range towers {
+		simInfo.towerAssignments.Towers =
+			append(simInfo.towerAssignments.Towers, TowerAssignment{
+				TowerId: tid,
+				Segments: segments,
+			})
 	}
 
 	//set the override

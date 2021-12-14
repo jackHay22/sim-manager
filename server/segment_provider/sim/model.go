@@ -107,14 +107,6 @@ type vehicleHistLookup struct {
 }
 
 /*
- * Maps tower id to segments that tower is responsible for
- */
-type towerAssignmentLookup struct {
-	//map from tower id to list of segment ids
-	towers map[string][]string
-}
-
-/*
  * Holds simulation information
  */
 type SimInfo struct {
@@ -123,7 +115,7 @@ type SimInfo struct {
 	//vehicle history lookup
 	vehicleHist vehicleHistLookup
 	//map from tower id to the segments it is responsible for
-	towerAssignments towerAssignmentLookup
+	towerAssignments TowerSegmentAssignments
 	//mutex for downloaded segments lookup
 	downloadedSegmentsLock sync.Mutex
 	//segments that have already been downloaded

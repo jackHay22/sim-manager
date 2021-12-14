@@ -84,6 +84,7 @@ class Result:
 
         buffer_data = []
         for b in self._buffer:
+            #TODO prune segments not marked as downloaded
             buffer_data.append(b.get_data())
 
         downloaded = []
@@ -99,6 +100,31 @@ class Result:
             "downloaded" : downloaded
         })
 
+class TowerSegmentMapping:
+    def __init__(self, tower_id, json=None):
+        self._tower_id = tower_id
+        self._my_segments = []
+        self._other_towers = [] #TODO maybe make this a dict
+        if json != None:
+            self.from_json(json)
+
+    def from_json(self,json):
+        """Load from json"""
+        for t in json['towers']:
+            tower_id = t['tower_id']
+            segments = []
+            for s in t['segments']:
+                segments.append(s)
+            if tower_id == self._tower_id:
+                self._my_segments = segments
+            else:
+                self._other_towers.append((tower_id, segments))
+
+    def responsible_for(self, segment_id):
+        """Check if the current server is responsible for this segment"""
+        return segment_id in self._my_segments
+
+
 def impl(segments, vehicle_coverage, buffer):
     """Implementation of the algorithm"""
     result = Result()
@@ -111,7 +137,7 @@ def impl(segments, vehicle_coverage, buffer):
             #only consider segments that haven't been previously downloaded
             if not s._downloaded:
                 #check if tower responsible for this segment
-                if s._segment_id in segments:
+                if segments.responsible_for(s._segment_id):
                     #download, add to buffer
                     to_download.append(s._segment_id)
                 else:
@@ -122,7 +148,7 @@ def impl(segments, vehicle_coverage, buffer):
 
     return result
 
-def main(segments_s, vehicle_coverage_s, buffer_s):
+def main(tower_id, segments_s, vehicle_coverage_s, buffer_s):
     """Function called by the server. The server passes
     in a list of segment ids that this tower is responsible for,
     the vehicles currently in range of the tower and their
@@ -130,9 +156,7 @@ def main(segments_s, vehicle_coverage_s, buffer_s):
     forwarded to the tower"""
 
     #list of segments this tower is responsible for
-    segments = json.loads(segments_s)
-    if segments == None:
-        segments = []
+    segments = TowerSegmentMapping(tower_id, json.loads(segments_s))
 
     #vehicles in range of this tower
     vehicle_coverage = []
