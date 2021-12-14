@@ -128,6 +128,11 @@ func StartProcessing(forwardBuffer *peers.ForwardBuffer,
   //the initial timestep to request
   currentTs := 1
 
+  //for each timestep, record the number of segments downloaded
+  var bandwidthUsage []int
+  //for each timestep, record the total memory usage
+  var storageUsage []int
+
   //while the server is running, process
   for ;; {
     //get the vehicle coverage for this timestep
@@ -146,9 +151,20 @@ func StartProcessing(forwardBuffer *peers.ForwardBuffer,
 
       //set updated buffer
       forwardBuffer.SetCurrentBuffer(implRes.buffer)
+      bufferSize := 0
+      for _, b := range implRes.buffer {
+        for _, v := range b.VehicleHistory {
+          if v.Downloaded {
+            //count segments marked as downloaded in total storage
+            bufferSize++
+          }
+        }
+      }
+      storageUsage = append(storageUsage, bufferSize)
 
       //notify segment provdider of downloaded segments
       segmentProvider.SetDownloaded(implRes.downloaded)
+      bandwidthUsage = append(bandwidthUsage, len(implRes.downloaded))
 
       //set the next timestep
       currentTs++
@@ -156,6 +172,9 @@ func StartProcessing(forwardBuffer *peers.ForwardBuffer,
       if cov.MaxTs < currentTs {
         //notify segment provider
         segmentProvider.Complete()
+
+        //generate output
+        WriteOutput(bandwidthUsage, storageUsage)
 
         //Note: need fatalf to exit
         log.Fatalf("completed final timestep (%d)", cov.MaxTs)

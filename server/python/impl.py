@@ -60,11 +60,15 @@ class Result:
         self._to_forward = []
         self._downloaded = []
 
-    def forward(self, server, data):
+    def forward(self, server, data, segment_ids):
+        #remove undownloaded segment ids
+        #TODO
         self._to_forward.append((server,data))
 
-    def mark_downloaded(self, vehicle_data, segment_ids):
-        """Mark a given vehicle history entry as downloaded"""
+    def download_segments(self, vehicle_data, segment_ids):
+        """Mark segments for a vehicle as downloaded, add to buffer,
+        also notifies the segment provider to mark this segment as downloaded"""
+        #TODO remove undownloaded segment ids
         for s in segment_ids:
             vehicle_data.mark_downloaded(segment_id)
             self._downloaded.append((vehicle_data._id, segment_id))
