@@ -124,6 +124,10 @@ type SimInfo struct {
 	vehicleHist vehicleHistLookup
 	//map from tower id to the segments it is responsible for
 	towerAssignments towerAssignmentLookup
+	//mutex for downloaded segments lookup
+	downloadedSegmentsLock sync.Mutex
+	//segments that have already been downloaded
+	downloadedSegments map[string]map[string]bool
 	//the current timestep
 	currentTs int
 	//the max timestep

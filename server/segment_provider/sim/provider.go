@@ -36,12 +36,25 @@ func load(path *string, v interface{}) {
  * Get the vehicle segment history up to the given timestep
  */
 func (s *SimInfo) getVehicleHist(vehicleId string, ts int) (h []vehicleHist, e error) {
+	//lock the downloaded lookup
+	s.downloadedSegmentsLock.Lock()
+	defer s.downloadedSegmentsLock.Unlock()
+
 	if v, foundV := s.vehicleHist.vehicles[vehicleId]; foundV {
 		if segments, foundT := v[ts]; foundT {
-			for _, s := range segments {
+			for _, seg := range segments {
+				segmentDownloaded := false
+				//check if this segment has been downloaded
+				if v, foundV := s.downloadedSegments[vehicleId]; foundV {
+					if d, foundS := v[seg.segmentId]; foundS {
+						segmentDownloaded = d
+					}
+				}
+
 				h = append(h, vehicleHist{
-					Elapsed: s.tsAgo,
-					SegmentId: s.segmentId,
+					Elapsed: seg.tsAgo,
+					SegmentId: seg.segmentId,
+					Downloaded: segmentDownloaded,
 				})
 			}
 			return h, nil
@@ -144,6 +157,20 @@ func (s *SimInfo) TowerCoverage(towerId string) ([]string, error) {
 }
 
 /*
+ * Mark segments as downloaded by a server
+ */
+func (s *SimInfo) MarkDownloaded(data []DownloadedSegment) {
+	s.downloadedSegmentsLock.Lock()
+	defer s.downloadedSegmentsLock.Unlock()
+	for _, d := range data {
+		if _, found := s.downloadedSegments[d.VehicleId]; !found {
+			s.downloadedSegments[d.VehicleId] = make(map[string]bool)
+		}
+		s.downloadedSegments[d.VehicleId][d.SegmentId] = true
+	}
+}
+
+/*
  * Called when a tower is done processing
  */
 func (s *SimInfo) TowersComplete(count int) {
@@ -174,6 +201,7 @@ func LoadSimInfo(towerOutPath *string,
 	simInfo.towerCoverage.towers = make(map[string]map[int][]vehicleDist)
 	simInfo.vehicleHist.vehicles = make(map[string]map[int][]segmentPos)
 	simInfo.towerAssignments.towers = make(map[string][]string)
+	simInfo.downloadedSegments = make(map[string]map[string]bool)
 	simInfo.towers = 0
 	simInfo.towersWaiting = 0
 	simInfo.currentTs = 1

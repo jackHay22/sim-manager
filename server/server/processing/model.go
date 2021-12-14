@@ -19,4 +19,6 @@ type implRes struct {
   } `json:"to_forward"`
   //the updated buffer (forwarded and stored)
   buffer []data.VehicleData `json:"buffer"`
+	//vehicle_id, segment_id pairs that the server downloaded
+	downloaded []data.DownloadedSegment `json:"downloaded"`
 }

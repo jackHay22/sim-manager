@@ -14,5 +14,16 @@ type VehicleData struct {
     Elapsed int `json:"elapsed"`
     //the segment id
     SegmentId string `json:"id"`
+    //whether this segment has been downloaded
+    Downloaded bool `json:"downloaded"`
   } `json:"hist"`
+}
+
+/*
+ * Mark a segment that a vehicle has passed
+ * as downloaded
+ */
+type DownloadedSegment struct {
+  VehicleId string `json:"vehicle_id"`
+  SegmentId string `json:"segment_id"`
 }

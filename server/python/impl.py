@@ -4,17 +4,23 @@ class VehicleHistory:
     def __init__(self, json=None):
         self._elapsed = 0
         self._segment_id = ""
+        self._downloaded = False
         if json != None:
             self.from_json(json)
 
     def from_json(self, json):
         self._elapsed = json['elapsed']
         self._segment_id = json['id']
+        self._downloaded = json['downloaded']
+
+    def is_downloaded(self):
+        return self._downloaded
 
     def get_data(self):
         return {
             "elapsed" : self._elapsed,
-            "id" : self._segment_id
+            "id" : self._segment_id,
+            "downloaded" : self._downloaded
         }
 
 class VehicleData:
@@ -32,6 +38,11 @@ class VehicleData:
         for h in json['hist']:
             self._hist.append(VehicleHistory(h))
 
+    def mark_downloaded(self, segment_id):
+        for h in self._hist:
+            if h._segment_id == segment_id:
+                h._downloaded = true
+
     def get_data(self):
         vehicle_hist = []
         for v in self._hist:
@@ -47,9 +58,19 @@ class Result:
     def __init__(self):
         self._buffer = []
         self._to_forward = []
+        self._downloaded = []
 
-    def forward(server, data):
+    def forward(self, server, data):
         self._to_forward.append((server,data))
+
+    def mark_downloaded(self, vehicle_data, segment_ids):
+        """Mark a given vehicle history entry as downloaded"""
+        for s in segment_ids:
+            vehicle_data.mark_downloaded(segment_id)
+            self._downloaded.append((vehicle_data._id, segment_id))
+
+        #add to the buffer
+        self._buffer.append(vehicle_data)
 
     def to_json(self):
         to_forward_data = []
@@ -63,9 +84,17 @@ class Result:
         for b in self._buffer:
             buffer_data.append(b.get_data())
 
+        downloaded = []
+        for d in self._downloaded:
+            downloaded.append({
+                "vehicle_id" : d[0],
+                "segment_id" : d[1]
+            })
+
         return json.dumps({
             "to_forward" : to_forward_data,
-            "buffer" : buffer_data
+            "buffer" : buffer_data,
+            "downloaded" : downloaded
         })
 
 def impl(segments, vehicle_coverage, buffer):

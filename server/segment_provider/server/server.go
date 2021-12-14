@@ -149,6 +149,32 @@ func coverageHandler(provider *sim.SimInfo) http.HandlerFunc {
 }
 
 /*
+ * Accepts requests to mark segments as having been downloaded
+ */
+func downloadedHandler(provider *sim.SimInfo) http.HandlerFunc {
+  return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+    if request.Method != "POST" {
+      //bad request
+      writer.WriteHeader(http.StatusBadRequest)
+      log.Printf("invalid request for /downloaded: %s", request.Method)
+      return
+    }
+
+    //deserialize and pass to siminfo
+    var data []sim.DownloadedSegment
+    //decode the body of the request
+    if jsonErr := json.NewDecoder(request.Body).Decode(&data); jsonErr != nil {
+      log.Printf("failed to deserialize downloaded segment json: %v", jsonErr)
+      writer.WriteHeader(http.StatusBadRequest)
+      return
+    }
+
+    //mark segments as downloaded
+    provider.MarkDownloaded(data)
+  })
+}
+
+/*
  * Towers make this request once they have completed the final timestep
  */
 func completeHandler(provider *sim.SimInfo) http.HandlerFunc {
@@ -170,6 +196,8 @@ func StartServer(port int, provider *sim.SimInfo) {
   log.Printf("segment provider serving segment info at http://0.0.0.0:%d/segments/{towerid}", port)
   r.HandleFunc("/complete", endpointLogger(completeHandler(provider)))
   log.Printf("segment provider serving completion endpoint at http://0.0.0.0:%d/complete", port)
+  r.HandleFunc("/downloaded", endpointLogger(downloadedHandler(provider)))
+  log.Printf("segment provider serving segment downloaded endpoint at http://0.0.0.0:%d/downloaded", port)
 
 	//serve the endpoint
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))

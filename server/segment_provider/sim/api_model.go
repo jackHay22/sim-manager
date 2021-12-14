@@ -5,6 +5,8 @@ type vehicleHist struct {
   Elapsed int `json:"elapsed"`
   //the segment id
   SegmentId string `json:"id"`
+  //whether this segment has been downloaded
+  Downloaded bool `json:"downloaded"`
 }
 
 type vehicle struct {
@@ -24,4 +26,15 @@ type vehicleCoverage struct {
   Vehicles []vehicle `json:"vehicles"`
   //the max timestep (inclusive)
   MaxTs int `json:"max_ts"`
+}
+
+/*
+ * Mark a segment that a vehicle has passed
+ * as downloaded
+ */
+type DownloadedSegment struct {
+  //the vehicle traveling the segment
+  VehicleId string `json:"vehicle_id"`
+  //the id for the segment
+  SegmentId string `json:"segment_id"`
 }

@@ -5,6 +5,8 @@ import (
   "log"
   "fmt"
   "encoding/json"
+  "bytes"
+  "jackhay.io/vehicleserver/data"
 )
 
 /*
@@ -33,6 +35,27 @@ func NewSegmentProvider(towerId string, segmentProviderAddr string) (*SegmentPro
   }
 
   return &prov, nil
+}
+
+/*
+ * Mark segments as downloaded
+ */
+func (p *SegmentProvider) SetDownloaded(segments []data.DownloadedSegment) {
+  //the post body
+	body, jsonErr := json.Marshal(segments)
+	if jsonErr != nil {
+		log.Printf("error serializing downloaded segments to send to segment provider: %v", jsonErr)
+		return
+	}
+	postBody := bytes.NewBuffer(body)
+
+  //make the request
+  resp, postErr := http.Post(fmt.Sprintf("http://%s/downloaded", p.segmentProviderAddr), "application/json", postBody)
+  if postErr != nil {
+    log.Printf("error forwarding downloaded segments to segment provider %s: %v", postErr)
+    return
+  }
+  defer resp.Body.Close()
 }
 
 /*

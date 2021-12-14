@@ -147,6 +147,9 @@ func StartProcessing(forwardBuffer *peers.ForwardBuffer,
       //set updated buffer
       forwardBuffer.SetCurrentBuffer(implRes.buffer)
 
+      //notify segment provdider of downloaded segments
+      segmentProvider.SetDownloaded(implRes.downloaded)
+
       //set the next timestep
       currentTs++
 
