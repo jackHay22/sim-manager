@@ -104,9 +104,7 @@ class TowerSegmentMapping:
     def __init__(self, tower_id, json=None):
         self._tower_id = tower_id
         self._my_segments = []
-        self._other_towers = [] #TODO maybe make this a dict
-        if json != None:
-            self.from_json(json)
+        self._other_towers = {}
 
     def from_json(self,json):
         """Load from json"""
@@ -115,14 +113,17 @@ class TowerSegmentMapping:
             segments = []
             for s in t['segments']:
                 segments.append(s)
+                self._other_towers[s] = tower_id
             if tower_id == self._tower_id:
                 self._my_segments = segments
-            else:
-                self._other_towers.append((tower_id, segments))
 
     def responsible_for(self, segment_id):
         """Check if the current server is responsible for this segment"""
         return segment_id in self._my_segments
+
+    def get_peer_for_segment(self, segment_id):
+        """Get the peer server id responsible for this segment"""
+        return self._other_towers[segment_id]
 
 
 def impl(segments, vehicle_coverage, buffer):
@@ -143,8 +144,11 @@ def impl(segments, vehicle_coverage, buffer):
                 else:
                     pass
                     #forward to peer
-                    #TODO based on segment id?
+                    # result.forward(segments.get_peer_for_segment(s._segment_id),
+                    #                v, [s._segment_id])
         result.download_segments(v, to_download)
+
+    #TODO prune buffer
 
     return result
 

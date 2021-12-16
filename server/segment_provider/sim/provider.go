@@ -117,7 +117,9 @@ func (s *SimInfo) VehiclesConnected(ts int, towerId string) (*vehicleCoverage, e
 		s.towersWaiting++
 
 		if s.towersWaiting == s.towers {
-			log.Printf("timestep %d complete", s.currentTs)
+			if s.currentTs % 10 == 0 {
+				log.Printf("timestep %d complete", s.currentTs)
+			}
 			//this tower was the last one, wake the others, continue
 			s.towersWaiting = 0
 			s.currentTs++

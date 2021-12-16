@@ -40,7 +40,7 @@ rapidxml_utils.hpp
 ## Setup
 - Use `vagrant` to run in a vm
   - Run: `vagrant up && vagrant ssh`
-  - In the vm: `cd /vagrant && export SUMO_HOME=/home/vagrant/sumo`
+  - In the vm: `cd /vagrant && export SUMO_HOME=/home/vagrant/sumo && export PATH=$PATH:/usr/local/go/bin`
 
 ## Use
 
