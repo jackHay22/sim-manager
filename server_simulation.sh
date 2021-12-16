@@ -20,7 +20,8 @@ vehicle_server () {
     -idx $1 \
     -peer-count $2 \
     -port-range-start 9000 \
-    -sprov 127.0.0.1:8080
+    -sprov 127.0.0.1:8080 \
+    -outdir $3
 }
 
 MAX_TOWER_IDX="$(($2-1))"
@@ -29,8 +30,8 @@ for ((i=0; i<=$MAX_TOWER_IDX; i++))
 do
   if [ $i != $MAX_TOWER_IDX ]
   then
-    vehicle_server $i $MAX_TOWER_IDX &
+    vehicle_server $i $MAX_TOWER_IDX $1 &
   else
-    vehicle_server $i $MAX_TOWER_IDX
+    vehicle_server $i $MAX_TOWER_IDX $1
   fi
 done

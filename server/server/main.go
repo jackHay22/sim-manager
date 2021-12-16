@@ -28,6 +28,7 @@ func main() {
 	peerCountPtr := flag.Int("peer-count", -1, "the number of peer servers")
 	portOffset := flag.Int("port-range-start", 9000, "the start of the port range")
 	segmentProviderPtr := flag.String("sprov", "127.0.0.1:8080", "address of the segment provider")
+	outputDirPtr := flag.String("outdir", "output_data", "location to write output to")
 
 	flag.Parse()
 
@@ -61,7 +62,8 @@ func main() {
 	go processing.StartProcessing(towerId,
 		segmentBuffer,
 		peerLookup,
-		segmentProvider)
+		segmentProvider,
+		*outputDirPtr)
 
 	//start the server
 	peers.StartServer(*portOffset + *idxPtr, towerId, segmentBuffer)

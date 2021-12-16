@@ -4,6 +4,7 @@ import (
   "log"
   "errors"
   "strings"
+  "fmt"
   "encoding/json"
   "jackhay.io/vehicleserver/peers"
   "jackhay.io/vehicleserver/segmentprovider"
@@ -119,7 +120,8 @@ func sendState(mainFn *python3.PyObject,
 func StartProcessing(towerid string,
                      forwardBuffer *peers.ForwardBuffer,
                      peerForwarder *peers.Peers,
-                     segmentProvider *segmentprovider.SegmentProvider) {
+                     segmentProvider *segmentprovider.SegmentProvider,
+                     outputDir string) {
 
   //initialize python3
   python3.Py_Initialize()
@@ -178,11 +180,13 @@ func StartProcessing(towerid string,
         //notify segment provider
         segmentProvider.Complete()
 
+        outPath := fmt.Sprintf("%s/server_stats_tower_%s.csv", outputDir, towerid)
+
         //generate output
-        WriteOutput(bandwidthUsage, storageUsage)
+        WriteOutput(bandwidthUsage, storageUsage, outPath)
 
         //Note: need fatalf to exit
-        log.Fatalf("completed final timestep (%d)", cov.MaxTs)
+        log.Fatalf("completed final timestep (%d), wrote to %s", cov.MaxTs, outPath)
       }
 
     } else {
