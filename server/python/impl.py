@@ -106,6 +106,9 @@ class TowerSegmentMapping:
         self._my_segments = []
         self._other_towers = {}
 
+        if json != None:
+            self.from_json(json)
+
     def from_json(self,json):
         """Load from json"""
         for t in json['towers']:
@@ -123,8 +126,9 @@ class TowerSegmentMapping:
 
     def get_peer_for_segment(self, segment_id):
         """Get the peer server id responsible for this segment"""
-        return self._other_towers[segment_id]
-
+        if segment_id in self._other_towers:
+            return self._other_towers[segment_id]
+        return self._tower_id
 
 def impl(segments, vehicle_coverage, buffer):
     """Implementation of the algorithm"""
@@ -142,10 +146,12 @@ def impl(segments, vehicle_coverage, buffer):
                     #download, add to buffer
                     to_download.append(s._segment_id)
                 else:
-                    pass
-                    #forward to peer
-                    # result.forward(segments.get_peer_for_segment(s._segment_id),
-                    #                v, [s._segment_id])
+                    peer = segments.get_peer_for_segment(s._segment_id)
+                    if peer == segments._tower_id:
+                        print("WARNING: found unassigned segment")
+                    else:
+                        #forward to peer
+                        result.forward(peer, v, [s._segment_id])
         result.download_segments(v, to_download)
 
     #TODO prune buffer

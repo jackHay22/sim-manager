@@ -21,7 +21,7 @@ func NewPeerLookup(thisIdx int, peerCount int, portOffset int) *Peers {
 	for i := 0; i<(peerCount + 1); i++ {
 		if i != thisIdx {
 			//add the mapping
-			p.mapping[fmt.Sprintf("tower_%s", i)] = fmt.Sprintf("127.0.0.1:%d", portOffset + i)
+			p.mapping[fmt.Sprintf("tower_%d", i)] = fmt.Sprintf("127.0.0.1:%d", portOffset + i)
 		}
 	}
 

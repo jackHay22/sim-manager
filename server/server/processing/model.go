@@ -11,14 +11,14 @@ import (
  * - Segments to process
  * - Segments to forward to peers
  */
-type implRes struct {
+type ImplRes struct {
   //the segments to forward to peers
-  toForward []struct {
-    towerId string `json:"tower_id"`
-    data data.VehicleData `json:"data"`
+  ToForward []struct {
+    TowerId string `json:"tower_id"`
+    Data data.VehicleData `json:"data"`
   } `json:"to_forward"`
   //the updated buffer (forwarded and stored)
-  buffer []data.VehicleData `json:"buffer"`
+  Buffer []data.VehicleData `json:"buffer"`
 	//vehicle_id, segment_id pairs that the server downloaded
-	downloaded []data.DownloadedSegment `json:"downloaded"`
+	Downloaded []data.DownloadedSegment `json:"downloaded"`
 }

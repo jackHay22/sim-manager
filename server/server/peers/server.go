@@ -56,7 +56,7 @@ func forwardHandler(buffer *ForwardBuffer) http.HandlerFunc {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		var data data.VehicleData
 		//decode the body of the request
-		if jsonErr := json.NewDecoder(request.Body).Decode(data); jsonErr != nil {
+		if jsonErr := json.NewDecoder(request.Body).Decode(&data); jsonErr != nil {
 			log.Printf("failed to deserialize forwarded json: %v", jsonErr)
 			writer.WriteHeader(http.StatusBadRequest)
 			return

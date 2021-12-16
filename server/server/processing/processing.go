@@ -3,7 +3,6 @@ package processing
 import (
   "log"
   "errors"
-  "strings"
   "fmt"
   "encoding/json"
   "jackhay.io/vehicleserver/peers"
@@ -53,7 +52,7 @@ func sendState(mainFn *python3.PyObject,
                coverage *segmentprovider.VehicleCoverage,
                forwardBuffer *peers.ForwardBuffer,
                peerForwarder *peers.Peers,
-               segmentProvider *segmentprovider.SegmentProvider) (*implRes, error) {
+               segmentProvider *segmentprovider.SegmentProvider) (*ImplRes, error) {
 
   //create the args tuple
   args := python3.PyTuple_New(4)
@@ -105,8 +104,8 @@ func sendState(mainFn *python3.PyObject,
 		return nil, errors.New("failed to parse string from python response")
 	}
 
-  var result implRes
-  if jsonErr := json.NewDecoder(strings.NewReader(jsonStr)).Decode(&result); jsonErr != nil {
+  var result ImplRes
+  if jsonErr := json.Unmarshal([]byte(jsonStr), &result); jsonErr != nil {
     log.Printf("failed to deserialize implementation result as json: %v", jsonErr)
     return nil, jsonErr
   }
@@ -152,14 +151,14 @@ func StartProcessing(towerid string,
       }
 
       //forward segments
-      for _, s := range implRes.toForward {
-        peerForwarder.ForwardSegment(s.towerId, s.data)
+      for _, s := range implRes.ToForward {
+        peerForwarder.ForwardSegment(s.TowerId, s.Data)
       }
 
       //set updated buffer
-      forwardBuffer.SetCurrentBuffer(implRes.buffer)
+      forwardBuffer.SetCurrentBuffer(implRes.Buffer)
       bufferSize := 0
-      for _, b := range implRes.buffer {
+      for _, b := range implRes.Buffer {
         for _, v := range b.VehicleHistory {
           if v.Downloaded {
             //count segments marked as downloaded in total storage
@@ -170,8 +169,8 @@ func StartProcessing(towerid string,
       storageUsage = append(storageUsage, bufferSize)
 
       //notify segment provdider of downloaded segments
-      segmentProvider.SetDownloaded(implRes.downloaded)
-      bandwidthUsage = append(bandwidthUsage, len(implRes.downloaded))
+      segmentProvider.SetDownloaded(implRes.Downloaded)
+      bandwidthUsage = append(bandwidthUsage, len(implRes.Downloaded))
 
       //set the next timestep
       currentTs++
