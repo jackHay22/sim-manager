@@ -7,17 +7,6 @@
 
 ## Analysis transformer
 - `make analysis`
-- Requires (both can be installed as header only libraries in `analysis/libs/`)
-  - [RapidXML](https://sourceforge.net/projects/rapidxml/)
-  - [nlohmann json](https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp)
-- `analysis/libs/` should contain the following files:
-```
-json.hpp
-rapidxml.hpp
-rapidxml_iterators.hpp
-rapidxml_print.hpp
-rapidxml_utils.hpp
-```
 
 ## Server simulation
 - Creates a "segment provider" that distributes simulation information to different towers
